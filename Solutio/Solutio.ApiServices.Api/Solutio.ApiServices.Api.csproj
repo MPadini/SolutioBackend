@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
+    <PackageReference Include="Mapster" Version="4.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="4.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dtos\Responses\" />
+    <Folder Include="Dtos\Requests\" />
+    <Folder Include="Swagger\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Solutio.Core.Entities\Solutio.Core.Entities.csproj" />
+    <ProjectReference Include="..\Solutio.Core.Services\Solutio.Core.Services.csproj" />
+    <ProjectReference Include="..\Solution.Infrastructure.Repositories\Solutio.Infrastructure.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
