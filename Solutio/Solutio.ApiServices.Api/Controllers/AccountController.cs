@@ -40,7 +40,7 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var user = new ApplicationUser { UserName = userInfo.UserName };
+                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
                 var result = await userManager.CreateAsync(user, userInfo.Password);
                 if (!result.Succeeded)
                 {
@@ -61,7 +61,7 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var result = await signInManager.PasswordSignInAsync(userInfo.UserName, userInfo.Password, isPersistent: false, lockoutOnFailure: false);
+                var result = await signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent: false, lockoutOnFailure: false);
                 if (!result.Succeeded)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");

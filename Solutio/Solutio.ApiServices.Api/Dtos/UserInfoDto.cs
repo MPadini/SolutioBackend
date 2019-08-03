@@ -7,7 +7,7 @@ namespace Solutio.ApiServices.Api.Dtos
 {
     public class UserInfoDto
     {
-        public string UserName { get; set; }
+        public string Email { get; set; }
 
         public string Password { get; set; }
     }

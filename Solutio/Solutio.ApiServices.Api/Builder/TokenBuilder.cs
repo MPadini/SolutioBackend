@@ -28,7 +28,7 @@ namespace Solutio.ApiServices.Api.Builder
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.UserName),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
                 new Claim("uniquevalue", "nicolasbjkmpadini"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };

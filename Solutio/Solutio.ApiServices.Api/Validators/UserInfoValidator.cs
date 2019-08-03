@@ -11,7 +11,7 @@ namespace Solutio.ApiServices.Api.Validators
     {
         public UserInfoValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty();
+            RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Password).NotEmpty();
         }
     }
