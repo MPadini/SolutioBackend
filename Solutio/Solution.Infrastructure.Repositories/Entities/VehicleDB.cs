@@ -15,5 +15,7 @@ namespace Solutio.Infrastructure.Repositories.Entities
         public long VehicleModelId { get; set; }
 
         public VehicleModelDB VehicleModel { get; set; }
+
+        public List<ClaimVehicleDB> ClaimVehicles { get; set; }
     }
 }

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Solutio.Infrastructure.Repositories.Entities;
 using Microsoft.AspNetCore.Identity;
+using Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups;
 
 namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 {
@@ -58,6 +59,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<PersonResponsabilityTypeDB> PersonResponsabilityTypes { get; set; }
 
+        public DbSet<VehicleParticipationTypeDB> VehicleParticipationTypes { get; set; }
+
         public DbSet<VehicleModelDB> VehicleModels { get; set; }
 
         public DbSet<VehicleTypeDB> VehicleTypes { get; set; }
@@ -71,7 +74,17 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            //modelBuilder.ApplyConfiguration(new StageMap());
+            modelBuilder.ApplyConfiguration(new ClaimDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimPersonDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimStateDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimVehicleDBMap());
+            modelBuilder.ApplyConfiguration(new PersonDBMap());
+            modelBuilder.ApplyConfiguration(new PersonResponsabilityTypeDBMap());
+            modelBuilder.ApplyConfiguration(new PersonTypeDBMap());
+            modelBuilder.ApplyConfiguration(new VehicleDBMap());
+            modelBuilder.ApplyConfiguration(new VehicleModelDBMap());
+            modelBuilder.ApplyConfiguration(new VehicleTypeDBMap());
+            modelBuilder.ApplyConfiguration(new VehicleParticipationTypeDBMap());
         }
     }
 }

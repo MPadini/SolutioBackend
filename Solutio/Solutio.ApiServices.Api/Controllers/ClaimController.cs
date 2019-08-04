@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Solutio.ApiServices.Api.Dtos.Requests;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -24,8 +25,17 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] NewClaimRequestDto newClaimRequest)
         {
+            try
+            {
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]

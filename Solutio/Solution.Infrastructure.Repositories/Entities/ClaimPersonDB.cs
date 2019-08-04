@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Solutio.Infrastructure.Repositories.Entities
 {
-    public class ClaimPersonDB
+    public class ClaimPersonDB : BaseEntityDB
     {
         public long PersonResponsabilityTypeId { get; set; }
 

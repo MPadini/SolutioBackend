@@ -14,5 +14,9 @@ namespace Solutio.Core.Entities
         public DateTime Hour { get; set; }
 
         public long StateId { get; set; }
+
+        public List<ClaimPerson> ClaimPersons { get; set; }
+
+        public List<ClaimVehicle> ClaimVehicles { get; set; }
     }
 }

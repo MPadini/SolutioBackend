@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <Folder Include="EFConfigurations\DbContexts\" />
-    <Folder Include="EFConfigurations\FluentSetups\" />
+    <Folder Include="Mappers\" />
   </ItemGroup>
 
   <ItemGroup>
