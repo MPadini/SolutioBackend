@@ -17,6 +17,10 @@ using Microsoft.Extensions.Options;
 using Solutio.ApiServices.Api.Builder;
 using Solutio.ApiServices.Api.Filters;
 using Solutio.ApiServices.Api.Swagger;
+using Solutio.Core.Services.ApplicationServices.ClaimsServices;
+using Solutio.Core.Services.Repositories.ClaimsRepositories;
+using Solutio.Core.Services.ServicesProviders.ClaimsServices;
+using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
 using Solutio.Infrastructure.Repositories.Entities;
 using Swashbuckle.AspNetCore.Swagger;
@@ -63,17 +67,9 @@ namespace Solutio.ApiServices.Api
 
         private void SetupDependenciesInjection(IServiceCollection services)
         {
-
-            #region DbContexts Settings
-
-            //services.AddScoped<IDbContextScopeFactory, DbContextScopeFactory>();
-            //services.AddScoped<IDbContextFactory, DBContextFactory>();
-            //services.AddScoped<IAmbientDbContextLocator, AmbientDbContextLocator>();
-
-            #endregion DbContexts Settings
-
             #region Repositories Settings
 
+            services.AddTransient<IClaimRepository, ClaimRepository>();
 
             #endregion Repositories Settings
 
@@ -83,6 +79,8 @@ namespace Solutio.ApiServices.Api
             #endregion
 
             #region Services Settings
+
+            services.AddTransient<INewClaimService, NewClaimService>();
 
             #endregion Services Settings
 

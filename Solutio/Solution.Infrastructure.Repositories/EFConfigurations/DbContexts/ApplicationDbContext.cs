@@ -16,12 +16,11 @@ using Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups;
 
 namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int> //IdentityDbContext<ApplicationUser<int>, int>
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         #region constants
 
         private readonly IConfiguration configuration;
-        private readonly string connectionStringName = "SolutioConnectionString";
 
         #endregion constants
 

@@ -9,10 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationServices\" />
     <Folder Include="Validators\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="ServicesProviders\" />
   </ItemGroup>
 
   <ItemGroup>

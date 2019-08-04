@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.ApiServices.Api.Dtos.Requests;
+using Solutio.Core.Entities;
+using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -12,6 +15,13 @@ namespace Solutio.ApiServices.Api.Controllers
     [ApiController]
     public class ClaimController : ControllerBase
     {
+        private readonly INewClaimService newClaimService;
+
+        public ClaimController(INewClaimService newClaimService)
+        {
+            this.newClaimService = newClaimService;
+        }
+
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -29,8 +39,10 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                var claim = newClaimRequest.Claim.Adapt<Claim>();
+                var claimId = await newClaimService.Save(claim);
 
-                return Ok();
+                return Ok(new { claimId });
             }
             catch (Exception ex)
             {
