@@ -46,8 +46,25 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         #region DbSet Setups
 
-        // public DbSet<PracticalWork> PracticalWorks { get; set; }
+        public DbSet<ClaimDB> Claims { get; set; }
 
+        public DbSet<ClaimStateDB> ClaimStates { get; set; }
+
+        public DbSet<ClaimPersonDB> ClaimPersons { get; set; }
+
+        public DbSet<PersonDB> Persons { get; set; }
+
+        public DbSet<PersonTypeDB> PersonTypes { get; set; }
+
+        public DbSet<PersonResponsabilityTypeDB> PersonResponsabilityTypes { get; set; }
+
+        public DbSet<VehicleModelDB> VehicleModels { get; set; }
+
+        public DbSet<VehicleTypeDB> VehicleTypes { get; set; }
+
+        public DbSet<VehicleDB> Vehicles { get; set; }
+
+        public DbSet<ClaimVehicleDB> ClaimVehicles { get; set; }
 
         #endregion DbSet Setups
 
@@ -56,13 +73,5 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             base.OnModelCreating(modelBuilder);
             //modelBuilder.ApplyConfiguration(new StageMap());
         }
-
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    if (configuration != null)
-        //    {
-        //        optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-        //    }
-        //}
     }
 }
