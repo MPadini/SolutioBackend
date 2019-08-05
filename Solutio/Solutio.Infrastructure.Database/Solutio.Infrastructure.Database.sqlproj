@@ -60,7 +60,6 @@
     <Folder Include="dbo" />
     <Folder Include="Tables" />
     <Folder Include="dbo\Post-Deployment" />
-    <Folder Include="dbo\Post-Deployment\Scripts" />
     <Folder Include="dbo\Pre-Deployment" />
   </ItemGroup>
   <ItemGroup>
@@ -71,7 +70,6 @@
     <Build Include="Tables\AspNetUserLogins.sql" />
     <Build Include="Tables\AspNetUserRoles.sql" />
     <Build Include="Tables\AspNetUserTokens.sql" />
-    <None Include="dbo\Post-Deployment\Scripts\Index.sql" />
     <Build Include="Tables\ClaimStates.sql" />
     <Build Include="Tables\PersonResponsabilityTypes.sql" />
     <Build Include="Tables\PersonTypes.sql" />
@@ -85,6 +83,6 @@
     <Build Include="Tables\VehicleParticipationTypes.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="dbo\Post-Deployment\PostDeployment.sql" />
+    <PostDeploy Include="dbo\Post-Deployment\ClaimStatesPostDeployment.sql" />
   </ItemGroup>
 </Project>

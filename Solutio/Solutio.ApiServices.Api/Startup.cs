@@ -18,8 +18,11 @@ using Solutio.ApiServices.Api.Builder;
 using Solutio.ApiServices.Api.Filters;
 using Solutio.ApiServices.Api.Swagger;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
+using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
+using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
+using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
 using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
 using Solutio.Infrastructure.Repositories.Entities;
@@ -82,7 +85,8 @@ namespace Solutio.ApiServices.Api
             #region Repositories Settings
 
             services.AddTransient<IClaimRepository, ClaimRepository>();
-
+            services.AddTransient<IClaimStateRepository, ClaimStateRepository>();
+            
             #endregion Repositories Settings
 
             #region Mappers Settings
@@ -93,6 +97,7 @@ namespace Solutio.ApiServices.Api
             #region Services Settings
 
             services.AddTransient<INewClaimService, NewClaimService>();
+            services.AddTransient<IClaimStateService, ClaimStateService>();
 
             #endregion Services Settings
 
