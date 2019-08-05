@@ -13,10 +13,12 @@ using Microsoft.IdentityModel.Tokens;
 using Solutio.Infrastructure.Repositories.Entities;
 using Solutio.ApiServices.Api.Dtos;
 using Solutio.ApiServices.Api.Builder;
+using Microsoft.AspNetCore.Cors;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -57,6 +59,7 @@ namespace Solutio.ApiServices.Api.Controllers
 
         [HttpPost]
         [Route("Login")]
+        [EnableCors("AllowOrigin")]
         public async Task<IActionResult> Login([FromBody] UserInfoDto userInfo)
         {
             try
@@ -80,11 +83,13 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             var token = tokenBuilder.WithUserInfo(userInfo).Build();
             var expiration = DateTime.UtcNow.AddHours(1);
+            var expirationTimeInSeconds = 1 * 60 * 60;
 
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration
+                expiration,
+                expirationTimeInSeconds
             });
         }
     }

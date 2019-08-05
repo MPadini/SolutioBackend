@@ -38,6 +38,18 @@ namespace Solutio.ApiServices.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            var policy = new Microsoft.AspNetCore.Cors.Infrastructure.CorsPolicy();
+
+            policy.Headers.Add("*");
+            policy.Methods.Add("*");
+            policy.Origins.Add("*");
+            policy.SupportsCredentials = true;
+
+            services.AddCors(c =>
+            {
+                c.AddPolicy("AllowOrigin", policy);
+            });
+
             //services.AddApiVersioning(o =>
             //{
             //    o.ReportApiVersions = true;
@@ -99,6 +111,8 @@ namespace Solutio.ApiServices.Api
             {
                 c.SwaggerEndpoint(SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.EndpointDescription);
             });
+
+            app.UseCors("AllowOrigin");
 
             app.UseMvc();
         }
