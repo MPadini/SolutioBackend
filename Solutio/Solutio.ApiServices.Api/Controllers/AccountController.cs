@@ -89,7 +89,7 @@ namespace Solutio.ApiServices.Api.Controllers
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expiration,
-                expirationTimeInSeconds
+                expiresIn = expirationTimeInSeconds
             });
         }
     }
