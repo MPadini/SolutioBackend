@@ -14,6 +14,8 @@ using Solutio.Infrastructure.Repositories.Entities;
 using Solutio.ApiServices.Api.Dtos;
 using Solutio.ApiServices.Api.Builder;
 using Microsoft.AspNetCore.Cors;
+using Solutio.Core.Services.ApplicationServices;
+using Solutio.Core.Services.ServicesProviders.LoginServices;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -25,15 +27,18 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ITokenBuilder tokenBuilder;
+        private readonly ISendConfirmationEmailService sendConfirmationEmailService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ITokenBuilder tokenBuilder)
+            ITokenBuilder tokenBuilder,
+            ISendConfirmationEmailService sendConfirmationEmailService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.tokenBuilder = tokenBuilder;
+            this.sendConfirmationEmailService = sendConfirmationEmailService;
         }
 
         [Route("Create")]
@@ -48,6 +53,8 @@ namespace Solutio.ApiServices.Api.Controllers
                 {
                     return BadRequest(result.Errors.ToList());
                 }
+
+                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
 
                 return BuildToken(userInfo);
             }
@@ -67,8 +74,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var result = await signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent: false, lockoutOnFailure: false);
                 if (!result.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                    return BadRequest(ModelState);
+                    return BadRequest(new { message = GetErrorMessage(result) });
                 }
 
                 return BuildToken(userInfo);
@@ -79,6 +85,109 @@ namespace Solutio.ApiServices.Api.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("ResendConfirmationEmail")]
+        [EnableCors("AllowOrigin")]
+        public async Task<IActionResult> ResendConfirmationEmail([FromBody] UserEmailDto userEmail)
+        {
+            try
+            {
+                var user = await userManager.FindByEmailAsync(userEmail.Email);
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("ConfirmEmail")]
+        [EnableCors("AllowOrigin")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] UserConfirmEmailDto userConfirmEmail)
+        {
+            try
+            {
+                var user = await userManager.FindByIdAsync(userConfirmEmail.UserId);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var result = await userManager.ConfirmEmailAsync(user, userConfirmEmail.Token);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors.ToList());
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("SendPasswordResetLink")]
+        [EnableCors("AllowOrigin")]
+        public async Task<IActionResult> SendPasswordResetLink([FromBody] UserEmailDto userEmail)
+        {
+            try
+            {
+                var user = await userManager.FindByEmailAsync(userEmail.Email);
+
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GeneratePasswordResetTokenAsync(user));
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        [EnableCors("AllowOrigin")]
+        public async Task<IActionResult> ResetPassword([FromBody] UserResetPasswordDto userResetPassword)
+        {
+            try
+            {
+                var user = await userManager.FindByEmailAsync(userResetPassword.Email);
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                var result = await userManager.ResetPasswordAsync(user, userResetPassword.Token, userResetPassword.NewPassword);
+                if (!result.Succeeded)
+                {
+                    return BadRequest(result.Errors.ToList());
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        #region private methods
         private IActionResult BuildToken(UserInfoDto userInfo)
         {
             var token = tokenBuilder.WithUserInfo(userInfo).Build();
@@ -92,5 +201,21 @@ namespace Solutio.ApiServices.Api.Controllers
                 expiresIn = expirationTimeInSeconds
             });
         }
+
+        private string GetErrorMessage(Microsoft.AspNetCore.Identity.SignInResult result)
+        {
+            var errorMessage = "Intento de logueo inválido.";
+
+            if (result != null)
+            {
+                if (result.IsLockedOut) errorMessage = "Usuario bloqueado.";
+                if (result.IsNotAllowed) errorMessage = "Para iniciar sesion debe confirmar su correo elesctrónico.";
+            }
+
+            return errorMessage;
+        }
+
+        #endregion private methods
+
     }
 }

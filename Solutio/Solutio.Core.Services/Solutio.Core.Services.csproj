@@ -9,6 +9,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Builders\" />
+    <Folder Include="ServicesProviders\Email\" />
     <Folder Include="Validators\" />
   </ItemGroup>
 

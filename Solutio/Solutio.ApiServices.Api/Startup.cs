@@ -8,7 +8,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,12 +19,16 @@ using Microsoft.Extensions.Options;
 using Solutio.ApiServices.Api.Builder;
 using Solutio.ApiServices.Api.Filters;
 using Solutio.ApiServices.Api.Swagger;
+using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
+using Solutio.Core.Services.ApplicationServices.LoginServices;
 using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
+using Solutio.Core.Services.ServicesProviders;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
+using Solutio.Core.Services.ServicesProviders.LoginServices;
 using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
 using Solutio.Infrastructure.Repositories.Entities;
@@ -59,19 +65,28 @@ namespace Solutio.ApiServices.Api
             //    o.AssumeDefaultVersionWhenUnspecified = true;
             //    o.DefaultApiVersion = new ApiVersion(1, 0);
             //});
+
+            //db context
             services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("defaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole<int>>()
+            //Identity
+            services.AddIdentity<ApplicationUser, IdentityRole<int>>(config =>
+            {
+                config.SignIn.RequireConfirmedEmail = true;
+                config.User.RequireUniqueEmail = true;
+            })
                  .AddEntityFrameworkStores<ApplicationDbContext>()
                  .AddDefaultTokenProviders();
 
+            //Configure mail
+            services.AddOptions();
+            services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
-            services.AddTransient<ITokenBuilder, TokenBuilder>();
-
+            //Filter for validation
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
-
             services.AddMvc(opt => opt.Filters.Add(typeof(ModelStateFilter)))
             .AddFluentValidation(fvc => fvc.RegisterValidatorsFromAssemblyContaining<Startup>())
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -86,7 +101,7 @@ namespace Solutio.ApiServices.Api
 
             services.AddTransient<IClaimRepository, ClaimRepository>();
             services.AddTransient<IClaimStateRepository, ClaimStateRepository>();
-            
+
             #endregion Repositories Settings
 
             #region Mappers Settings
@@ -98,9 +113,16 @@ namespace Solutio.ApiServices.Api
 
             services.AddTransient<INewClaimService, NewClaimService>();
             services.AddTransient<IClaimStateService, ClaimStateService>();
+            services.AddSingleton<Solutio.Core.Services.ApplicationServices.IEmailSender, EmailSender>();
+            services.AddTransient<ISendConfirmationEmailService, SendConfirmationEmailService>();
 
             #endregion Services Settings
 
+            #region Builder Settings
+
+            services.AddTransient<ITokenBuilder, TokenBuilder>();
+
+            #endregion Builder Settings
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
