@@ -121,7 +121,7 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var user = await userManager.FindByIdAsync(userConfirmEmail.UserId);
+                var user = await userManager.FindByEmailAsync(userConfirmEmail.Email);
                 if (user == null)
                 {
                     return NotFound();

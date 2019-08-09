@@ -2,10 +2,6 @@
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
-using Solutio.Core.Services.ServicesProviders.LoginServices;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using System.Web;

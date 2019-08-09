@@ -11,7 +11,7 @@ namespace Solutio.ApiServices.Api.Validators
     {
         public UserConfirmEmailValidator()
         {
-            RuleFor(x => x.UserId).NotEmpty();
+            RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Token).NotEmpty();
         }
     }
