@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Solutio.Core.Services.ServicesProviders.LoginServices
 {
@@ -24,20 +25,20 @@ namespace Solutio.Core.Services.ServicesProviders.LoginServices
 
         public async Task Send(int userId, string email, string ConfirmationToken)
         {
-            await emailSender.SendEmailAsync(email, "Solutio - Por favor confirme su correo electronico", GenerateMessage(userId, ConfirmationToken));
+            await emailSender.SendEmailAsync(email, "Solutio - Por favor confirme su correo electronico", GenerateMessage(email, ConfirmationToken));
         }
 
-        private string GenerateMessage(int userId, string ConfirmationToken)
+        private string GenerateMessage(string email, string ConfirmationToken)
         {
-            var callbackUrl = GetLink(userId, ConfirmationToken);
+            var callbackUrl = GetLink(email, ConfirmationToken);
             var message = $"Por favor confirme su cuenta haciendo click <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' >aquí</a>.";
 
             return message;
         }
 
-        private string GetLink(int userId, string ConfirmationToken)
+        private string GetLink(string email, string ConfirmationToken)
         {
-            var link = $"{urlLogin.UrlConfirmMail}?id={userId}&amp;code={ConfirmationToken}";
+            var link = $"{urlLogin.UrlConfirmMail}/" + HttpUtility.UrlEncode(email) + "/" + HttpUtility.UrlEncode(ConfirmationToken);
 
             return link;
         }
