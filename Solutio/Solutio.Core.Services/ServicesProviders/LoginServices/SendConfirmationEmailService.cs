@@ -1,4 +1,6 @@
-﻿using Solutio.Core.Services.ApplicationServices;
+﻿using Microsoft.Extensions.Options;
+using Solutio.Core.Entities;
+using Solutio.Core.Services.ApplicationServices;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
 using System;
@@ -12,10 +14,12 @@ namespace Solutio.Core.Services.ServicesProviders.LoginServices
     public class SendConfirmationEmailService : ISendConfirmationEmailService
     {
         private readonly IEmailSender emailSender;
+        private readonly UrlLoginSettings urlLogin;
 
-        public SendConfirmationEmailService(IEmailSender emailSender)
+        public SendConfirmationEmailService(IEmailSender emailSender, IOptions<UrlLoginSettings> urlLogin)
         {
             this.emailSender = emailSender;
+            this.urlLogin = urlLogin.Value;
         }
 
         public async Task Send(int userId, string email, string ConfirmationToken)
@@ -33,7 +37,7 @@ namespace Solutio.Core.Services.ServicesProviders.LoginServices
 
         private string GetLink(int userId, string ConfirmationToken)
         {
-            var link = $"http://algunadireccion.com/?id='{userId}'&amp;code='{ConfirmationToken}'";
+            var link = $"{urlLogin.UrlConfirmMail}?id={userId}&amp;code={ConfirmationToken}";
 
             return link;
         }

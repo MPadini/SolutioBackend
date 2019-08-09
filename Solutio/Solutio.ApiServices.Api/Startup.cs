@@ -83,6 +83,9 @@ namespace Solutio.ApiServices.Api
             services.AddOptions();
             services.Configure<EmailSettings>(Configuration.GetSection("EmailSettings"));
 
+            //Configure urls
+            services.Configure<UrlLoginSettings>(Configuration.GetSection("UrlLoginSettings"));
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
 
             //Filter for validation
