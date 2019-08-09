@@ -14,5 +14,9 @@ namespace Solutio.ApiServices.Api.Dtos
         public DateTime Hour { get; set; }
 
         public long StateId { get; set; }
+
+        public List<ClaimPersonDto> ClaimPersons { get; set; }
+
+        public List<ClaimVehicleDto> ClaimVehicles { get; set; }
     }
 }

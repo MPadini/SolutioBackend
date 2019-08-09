@@ -21,10 +21,19 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<long> Save(Claim claim)
         {
-            var claimDb = claim.Adapt<ClaimDB>();
+            try
+            {
+                var claimDb = claim.Adapt<ClaimDB>();
 
-            context.Claims.Add(claimDb);
-            return await context.SaveChangesAsync();
+                context.Claims.Add(claimDb);
+                return await context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
         }
     }
 }

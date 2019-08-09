@@ -14,5 +14,9 @@ namespace Solutio.ApiServices.Api.Dtos
         public long ClaimId { get; set; }
 
         public ClaimDto Claim { get; set; }
+
+        public long VehicleParticipationTypeId { get; set; }
+
+        public VehicleParticipationTypeDto VehicleParticipationType { get; set; }
     }
 }
