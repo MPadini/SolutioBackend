@@ -16,6 +16,7 @@ using Solutio.ApiServices.Api.Builder;
 using Microsoft.AspNetCore.Cors;
 using Solutio.Core.Services.ApplicationServices;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
+using Solutio.Core.Services.ApplicationServices.LoginServices;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -28,17 +29,20 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly ITokenBuilder tokenBuilder;
         private readonly ISendConfirmationEmailService sendConfirmationEmailService;
+        private readonly ISendResetPasswordService sendResetPasswordService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ITokenBuilder tokenBuilder,
-            ISendConfirmationEmailService sendConfirmationEmailService)
+            ISendConfirmationEmailService sendConfirmationEmailService,
+            ISendResetPasswordService sendResetPasswordService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.tokenBuilder = tokenBuilder;
             this.sendConfirmationEmailService = sendConfirmationEmailService;
+            this.sendResetPasswordService = sendResetPasswordService;
         }
 
         [Route("Create")]
@@ -150,7 +154,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     return NotFound();
                 }
 
-                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GeneratePasswordResetTokenAsync(user));
+                await sendResetPasswordService.Send(user.Id, user.Email, await userManager.GeneratePasswordResetTokenAsync(user));
 
                 return Ok();
             }

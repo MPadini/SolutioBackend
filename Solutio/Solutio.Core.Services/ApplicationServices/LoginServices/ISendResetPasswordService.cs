@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Solutio.Core.Services.ServicesProviders.LoginServices
+namespace Solutio.Core.Services.ApplicationServices.LoginServices
 {
-    public interface ISendConfirmationEmailService
+    public interface ISendResetPasswordService
     {
         Task Send(int userId, string email, string ConfirmationToken);
     }

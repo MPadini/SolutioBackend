@@ -1,30 +1,31 @@
-﻿using Solutio.Core.Services.ServicesProviders.LoginServices;
+﻿using Solutio.Core.Services.ApplicationServices;
+using Solutio.Core.Services.ApplicationServices.LoginServices;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 
-namespace Solutio.Core.Services.ApplicationServices.LoginServices
+namespace Solutio.Core.Services.ServicesProviders.LoginServices
 {
-    public class SendConfirmationEmailService : ISendConfirmationEmailService
+    public class SendResetPasswordService : ISendResetPasswordService
     {
         private readonly IEmailSender emailSender;
 
-        public SendConfirmationEmailService(IEmailSender emailSender)
+        public SendResetPasswordService(IEmailSender emailSender)
         {
             this.emailSender = emailSender;
         }
 
         public async Task Send(int userId, string email, string ConfirmationToken)
         {
-            await emailSender.SendEmailAsync(email, "Solutio - Por favor confirme su correo electronico", GenerateMessage(userId, ConfirmationToken));
+            await emailSender.SendEmailAsync(email, "Solutio - Modificación de contraseña", GenerateMessage(userId, ConfirmationToken));
         }
 
         private string GenerateMessage(int userId, string ConfirmationToken)
         {
             var callbackUrl = GetLink(userId, ConfirmationToken);
-            var message = $"Por favor confirme su cuenta haciendo click <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' >aquí</a>.";
+            var message = $"Para modificar su contraseña haga click <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' >aquí</a>.";
 
             return message;
         }
