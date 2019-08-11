@@ -28,5 +28,18 @@ namespace Solutio.Core.Entities
         public bool CanClose { get; set; }
 
         public int MaximumTimeAllowed { get; set; }
+
+        public enum eId
+        {
+            InDraft = 1,
+            Audit = 2,
+            Presented = 3,
+            WaitForAction = 4,
+            InMonitoring = 5,
+            Offered = 6,
+            Acepted = 7,
+            Outstanding = 8,
+            Close = 9
+        }
     }
 }

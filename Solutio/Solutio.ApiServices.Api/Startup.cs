@@ -23,6 +23,7 @@ using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
+using Solutio.Core.Services.Factories;
 using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using Solutio.Core.Services.ServicesProviders;
@@ -119,6 +120,7 @@ namespace Solutio.ApiServices.Api
             services.AddSingleton<Solutio.Core.Services.ApplicationServices.IEmailSender, EmailSender>();
             services.AddTransient<ISendConfirmationEmailService, SendConfirmationEmailService>();
             services.AddTransient<ISendResetPasswordService, SendResetPasswordService>();
+            services.AddTransient<IChangeClaimStateService, ChangeClaimStateService>();
             
             #endregion Services Settings
 
@@ -127,6 +129,12 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<ITokenBuilder, TokenBuilder>();
 
             #endregion Builder Settings
+
+            #region Factories Settings
+
+            services.AddTransient<IClaimStateFactory, ClaimStateFactory>();
+
+            #endregion Factories Settings
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
