@@ -16,6 +16,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
             builder.HasOne(entity => entity.Vehicle)
                 .WithMany(entity => entity.ClaimVehicles)
                 .HasForeignKey(entity => entity.VehicleId);
+
+            builder.HasQueryFilter(x => x.Deleted == null);
         }
     }
 }

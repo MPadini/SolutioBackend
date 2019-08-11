@@ -12,6 +12,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
         {
             builder.HasKey(entity => entity.Id);
             builder.Property(entity => entity.Patent).IsRequired();
+            builder.HasQueryFilter(x => x.Deleted == null);
         }
     }
 }

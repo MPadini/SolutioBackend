@@ -11,6 +11,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
         public override void OnConfigure(EntityTypeBuilder<VehicleParticipationTypeDB> builder)
         {
             builder.HasKey(entity => entity.Id);
+            builder.HasQueryFilter(x => x.Deleted == null);
         }
     }
 }

@@ -70,6 +70,33 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         #endregion DbSet Setups
 
+        public override int SaveChanges()
+        {
+            SetLogicalDelete();
+            SetUpdateDate();
+            
+            return base.SaveChanges();
+        }
+
+        private void SetLogicalDelete()
+        {
+            foreach (var item in ChangeTracker.Entries().Where(e => e.State == EntityState.Deleted &&
+             e.Metadata.GetProperties().Any(x => x.Name == "Deleted")))
+            {
+                item.State = EntityState.Unchanged;
+                item.CurrentValues["Deleted"] = DateTime.Now;
+            }
+        }
+
+        private void SetUpdateDate()
+        {
+            foreach (var item in ChangeTracker.Entries().Where(e => e.State == EntityState.Modified &&
+                         e.Metadata.GetProperties().Any(x => x.Name == "Modified")))
+            {
+                item.CurrentValues["Modified"] = DateTime.Now;
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

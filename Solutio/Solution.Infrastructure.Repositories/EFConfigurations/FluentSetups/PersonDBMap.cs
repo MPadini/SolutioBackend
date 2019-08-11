@@ -14,6 +14,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
             builder.Property(entity => entity.DocumentNumber).IsRequired();
             builder.Property(entity => entity.Name).IsRequired();
             builder.Property(entity => entity.Surname).IsRequired();
+            builder.HasQueryFilter(x => x.Deleted == null);
         }
     }
 }

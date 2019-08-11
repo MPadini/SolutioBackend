@@ -13,6 +13,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
             builder.HasKey(claim => claim.Id);
             builder.Property(claim => claim.Date).IsRequired();
             builder.Property(claim => claim.Hour).IsRequired();
+            builder.HasQueryFilter(x => x.Deleted == null);
         }
     }
 }

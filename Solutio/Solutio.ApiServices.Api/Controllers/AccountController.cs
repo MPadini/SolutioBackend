@@ -104,6 +104,11 @@ namespace Solutio.ApiServices.Api.Controllers
                     return NotFound();
                 }
 
+                if (user.EmailConfirmed)
+                {
+                    throw new ApplicationException("El correo ingresado ya fue confirmado");
+                }
+
                 await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
 
                 return Ok();

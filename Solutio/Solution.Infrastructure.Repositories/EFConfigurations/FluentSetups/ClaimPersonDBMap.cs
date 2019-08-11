@@ -16,6 +16,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
             builder.HasOne(entity => entity.Person)
                 .WithMany(entity => entity.ClaimPersons)
                 .HasForeignKey(entity => entity.PersonId);
+
+            builder.HasQueryFilter(x => x.Deleted == null);
         }
     }
 }
