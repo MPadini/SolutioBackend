@@ -85,4 +85,7 @@
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\ClaimStatesPostDeployment.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Solutio.Infrastructure.Database.refactorlog" />
+  </ItemGroup>
 </Project>

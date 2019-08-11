@@ -8,5 +8,7 @@ namespace Solutio.ApiServices.Api.Dtos
     public class ClaimStateDto : BaseEntityDto
     {
         public string Description { get; set; }
+
+        public int MaximumTimeAllowed { get; set; }
     }
 }

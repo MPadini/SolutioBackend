@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
 {
-    public class ClaimStateService : IClaimStateService
+    public class ClaimGetStateService : IClaimGetStateService
     {
         private readonly IClaimStateRepository claimStateRepository;
 
-        public ClaimStateService(IClaimStateRepository claimStateRepository)
+        public ClaimGetStateService(IClaimStateRepository claimStateRepository)
         {
             this.claimStateRepository = claimStateRepository;
         }

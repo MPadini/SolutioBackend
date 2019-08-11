@@ -14,9 +14,9 @@ namespace Solutio.ApiServices.Api.Controllers
     [ApiController]
     public class ClaimStateController : ControllerBase
     {
-        private readonly IClaimStateService claimStateService;
+        private readonly IClaimGetStateService claimStateService;
 
-        public ClaimStateController(IClaimStateService claimStateService)
+        public ClaimStateController(IClaimGetStateService claimStateService)
         {
             this.claimStateService = claimStateService;
         }

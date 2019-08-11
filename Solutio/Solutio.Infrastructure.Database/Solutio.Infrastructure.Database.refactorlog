@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="0b1958fe-4a52-4a57-8fa5-5901327d147b" ChangeDateTime="08/11/2019 14:48:12">
+    <Property Name="ElementName" Value="[dbo].[ClaimStates].[public int MaximumTimeAllowed { get; set; }]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ClaimStates]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MaximumTimeAllowed" />
+  </Operation>
+</Operations>

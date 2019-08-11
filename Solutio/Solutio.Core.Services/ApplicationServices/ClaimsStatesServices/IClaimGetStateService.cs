@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Solutio.Core.Services.ApplicationServices.ClaimsStatesServices
 {
-    public interface IClaimStateService
+    public interface IClaimGetStateService
     {
         Task<List<ClaimState>> GetAll();
     }

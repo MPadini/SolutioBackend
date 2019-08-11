@@ -115,7 +115,7 @@ namespace Solutio.ApiServices.Api
             #region Services Settings
 
             services.AddTransient<INewClaimService, NewClaimService>();
-            services.AddTransient<IClaimStateService, ClaimStateService>();
+            services.AddTransient<IClaimGetStateService, ClaimGetStateService>();
             services.AddSingleton<Solutio.Core.Services.ApplicationServices.IEmailSender, EmailSender>();
             services.AddTransient<ISendConfirmationEmailService, SendConfirmationEmailService>();
             services.AddTransient<ISendResetPasswordService, SendResetPasswordService>();
