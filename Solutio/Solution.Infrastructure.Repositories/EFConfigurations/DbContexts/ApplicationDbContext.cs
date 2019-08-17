@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Solutio.Infrastructure.Repositories.Entities;
 using Microsoft.AspNetCore.Identity;
 using Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups;
+using System.Threading.Tasks;
 
 namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 {
@@ -68,13 +69,16 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimVehicleDB> ClaimVehicles { get; set; }
 
+        public DbSet<ClaimFileDB> ClaimFiles { get; set; }
+
         #endregion DbSet Setups
 
         public override int SaveChanges()
         {
-            SetLogicalDelete();
+            SetCreateDate();
             SetUpdateDate();
-            
+            SetLogicalDelete();
+                   
             return base.SaveChanges();
         }
 
@@ -85,6 +89,15 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             {
                 item.State = EntityState.Unchanged;
                 item.CurrentValues["Deleted"] = DateTime.Now;
+            }
+        }
+
+        private void SetCreateDate()
+        {
+            foreach (var item in ChangeTracker.Entries().Where(e => e.State == EntityState.Added &&
+             e.Metadata.GetProperties().Any(x => x.Name == "Created")))
+            {
+                item.CurrentValues["Created"] = DateTime.Now;
             }
         }
 
@@ -111,6 +124,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new VehicleModelDBMap());
             modelBuilder.ApplyConfiguration(new VehicleTypeDBMap());
             modelBuilder.ApplyConfiguration(new VehicleParticipationTypeDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimFileDBMap());
         }
     }
 }

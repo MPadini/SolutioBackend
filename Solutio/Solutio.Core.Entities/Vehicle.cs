@@ -15,6 +15,10 @@ namespace Solutio.Core.Entities
 
         public long VehicleModelId { get; set; }
 
-        public VehicleModel VehicleModel { get; set; }
+        public string VehicleModel { get; set; }
+
+        public string VehicleManufacturer { get; set; }
+
+        public string DamageDetail { get; set; }
     }
 }

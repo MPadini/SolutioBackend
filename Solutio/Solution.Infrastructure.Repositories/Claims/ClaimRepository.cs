@@ -12,11 +12,11 @@ namespace Solutio.Infrastructure.Repositories.Claims
 {
     public class ClaimRepository : IClaimRepository
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext applicationDbContext;
 
         public ClaimRepository(ApplicationDbContext applicationDbContext)
         {
-            this.context = applicationDbContext;
+            this.applicationDbContext = applicationDbContext;
         }
 
         public async Task<long> Save(Claim claim)
@@ -25,8 +25,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
             {
                 var claimDb = claim.Adapt<ClaimDB>();
 
-                context.Claims.Add(claimDb);
-                return await context.SaveChangesAsync();
+                applicationDbContext.Claims.Add(claimDb);
+                return await applicationDbContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {

@@ -22,6 +22,7 @@ using Solutio.ApiServices.Api.Swagger;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
+using Solutio.Core.Services.ApplicationServices.FileService;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
 using Solutio.Core.Services.Factories;
 using Solutio.Core.Services.Repositories;
@@ -29,6 +30,7 @@ using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using Solutio.Core.Services.ServicesProviders;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
+using Solutio.Core.Services.ServicesProviders.FileService;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
 using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
@@ -105,6 +107,7 @@ namespace Solutio.ApiServices.Api
 
             services.AddTransient<IClaimRepository, ClaimRepository>();
             services.AddTransient<IClaimStateRepository, ClaimStateRepository>();
+            services.AddTransient<IClaimFileRepository, ClaimFileRepository>();
 
             #endregion Repositories Settings
 
@@ -121,7 +124,10 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<ISendConfirmationEmailService, SendConfirmationEmailService>();
             services.AddTransient<ISendResetPasswordService, SendResetPasswordService>();
             services.AddTransient<IChangeClaimStateService, ChangeClaimStateService>();
-            
+            services.AddTransient<IUploadFileService, UploadFileService>();
+            services.AddTransient<IDeleteFileService, DeleteFileService>();
+            services.AddTransient<IGetFileService, GetFileService>();
+
             #endregion Services Settings
 
             #region Builder Settings

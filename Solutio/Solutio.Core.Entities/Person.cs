@@ -21,8 +21,8 @@ namespace Solutio.Core.Entities
 
         public string Adress { get; set; }
 
-        public long PersonTypeId { get; set; }
+        //public long PersonTypeId { get; set; }
 
-        public PersonType PersonType { get; set; }
+        //public PersonType PersonType { get; set; }
     }
 }

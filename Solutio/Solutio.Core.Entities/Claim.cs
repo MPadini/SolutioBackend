@@ -17,8 +17,16 @@ namespace Solutio.Core.Entities
 
         public ClaimState State { get; set; }
 
-        public List<ClaimPerson> ClaimPersons { get; set; }
+        //public List<ClaimPerson> ClaimPersons { get; set; }
 
-        public List<ClaimVehicle> ClaimVehicles { get; set; }
+        //public List<ClaimVehicle> ClaimVehicles { get; set; }
+
+        public long InsuredPersonId { get; set; }
+
+        public Person InsuredPerson { get; set; }
+
+        public long InsuredVehicleId { get; set; }
+
+        public Vehicle InsuredVehicle { get; set; }
     }
 }
