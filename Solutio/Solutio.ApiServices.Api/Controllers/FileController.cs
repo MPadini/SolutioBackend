@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.ApiServices.Api.Dtos;
@@ -30,6 +32,7 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpGet("{fileId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(long fileId)
         {
             try
@@ -49,6 +52,7 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpPost]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post([FromBody] ClaimFileDto claimFile)
         {
             try
@@ -70,6 +74,7 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpDelete("{fileId}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete(long fileId)
         {
             try

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,6 +17,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Solutio.ApiServices.Api.Builder;
 using Solutio.ApiServices.Api.Filters;
 using Solutio.ApiServices.Api.Swagger;
@@ -79,8 +81,8 @@ namespace Solutio.ApiServices.Api
                 config.SignIn.RequireConfirmedEmail = true;
                 config.User.RequireUniqueEmail = true;
             })
-                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                 .AddDefaultTokenProviders();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             //Configure mail
             services.AddOptions();
@@ -89,7 +91,19 @@ namespace Solutio.ApiServices.Api
             //Configure urls
             services.Configure<UrlLoginSettings>(Configuration.GetSection("UrlLoginSettings"));
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)//.AddJwtBearer();
+            .AddJwtBearer(options =>
+                 options.TokenValidationParameters = new TokenValidationParameters
+                 {
+                     ValidateIssuer = true,
+                     ValidateAudience = true,
+                     ValidateLifetime = true,
+                     ValidateIssuerSigningKey = true,
+                     ValidIssuer = "yourdomain.com",
+                     ValidAudience = "yourdomain.com",
+                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["SecretKeyValue"])),
+                     ClockSkew = TimeSpan.Zero
+                 });
 
             //Filter for validation
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
@@ -175,6 +189,16 @@ namespace Solutio.ApiServices.Api
                                        Description = SwaggerConfiguration.DocInfoDescription,
                                        Contact = contact
                                    });
+                swagger.AddSecurityDefinition("Bearer",
+                                    new ApiKeyScheme
+                                    {
+                                        In = "header",
+                                        Description = "Please enter into field the word 'Bearer' following by space and JWT",
+                                        Name = "Authorization",
+                                        Type = "apiKey"
+                                    });
+                swagger.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {{ "Bearer", Enumerable.Empty<string>()},});
             });
         }
     }
