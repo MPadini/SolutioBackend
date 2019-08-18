@@ -19,12 +19,12 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public List<ClaimInsuredVehicleDto> ClaimInsuredVehicles { get; set; }
 
-        public decimal TotalBudgetAmount { get; set; }
+        public decimal? TotalBudgetAmount { get; set; }
 
         public string InsuranceCompany { get; set; }
 
         public bool HaveFullCoverage { get; set; }
 
-        public decimal Franchise { get; set; }
+        public decimal? Franchise { get; set; }
     }
 }

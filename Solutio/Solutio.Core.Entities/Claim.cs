@@ -7,6 +7,12 @@ namespace Solutio.Core.Entities
 {
     public class Claim : BaseEntity
     {
+        public Claim()
+        {
+            ClaimInsuredPersons = new List<ClaimInsuredPerson>();
+            ClaimInsuredVehicles = new List<ClaimInsuredVehicle>();
+        }
+
         public string Story { get; set; }
 
         public DateTime Date { get; set; }
@@ -21,15 +27,12 @@ namespace Solutio.Core.Entities
 
         public List<ClaimInsuredVehicle> ClaimInsuredVehicles { get; set; }
 
-        public decimal TotalBudgetAmount { get; set; }
+        public decimal? TotalBudgetAmount { get; set; }
 
         public string InsuranceCompany { get; set; }
 
         public bool HaveFullCoverage { get; set; }
 
-        public decimal Franchise { get; set; }
-
-        //TODO:
-        //domicilio
+        public decimal? Franchise { get; set; }
     }
 }

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Solutio.ApiServices.Api.Dtos.Requests;
+using Solutio.ApiServices.Api.Dtos;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 
@@ -13,33 +15,76 @@ namespace Solutio.ApiServices.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ClaimController : ControllerBase
     {
         private readonly INewClaimService newClaimService;
+        private readonly IGetClaimService getClaimService;
+        private readonly IUpdateClaimService updateClaimService;
+        private readonly IDeleteClaimService deleteClaimService;
 
-        public ClaimController(INewClaimService newClaimService)
+        public ClaimController(
+            INewClaimService newClaimService, 
+            IGetClaimService getClaimService, 
+            IUpdateClaimService updateClaimService, 
+            IDeleteClaimService deleteClaimService)
         {
             this.newClaimService = newClaimService;
+            this.getClaimService = getClaimService;
+            this.updateClaimService = updateClaimService;
+            this.deleteClaimService = deleteClaimService;
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody] NewClaimRequestDto newClaimRequest)
+        public async Task<IActionResult> Get()
         {
             try
             {
-                var claim = newClaimRequest.Claim.Adapt<Claim>();
+                var claims = await getClaimService.GetAll();
+                if (claims == null || !claims.Any())
+                {
+                    return NotFound();
+                }
+
+                var claimsDto = claims.Adapt<List<ClaimDto>>();
+
+                return Ok(new { claimsDto });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(long id)
+        {
+            try
+            {
+                var claim = await getClaimService.GetById(id);
+                if (claim == null)
+                {
+                    return NotFound();
+                }
+
+                var claimDto = claim.Adapt<ClaimDto>();
+
+                return Ok(new { claimDto });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] ClaimDto claimDto)
+        {
+            try
+            {
+                if (claimDto == null) return BadRequest("ClaimDto null");
+
+                var claim = claimDto.Adapt<Claim>();
                 var claimId = await newClaimService.Save(claim);
 
                 return Ok(new { claimId });
@@ -51,13 +96,45 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(long id, [FromBody] string value)
         {
+            try
+            {
+                var claim = await getClaimService.GetById(id);
+                if (claim == null)
+                {
+                    return NotFound();
+                }
+
+                await updateClaimService.Update(claim);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(long id)
         {
+            try
+            {
+                var claim = await getClaimService.GetById(id);
+                if (claim == null)
+                {
+                    return NotFound();
+                }
+
+                await deleteClaimService.Delete(claim);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
         }
     }
 }

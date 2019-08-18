@@ -6,9 +6,11 @@ namespace Solutio.Infrastructure.Repositories.Entities
 {
     public class ClaimInsuredPersonDB : BaseEntityDB
     {
-        //public long PersonResponsabilityTypeId { get; set; }
-
-        //public PersonResponsabilityTypeDB PersonResponsabilityType { get; set; }
+        public ClaimInsuredPersonDB()
+        {
+            Person = new PersonDB();
+            Claim = new ClaimDB();
+        }
 
         public long PersonId { get; set; }
 

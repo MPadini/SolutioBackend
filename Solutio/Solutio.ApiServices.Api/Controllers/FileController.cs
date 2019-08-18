@@ -15,6 +15,7 @@ namespace Solutio.ApiServices.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FileController : ControllerBase
     {
         private readonly IUploadFileService uploadFileService;
@@ -32,7 +33,6 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpGet("{fileId}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Get(long fileId)
         {
             try
@@ -52,7 +52,6 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Post([FromBody] ClaimFileDto claimFile)
         {
             try
@@ -74,7 +73,6 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpDelete("{fileId}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> Delete(long fileId)
         {
             try

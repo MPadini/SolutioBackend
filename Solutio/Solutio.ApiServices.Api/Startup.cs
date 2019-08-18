@@ -141,6 +141,9 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IUploadFileService, UploadFileService>();
             services.AddTransient<IDeleteFileService, DeleteFileService>();
             services.AddTransient<IGetFileService, GetFileService>();
+            services.AddTransient<IGetClaimService, GetClaimService>();
+            services.AddTransient<IUpdateClaimService, UpdateClaimService>();
+            services.AddTransient<IDeleteClaimService, DeleteClaimService>();
 
             #endregion Services Settings
 

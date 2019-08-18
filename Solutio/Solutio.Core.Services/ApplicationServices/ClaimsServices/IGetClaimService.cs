@@ -4,18 +4,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Solutio.Core.Services.Repositories.ClaimsRepositories
+namespace Solutio.Core.Services.ApplicationServices.ClaimsServices
 {
-    public interface IClaimRepository
+    public interface IGetClaimService
     {
-        Task<long> Save(Claim claim);
-
         Task<Claim> GetById(long id);
 
         Task<List<Claim>> GetAll();
-
-        Task Update(Claim claim);
-
-        Task Delete(Claim claim);
     }
 }

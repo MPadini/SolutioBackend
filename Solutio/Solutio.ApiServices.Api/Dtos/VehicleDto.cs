@@ -13,8 +13,10 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public VehicleTypeDto VehicleType { get; set; }
 
-        public long VehicleModelId { get; set; }
+        public string VehicleModel { get; set; }
 
-        public VehicleModelDto VehicleModel { get; set; }
+        public string VehicleManufacturer { get; set; }
+
+        public string DamageDetail { get; set; }
     }
 }

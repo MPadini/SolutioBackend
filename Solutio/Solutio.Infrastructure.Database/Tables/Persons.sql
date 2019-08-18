@@ -14,5 +14,5 @@
 	[Modified] DATETIME,
 	[Deleted] DATETIME,
     CONSTRAINT [PK_Persons] PRIMARY KEY ([Id]),
-    CONSTRAINT [FK_Persons_PersonTypes_PersonTypeId] FOREIGN KEY ([PersonTypeId]) REFERENCES [PersonTypes] ([Id]) ON DELETE CASCADE
+    CONSTRAINT [FK_Persons_PersonTypes_PersonTypeId] FOREIGN KEY ([PersonTypeId]) REFERENCES [PersonTypes] ([Id])
 );

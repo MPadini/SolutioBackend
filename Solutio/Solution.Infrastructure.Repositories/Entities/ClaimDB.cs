@@ -6,6 +6,12 @@ namespace Solutio.Infrastructure.Repositories.Entities
 {
     public class ClaimDB : BaseEntityDB
     {
+        public ClaimDB()
+        {
+            ClaimInsuredPersons = new List<ClaimInsuredPersonDB>();
+            ClaimInsuredVehicles = new List<ClaimInsuredVehicleDB>();
+        }
+
         public string Story { get; set; }
 
         public DateTime Date { get; set; }
@@ -20,12 +26,12 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public List<ClaimInsuredVehicleDB> ClaimInsuredVehicles { get; set; }
 
-        public decimal TotalBudgetAmount { get; set; }
+        public decimal? TotalBudgetAmount { get; set; }
 
         public string InsuranceCompany { get; set; }
 
         public bool HaveFullCoverage { get; set; }
 
-        public decimal Franchise { get; set; }
+        public decimal? Franchise { get; set; }
     }
 }
