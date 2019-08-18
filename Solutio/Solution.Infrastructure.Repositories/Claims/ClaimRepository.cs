@@ -91,6 +91,15 @@ namespace Solutio.Infrastructure.Repositories.Claims
                         });
                     }
 
+                    if (claimDb.Files != null)
+                    {
+                        claimDb.Files.ForEach(file =>
+                        {
+                            applicationDbContext.ClaimFiles.Remove(file);
+                            applicationDbContext.SaveChanges();
+                        });
+                    }
+
                     applicationDbContext.Claims.Remove(claimDb);
                     applicationDbContext.SaveChanges();
 
