@@ -11,6 +11,7 @@ namespace Solutio.Core.Entities
         {
             ClaimInsuredPersons = new List<ClaimInsuredPerson>();
             ClaimInsuredVehicles = new List<ClaimInsuredVehicle>();
+            Files = new List<ClaimFile>();
         }
 
         public string Story { get; set; }
@@ -34,5 +35,7 @@ namespace Solutio.Core.Entities
         public bool HaveFullCoverage { get; set; }
 
         public decimal? Franchise { get; set; }
+
+        public List<ClaimFile> Files { get; set; }
     }
 }

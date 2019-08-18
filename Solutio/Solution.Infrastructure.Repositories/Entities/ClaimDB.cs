@@ -10,6 +10,7 @@ namespace Solutio.Infrastructure.Repositories.Entities
         {
             ClaimInsuredPersons = new List<ClaimInsuredPersonDB>();
             ClaimInsuredVehicles = new List<ClaimInsuredVehicleDB>();
+            Files = new List<ClaimFileDB>();
         }
 
         public string Story { get; set; }
@@ -33,5 +34,7 @@ namespace Solutio.Infrastructure.Repositories.Entities
         public bool HaveFullCoverage { get; set; }
 
         public decimal? Franchise { get; set; }
+
+        public List<ClaimFileDB> Files { get; set; }
     }
 }

@@ -26,5 +26,14 @@ namespace Solutio.ApiServices.Api.Dtos
         public bool HaveFullCoverage { get; set; }
 
         public decimal? Franchise { get; set; }
+
+        public List<ClaimSimpleFileDto> Files { get; set; }
+    }
+
+    public class ClaimSimpleFileDto
+    {
+        public string FileExtension { get; set; }
+
+        public string FileName { get; set; }
     }
 }

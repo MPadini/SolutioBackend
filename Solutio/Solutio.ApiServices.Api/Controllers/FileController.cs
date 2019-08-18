@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.ApiServices.Api.Dtos;
 using Solutio.Core.Entities;
+using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
 
 namespace Solutio.ApiServices.Api.Controllers
@@ -21,15 +22,18 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly IUploadFileService uploadFileService;
         private readonly IDeleteFileService deleteFileService;
         private readonly IGetFileService getFileService;
+        private readonly IGetClaimService getClaimService;
 
         public FileController(
             IUploadFileService uploadFileService, 
             IDeleteFileService deleteFileService, 
-            IGetFileService getFileService)
+            IGetFileService getFileService,
+            IGetClaimService getClaimService)
         {
             this.uploadFileService = uploadFileService;
             this.deleteFileService = deleteFileService;
             this.getFileService = getFileService;
+            this.getClaimService = getClaimService;
         }
 
         [HttpGet("{fileId}")]
@@ -58,8 +62,11 @@ namespace Solutio.ApiServices.Api.Controllers
             {
                 if (claimFile == null) return BadRequest("ClaimFileDto null");
 
-                //TODO:
-                //validate if claim exists
+                var claim = await getClaimService.GetById(claimFile.ClaimId);
+                if (claim == null)
+                {
+                    return NotFound("Claim does not exists.");
+                }
 
                 var file = claimFile.Adapt<ClaimFile>();
                 var fileId = await uploadFileService.Upload(file);

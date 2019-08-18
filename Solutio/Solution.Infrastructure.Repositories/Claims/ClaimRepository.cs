@@ -44,6 +44,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 .ThenInclude(x => x.Person)
                 .Include(x => x.ClaimInsuredVehicles)
                 .ThenInclude(x => x.Vehicle)
+                .Include(x => x.Files)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return claimDb.Adapt<Claim>();
