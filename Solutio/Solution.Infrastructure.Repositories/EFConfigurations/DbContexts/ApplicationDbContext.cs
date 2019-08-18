@@ -51,23 +51,17 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimStateDB> ClaimStates { get; set; }
 
-        public DbSet<ClaimPersonDB> ClaimPersons { get; set; }
+        public DbSet<ClaimInsuredPersonDB> ClaimInsuredPersons { get; set; }
 
         public DbSet<PersonDB> Persons { get; set; }
 
         public DbSet<PersonTypeDB> PersonTypes { get; set; }
 
-        public DbSet<PersonResponsabilityTypeDB> PersonResponsabilityTypes { get; set; }
-
-        public DbSet<VehicleParticipationTypeDB> VehicleParticipationTypes { get; set; }
-
-        public DbSet<VehicleModelDB> VehicleModels { get; set; }
-
         public DbSet<VehicleTypeDB> VehicleTypes { get; set; }
 
         public DbSet<VehicleDB> Vehicles { get; set; }
 
-        public DbSet<ClaimVehicleDB> ClaimVehicles { get; set; }
+        public DbSet<ClaimInsuredVehicleDB> ClaimInsuredVehicles { get; set; }
 
         public DbSet<ClaimFileDB> ClaimFiles { get; set; }
 
@@ -114,16 +108,13 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
         {
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfiguration(new ClaimDBMap());
-            modelBuilder.ApplyConfiguration(new ClaimPersonDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimInsuredPersonDBMap());
             modelBuilder.ApplyConfiguration(new ClaimStateDBMap());
-            modelBuilder.ApplyConfiguration(new ClaimVehicleDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimInsuredVehicleDBMap());
             modelBuilder.ApplyConfiguration(new PersonDBMap());
-            modelBuilder.ApplyConfiguration(new PersonResponsabilityTypeDBMap());
             modelBuilder.ApplyConfiguration(new PersonTypeDBMap());
             modelBuilder.ApplyConfiguration(new VehicleDBMap());
-            modelBuilder.ApplyConfiguration(new VehicleModelDBMap());
             modelBuilder.ApplyConfiguration(new VehicleTypeDBMap());
-            modelBuilder.ApplyConfiguration(new VehicleParticipationTypeDBMap());
             modelBuilder.ApplyConfiguration(new ClaimFileDBMap());
         }
     }

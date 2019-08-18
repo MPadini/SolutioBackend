@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Solutio.Core.Entities
 {
-    public class ClaimVehicle
+    public class ClaimInsuredVehicle
     {
         public long VehicleId { get; set; }
 
@@ -14,8 +14,8 @@ namespace Solutio.Core.Entities
 
         public Claim Claim { get; set; }
 
-        public long VehicleParticipationTypeId { get; set; }
+       // public long VehicleParticipationTypeId { get; set; }
 
-        public VehicleParticipationType VehicleParticipationType { get; set; }
+       // public VehicleParticipationType VehicleParticipationType { get; set; }
     }
 }

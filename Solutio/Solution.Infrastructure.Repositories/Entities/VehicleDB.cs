@@ -12,10 +12,14 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public VehicleTypeDB VehicleType { get; set; }
 
+        public List<ClaimInsuredVehicleDB> ClaimVehicles { get; set; }
+
         public long VehicleModelId { get; set; }
 
-        public VehicleModelDB VehicleModel { get; set; }
+        public string VehicleModel { get; set; }
 
-        public List<ClaimVehicleDB> ClaimVehicles { get; set; }
+        public string VehicleManufacturer { get; set; }
+
+        public string DamageDetail { get; set; }
     }
 }

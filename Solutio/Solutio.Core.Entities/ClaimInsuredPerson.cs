@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Solutio.Core.Entities
 {
-    public class ClaimPerson
+    public class ClaimInsuredPerson
     {
-        public long PersonResponsabilityTypeId { get; set; }
-
-        public PersonResponsabilityType PersonResponsabilityType { get; set; }
+        //public long PersonResponsabilityTypeId { get; set; }
+        //public PersonResponsabilityType PersonResponsabilityType { get; set; }
 
         public long PersonId { get; set; }
 

@@ -71,23 +71,20 @@
     <Build Include="Tables\AspNetUserRoles.sql" />
     <Build Include="Tables\AspNetUserTokens.sql" />
     <Build Include="Tables\ClaimStates.sql" />
-    <Build Include="Tables\PersonResponsabilityTypes.sql" />
     <Build Include="Tables\PersonTypes.sql" />
-    <Build Include="Tables\VehicleModels.sql" />
     <Build Include="Tables\VehicleTypes.sql" />
     <Build Include="Tables\Claims.sql" />
     <Build Include="Tables\Persons.sql" />
     <Build Include="Tables\Vehicles.sql" />
-    <Build Include="Tables\ClaimPersons.sql" />
-    <Build Include="Tables\ClaimVehicles.sql" />
-    <Build Include="Tables\VehicleParticipationTypes.sql" />
+    <Build Include="Tables\ClaimInsuredPersons.sql" />
+    <Build Include="Tables\ClaimInsuredVehicles.sql" />
     <Build Include="Tables\ClaimFiles.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />
-    <None Include="dbo\Post-Deployment\PersonResponsabilityTypes.sql" />
-    <None Include="dbo\Post-Deployment\VehicleParticipationTypes.sql" />
     <None Include="dbo\Post-Deployment\ClaimStates.sql" />
+    <None Include="dbo\Post-Deployment\PersonTypes.sql" />
+    <None Include="dbo\Post-Deployment\VehicleTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Solutio.Infrastructure.Database.refactorlog" />

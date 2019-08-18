@@ -1,15 +1,14 @@
 ﻿
-SET IDENTITY_INSERT [dbo].[PersonResponsabilityTypes] ON
+SET IDENTITY_INSERT [dbo].[VehicleTypes] ON
 GO
 --DEFINO LA TABLA DESTINO (TARGET)
-MERGE INTO [dbo].[PersonResponsabilityTypes] AS Target
+MERGE INTO [dbo].[VehicleTypes] AS Target
 
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
-	(1, N'Asegurado'),
-	(2, N'Tercero')
-) AS Source([PersonResponsabilityTypesId], [Description]) -- > AGREGAR COLUMNAS 
-ON Target.[Id] = [PersonResponsabilityTypesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
+	(1, N'Automóvil')
+) AS Source([VehicleTypesId], [Description]) -- > AGREGAR COLUMNAS 
+ON Target.[Id] = [VehicleTypesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 
 -- EL MERGE PLANTEA RESOLVER 3 CASOS BASICOS
 
@@ -21,7 +20,7 @@ WHEN MATCHED THEN
 WHEN NOT MATCHED BY TARGET THEN
 	INSERT ([Id],
 			[Description])
-	VALUES (Source.[PersonResponsabilityTypesId],
+	VALUES (Source.[VehicleTypesId],
 			Source.[Description])
 
 -- 3) NO MATCH SOURCE (Existe en DESTINO pero no en ORIGEN). Hay 2 OPCIONES
@@ -33,5 +32,5 @@ WHEN NOT MATCHED BY Source THEN
     DELETE;
 GO
 
-SET IDENTITY_INSERT [PersonResponsabilityTypes] OFF
+SET IDENTITY_INSERT [VehicleTypes] OFF
 GO

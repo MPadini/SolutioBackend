@@ -6,9 +6,9 @@ using System.Text;
 
 namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
 {
-    public class ClaimPersonDBMap : BaseMap<ClaimPersonDB>
+    public class ClaimInsuredPersonDBMap : BaseMap<ClaimInsuredPersonDB>
     {
-        public override void OnConfigure(EntityTypeBuilder<ClaimPersonDB> builder)
+        public override void OnConfigure(EntityTypeBuilder<ClaimInsuredPersonDB> builder)
         {
             builder.Ignore(entity => entity.Id);
             builder.HasKey(entity => new { entity.PersonId, entity.ClaimId });

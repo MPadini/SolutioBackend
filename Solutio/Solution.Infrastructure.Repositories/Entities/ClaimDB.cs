@@ -16,8 +16,16 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public ClaimStateDB State { get; set; }
 
-        public List<ClaimPersonDB> ClaimPersons { get; set; }
+        public List<ClaimInsuredPersonDB> ClaimInsuredPersons { get; set; }
 
-        public List<ClaimVehicleDB> ClaimVehicles { get; set; }
+        public List<ClaimInsuredVehicleDB> ClaimInsuredVehicles { get; set; }
+
+        public decimal TotalBudgetAmount { get; set; }
+
+        public string InsuranceCompany { get; set; }
+
+        public bool HaveFullCoverage { get; set; }
+
+        public decimal Franchise { get; set; }
     }
 }

@@ -11,6 +11,10 @@ namespace Solutio.Core.Entities
 
         public string Surname { get; set; }
 
+        public string LegalEntityName { get; set; }
+
+        public string Cuit { get; set; }
+
         public int DocumentNumber { get; set; }
 
         public int TelephoneNumber { get; set; }
@@ -19,10 +23,10 @@ namespace Solutio.Core.Entities
 
         public string Email { get; set; }
 
-        public string Adress { get; set; }
+        //public string Adress { get; set; }
 
-        //public long PersonTypeId { get; set; }
+        public long PersonTypeId { get; set; }
 
-        //public PersonType PersonType { get; set; }
+        public PersonType PersonType { get; set; }
     }
 }

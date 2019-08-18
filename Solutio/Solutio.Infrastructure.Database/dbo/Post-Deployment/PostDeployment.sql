@@ -10,6 +10,6 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-:r .\PersonResponsabilityTypes.sql
-:r .\VehicleParticipationTypes.sql
 :r .\ClaimStates.sql
+:r .\PersonTypes.sql
+:r .\VehicleTypes.sql

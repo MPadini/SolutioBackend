@@ -15,8 +15,16 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public long StateId { get; set; }
 
-        public List<ClaimPersonDto> ClaimPersons { get; set; }
+        public List<ClaimInsuredPersonDto> ClaimInsuredPersons { get; set; }
 
-        public List<ClaimVehicleDto> ClaimVehicles { get; set; }
+        public List<ClaimInsuredVehicleDto> ClaimInsuredVehicles { get; set; }
+
+        public decimal TotalBudgetAmount { get; set; }
+
+        public string InsuranceCompany { get; set; }
+
+        public bool HaveFullCoverage { get; set; }
+
+        public decimal Franchise { get; set; }
     }
 }

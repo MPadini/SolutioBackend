@@ -17,16 +17,19 @@ namespace Solutio.Core.Entities
 
         public ClaimState State { get; set; }
 
-        //public List<ClaimPerson> ClaimPersons { get; set; }
+        public List<ClaimInsuredPerson> ClaimInsuredPersons { get; set; }
 
-        //public List<ClaimVehicle> ClaimVehicles { get; set; }
+        public List<ClaimInsuredVehicle> ClaimInsuredVehicles { get; set; }
 
-        public long InsuredPersonId { get; set; }
+        public decimal TotalBudgetAmount { get; set; }
 
-        public Person InsuredPerson { get; set; }
+        public string InsuranceCompany { get; set; }
 
-        public long InsuredVehicleId { get; set; }
+        public bool HaveFullCoverage { get; set; }
 
-        public Vehicle InsuredVehicle { get; set; }
+        public decimal Franchise { get; set; }
+
+        //TODO:
+        //domicilio
     }
 }

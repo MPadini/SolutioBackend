@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Solutio.Infrastructure.Repositories.Entities
 {
-    public class ClaimVehicleDB : BaseEntityDB
+    public class ClaimInsuredVehicleDB : BaseEntityDB
     {
         public long VehicleId { get; set; }
 
@@ -14,8 +14,8 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public ClaimDB Claim { get; set; }
 
-        public long VehicleParticipationTypeId { get; set; }
+        //public long VehicleParticipationTypeId { get; set; }
 
-        public VehicleParticipationTypeDB VehicleParticipationType { get; set; }
+        //public VehicleParticipationTypeDB VehicleParticipationType { get; set; }
     }
 }

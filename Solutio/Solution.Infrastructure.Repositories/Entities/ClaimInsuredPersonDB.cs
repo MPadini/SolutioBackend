@@ -4,11 +4,11 @@ using System.Text;
 
 namespace Solutio.Infrastructure.Repositories.Entities
 {
-    public class ClaimPersonDB : BaseEntityDB
+    public class ClaimInsuredPersonDB : BaseEntityDB
     {
-        public long PersonResponsabilityTypeId { get; set; }
+        //public long PersonResponsabilityTypeId { get; set; }
 
-        public PersonResponsabilityTypeDB PersonResponsabilityType { get; set; }
+        //public PersonResponsabilityTypeDB PersonResponsabilityType { get; set; }
 
         public long PersonId { get; set; }
 
