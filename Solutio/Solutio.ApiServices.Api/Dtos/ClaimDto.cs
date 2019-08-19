@@ -11,7 +11,7 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public DateTime Date { get; set; }
 
-        public DateTime Hour { get; set; }
+        public string Hour { get; set; }
 
         public long StateId { get; set; }
 
@@ -32,6 +32,8 @@ namespace Solutio.ApiServices.Api.Dtos
 
     public class ClaimSimpleFileDto
     {
+        public long Id { get; set; }
+
         public string FileExtension { get; set; }
 
         public string FileName { get; set; }

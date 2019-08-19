@@ -18,7 +18,7 @@ namespace Solutio.Core.Entities
 
         public DateTime Date { get; set; }
 
-        public DateTime Hour { get; set; }
+        public string Hour { get; set; }
 
         public long StateId { get; set; }
 
