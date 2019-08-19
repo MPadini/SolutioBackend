@@ -19,7 +19,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Dtos\Requests\" />
     <Folder Include="Dtos\Responses\" />
     <Folder Include="Swagger\" />
   </ItemGroup>

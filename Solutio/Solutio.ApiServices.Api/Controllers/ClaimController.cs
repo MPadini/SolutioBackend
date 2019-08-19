@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.ApiServices.Api.Dtos;
+using Solutio.ApiServices.Api.Dtos.Requests;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 
@@ -78,13 +79,13 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ClaimDto claimDto)
+        public async Task<IActionResult> Post([FromBody] NewClaimRequest newClaimRequest)
         {
             try
             {
-                if (claimDto == null) return BadRequest("ClaimDto null");
+                if (newClaimRequest == null) return BadRequest("ClaimDto null");
 
-                var claim = claimDto.Adapt<Claim>();
+                var claim = newClaimRequest.Adapt<Claim>();
                 var claimId = await newClaimService.Save(claim);
 
                 return Ok(new { claimId });

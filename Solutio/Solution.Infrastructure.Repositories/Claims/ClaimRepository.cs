@@ -22,19 +22,27 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<long> Save(Claim claim)
         {
-            try
+            long  result = 0;
+            using (var transaction = applicationDbContext.Database.BeginTransaction())
             {
-                var claimDb = claim.Adapt<ClaimDB>();
+                try
+                {
+                    var claimDb = claim.Adapt<ClaimDB>();
 
-                applicationDbContext.Claims.Add(claimDb);
-                applicationDbContext.SaveChanges();
+                    applicationDbContext.Claims.Add(claimDb);
+                    applicationDbContext.SaveChanges();
 
-                return claimDb.Id;
+                    transaction.Commit();
+
+                    result = claimDb.Id;
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                }
             }
-            catch (Exception ex)
-            {
-                throw;
-            }
+
+            return result;
         }
 
         public async Task<Claim> GetById(long id)
@@ -69,36 +77,9 @@ namespace Solutio.Infrastructure.Repositories.Claims
             {
                 try
                 {
-                    if (claimDb.ClaimInsuredPersons!= null)
-                    {
-                        claimDb.ClaimInsuredPersons.ForEach(person =>
-                        {
-                            person.Claim = null;
-                            person.Person = null;
-                            applicationDbContext.ClaimInsuredPersons.Remove(person);
-                            applicationDbContext.SaveChanges();
-                        });
-                    }
-                    
-                    if(claimDb.ClaimInsuredVehicles != null)
-                    {
-                        claimDb.ClaimInsuredVehicles.ForEach(vehicle =>
-                        {
-                            vehicle.Claim = null;
-                            vehicle.Vehicle = null;
-                            applicationDbContext.ClaimInsuredVehicles.Remove(vehicle);
-                            applicationDbContext.SaveChanges();
-                        });
-                    }
-
-                    if (claimDb.Files != null)
-                    {
-                        claimDb.Files.ForEach(file =>
-                        {
-                            applicationDbContext.ClaimFiles.Remove(file);
-                            applicationDbContext.SaveChanges();
-                        });
-                    }
+                    await DeleteClaimInsuredPersons(claimDb);
+                    await DeleteClaimInsuredVehicles(claimDb);
+                    await DeleteClaimFiles(claimDb);
 
                     applicationDbContext.Claims.Remove(claimDb);
                     applicationDbContext.SaveChanges();
@@ -109,6 +90,46 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 {
                     transaction.Rollback();
                 }
+            }
+        }
+
+        private async Task DeleteClaimInsuredPersons(ClaimDB claimDB)
+        {
+            if (claimDB.ClaimInsuredPersons != null)
+            {
+                claimDB.ClaimInsuredPersons.ForEach(person =>
+                {
+                    person.Claim = null;
+                    person.Person = null;
+                    applicationDbContext.ClaimInsuredPersons.Remove(person);
+                    applicationDbContext.SaveChanges();
+                });
+            }
+        }
+
+        private async Task DeleteClaimInsuredVehicles(ClaimDB claimDB)
+        {
+            if (claimDB.ClaimInsuredVehicles != null)
+            {
+                claimDB.ClaimInsuredVehicles.ForEach(vehicle =>
+                {
+                    vehicle.Claim = null;
+                    vehicle.Vehicle = null;
+                    applicationDbContext.ClaimInsuredVehicles.Remove(vehicle);
+                    applicationDbContext.SaveChanges();
+                });
+            }
+        }
+
+        private async Task DeleteClaimFiles(ClaimDB claimDB)
+        {
+            if (claimDB.Files != null)
+            {
+                claimDB.Files.ForEach(file =>
+                {
+                    applicationDbContext.ClaimFiles.Remove(file);
+                    applicationDbContext.SaveChanges();
+                });
             }
         }
     }
