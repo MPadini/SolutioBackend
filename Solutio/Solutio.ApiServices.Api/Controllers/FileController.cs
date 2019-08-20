@@ -11,10 +11,12 @@ using Solutio.ApiServices.Api.Dtos;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
+using Microsoft.AspNetCore.Cors;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class FileController : ControllerBase
