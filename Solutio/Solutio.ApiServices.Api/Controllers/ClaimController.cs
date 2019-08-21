@@ -11,10 +11,12 @@ using Solutio.ApiServices.Api.Dtos;
 using Solutio.ApiServices.Api.Dtos.Requests;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
+using Microsoft.AspNetCore.Cors;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ClaimController : ControllerBase
@@ -88,7 +90,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var claim = newClaimRequest.Adapt<Claim>();
                 var claimId = await newClaimService.Save(claim);
 
-                return Ok(new { claimId });
+                return Created("claim", new { claimId });
             }
             catch (Exception ex)
             {
@@ -109,7 +111,7 @@ namespace Solutio.ApiServices.Api.Controllers
 
                 await updateClaimService.Update(claim);
 
-                return Ok();
+                return Created("claim", new { claim.Id });
             }
             catch (Exception ex)
             {
@@ -130,7 +132,7 @@ namespace Solutio.ApiServices.Api.Controllers
 
                 await deleteClaimService.Delete(claim);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
