@@ -73,7 +73,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var file = claimFile.Adapt<ClaimFile>();
                 var fileId = await uploadFileService.Upload(file);
 
-                return Ok(new { fileId });
+                return Created("file", new { fileId });
             }
             catch (Exception ex)
             {
@@ -94,7 +94,7 @@ namespace Solutio.ApiServices.Api.Controllers
 
                 await deleteFileService.Delete(file);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {

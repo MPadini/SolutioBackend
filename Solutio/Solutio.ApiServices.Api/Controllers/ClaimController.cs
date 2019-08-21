@@ -90,7 +90,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var claim = newClaimRequest.Adapt<Claim>();
                 var claimId = await newClaimService.Save(claim);
 
-                return Ok(new { claimId });
+                return Created("claim", new { claimId });
             }
             catch (Exception ex)
             {
@@ -111,7 +111,7 @@ namespace Solutio.ApiServices.Api.Controllers
 
                 await updateClaimService.Update(claim);
 
-                return Ok();
+                return Created("claim", new { claim.Id });
             }
             catch (Exception ex)
             {
@@ -132,7 +132,7 @@ namespace Solutio.ApiServices.Api.Controllers
 
                 await deleteClaimService.Delete(claim);
 
-                return Ok();
+                return NoContent();
             }
             catch (Exception ex)
             {
