@@ -79,6 +79,9 @@
     <Build Include="Tables\ClaimInsuredPersons.sql" />
     <Build Include="Tables\ClaimInsuredVehicles.sql" />
     <Build Include="Tables\ClaimFiles.sql" />
+    <Build Include="Tables\Countries.sql" />
+    <Build Include="Tables\Cities.sql" />
+    <Build Include="Tables\Provinces.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />

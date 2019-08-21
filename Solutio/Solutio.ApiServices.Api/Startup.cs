@@ -25,18 +25,22 @@ using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
+using Solutio.Core.Services.ApplicationServices.Location;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
 using Solutio.Core.Services.Factories;
 using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
+using Solutio.Core.Services.Repositories.Location;
 using Solutio.Core.Services.ServicesProviders;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
 using Solutio.Core.Services.ServicesProviders.FileService;
+using Solutio.Core.Services.ServicesProviders.Location;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
 using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
 using Solutio.Infrastructure.Repositories.Entities;
+using Solutio.Infrastructure.Repositories.Location;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Solutio.ApiServices.Api
@@ -122,6 +126,9 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IClaimRepository, ClaimRepository>();
             services.AddTransient<IClaimStateRepository, ClaimStateRepository>();
             services.AddTransient<IClaimFileRepository, ClaimFileRepository>();
+            services.AddTransient<ICityRepository, CityRepository>();
+            services.AddTransient<ICountryRepository, CountryRepository>();
+            services.AddTransient<IProvinceRepository, ProvinceRepository>();
 
             #endregion Repositories Settings
 
@@ -144,6 +151,9 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IGetClaimService, GetClaimService>();
             services.AddTransient<IUpdateClaimService, UpdateClaimService>();
             services.AddTransient<IDeleteClaimService, DeleteClaimService>();
+            services.AddTransient<ICountryService, CountryService>();
+            services.AddTransient<IProvinceService, ProvinceService>();
+            services.AddTransient<ICityService, CityService>();
 
             #endregion Services Settings
 

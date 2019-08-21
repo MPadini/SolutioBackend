@@ -65,6 +65,12 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimFileDB> ClaimFiles { get; set; }
 
+        public DbSet<ProvinceDB> Provinces { get; set; }
+
+        public DbSet<CityDB> Cities { get; set; }
+
+        public DbSet<CountryDB> Countries { get; set; }
+
         #endregion DbSet Setups
 
         public override int SaveChanges()
@@ -116,6 +122,9 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new VehicleDBMap());
             modelBuilder.ApplyConfiguration(new VehicleTypeDBMap());
             modelBuilder.ApplyConfiguration(new ClaimFileDBMap());
+            modelBuilder.ApplyConfiguration(new ProvinceDBMap());
+            modelBuilder.ApplyConfiguration(new CityDBMap());
+            modelBuilder.ApplyConfiguration(new CountryDBMap());
         }
     }
 }
