@@ -39,6 +39,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 catch (Exception ex)
                 {
                     transaction.Rollback();
+                    throw new ApplicationException(ex.Message);
                 }
             }
 
@@ -48,11 +49,11 @@ namespace Solutio.Infrastructure.Repositories.Claims
         public async Task<Claim> GetById(long id)
         {
             var claimDb = await applicationDbContext.Claims.AsNoTracking()
-                .Include(x => x.ClaimInsuredPersons)
-                .ThenInclude(x => x.Person)
-                .Include(x => x.ClaimInsuredVehicles)
-                .ThenInclude(x => x.Vehicle)
+                .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
+                .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
                 .Include(x => x.Files)
+                .Include(x => x.Adress).ThenInclude(e => e.City)
+                .Include(x => x.Adress).ThenInclude(e => e.Province)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return claimDb.Adapt<Claim>();

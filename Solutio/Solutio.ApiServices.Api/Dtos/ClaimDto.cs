@@ -27,6 +27,8 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public decimal? Franchise { get; set; }
 
+        public AdressDto ClaimAdress { get; set; }
+
         public List<ClaimSimpleFileDto> Files { get; set; }
     }
 

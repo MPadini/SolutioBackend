@@ -23,6 +23,8 @@ namespace Solutio.ApiServices.Api.Dtos.Requests
 
         public decimal? Franchise { get; set; }
 
+        public AdressDto ClaimAdress { get; set; }
+
         public List<ClaimInsuredPersonSimpleDto> ClaimInsuredPersons { get; set; }
 
         public List<ClaimInsuredVehicleSimpleDto> ClaimInsuredVehicles { get; set; }

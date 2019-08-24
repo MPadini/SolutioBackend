@@ -20,6 +20,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Solutio.ApiServices.Api.Builder;
 using Solutio.ApiServices.Api.Filters;
+using Solutio.ApiServices.Api.Mappers;
 using Solutio.ApiServices.Api.Swagger;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
@@ -134,6 +135,8 @@ namespace Solutio.ApiServices.Api
 
             #region Mappers Settings
 
+            services.AddTransient<INewClaimRequestMapper, NewClaimRequestMapper>();
+            services.AddTransient<IGetClaimByIdMapper, GetClaimByIdMapper>();
 
             #endregion
 
