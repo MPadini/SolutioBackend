@@ -71,6 +71,10 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<CountryDB> Countries { get; set; }
 
+        public DbSet<AdressDB> Adresses { get; set; }
+
+        public DbSet<ExternalKeyTypeDB> ExternalKeyTypes { get; set; }
+
         #endregion DbSet Setups
 
         public override int SaveChanges()
@@ -125,6 +129,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new ProvinceDBMap());
             modelBuilder.ApplyConfiguration(new CityDBMap());
             modelBuilder.ApplyConfiguration(new CountryDBMap());
+            modelBuilder.ApplyConfiguration(new AdressDBMap());
         }
     }
 }

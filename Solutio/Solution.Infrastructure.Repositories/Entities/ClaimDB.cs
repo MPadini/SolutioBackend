@@ -36,5 +36,9 @@ namespace Solutio.Infrastructure.Repositories.Entities
         public decimal? Franchise { get; set; }
 
         public List<ClaimFileDB> Files { get; set; }
+
+        public long? AdressId { get; set; }
+
+        public AdressDB Adress { get; set; }
     }
 }

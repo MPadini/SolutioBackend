@@ -4,6 +4,7 @@
     [Date] DATETIME NOT NULL,
     [Hour] VARCHAR(5) NOT NULL,
     [StateId] bigint NOT NULL,
+	[AdressId] bigint NULL,
     [TotalBudgetAmount] decimal(18,2) NULL,
     [InsuranceCompany] nvarchar(max) NULL,
     [HaveFullCoverage] bit NULL DEFAULT 0,

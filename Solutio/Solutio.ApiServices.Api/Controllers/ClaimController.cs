@@ -12,6 +12,7 @@ using Solutio.ApiServices.Api.Dtos.Requests;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Microsoft.AspNetCore.Cors;
+using Solutio.ApiServices.Api.Mappers;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -25,17 +26,23 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly IGetClaimService getClaimService;
         private readonly IUpdateClaimService updateClaimService;
         private readonly IDeleteClaimService deleteClaimService;
+        private readonly INewClaimRequestMapper newClaimRequestMapper;
+        private readonly IGetClaimByIdMapper getClaimByIdMapper;
 
         public ClaimController(
             INewClaimService newClaimService, 
             IGetClaimService getClaimService, 
             IUpdateClaimService updateClaimService, 
-            IDeleteClaimService deleteClaimService)
+            IDeleteClaimService deleteClaimService, 
+            INewClaimRequestMapper newClaimRequestMapper,
+            IGetClaimByIdMapper getClaimByIdMapper)
         {
             this.newClaimService = newClaimService;
             this.getClaimService = getClaimService;
             this.updateClaimService = updateClaimService;
             this.deleteClaimService = deleteClaimService;
+            this.newClaimRequestMapper = newClaimRequestMapper;
+            this.getClaimByIdMapper = getClaimByIdMapper;
         }
 
         [HttpGet]
@@ -70,7 +77,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     return NotFound();
                 }
 
-                var claimDto = claim.Adapt<ClaimDto>();
+                var claimDto = getClaimByIdMapper.Map(claim);
 
                 return Ok(new { claimDto });
             }
@@ -87,7 +94,7 @@ namespace Solutio.ApiServices.Api.Controllers
             {
                 if (newClaimRequest == null) return BadRequest("ClaimDto null");
 
-                var claim = newClaimRequest.Adapt<Claim>();
+                var claim = newClaimRequestMapper.Map(newClaimRequest); 
                 var claimId = await newClaimService.Save(claim);
 
                 return Created("claim", new { claimId });

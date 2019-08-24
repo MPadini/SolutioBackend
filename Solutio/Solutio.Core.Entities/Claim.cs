@@ -12,6 +12,7 @@ namespace Solutio.Core.Entities
             ClaimInsuredPersons = new List<ClaimInsuredPerson>();
             ClaimInsuredVehicles = new List<ClaimInsuredVehicle>();
             Files = new List<ClaimFile>();
+            //Adress = new Adress();
         }
 
         public string Story { get; set; }
@@ -37,5 +38,7 @@ namespace Solutio.Core.Entities
         public decimal? Franchise { get; set; }
 
         public List<ClaimFile> Files { get; set; }
+
+        public Adress Adress { get; set; }
     }
 }
