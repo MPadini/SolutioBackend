@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.Core.Services.Repositories.Location;
+using Microsoft.AspNetCore.Cors;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
     [Route("api/Country/{countryId}/[controller]")]
+    [EnableCors("AllowOrigin")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ProvinceController : ControllerBase
