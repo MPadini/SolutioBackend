@@ -19,7 +19,19 @@ namespace Solutio.ApiServices.Api.Mappers
                 claim.Adress = new Adress();
                 claim.Adress =  newClaimRequest.ClaimAdress.Adapt<Adress>();
             }
-            
+
+            if(newClaimRequest.ClaimInsuredPersons != null && newClaimRequest.ClaimInsuredPersons.Any())
+            {
+                claim.ClaimInsuredPersons = new List<ClaimInsuredPerson>();
+                claim.ClaimInsuredPersons = newClaimRequest.ClaimInsuredPersons.Adapt<List<ClaimInsuredPerson>>();
+            }
+
+            if (newClaimRequest.ClaimInsuredVehicles != null && newClaimRequest.ClaimInsuredVehicles.Any())
+            {
+                claim.ClaimInsuredVehicles = new List<ClaimInsuredVehicle>();
+                claim.ClaimInsuredVehicles = newClaimRequest.ClaimInsuredVehicles.Adapt<List<ClaimInsuredVehicle>>();
+            }
+
             return claim;
         }
     }

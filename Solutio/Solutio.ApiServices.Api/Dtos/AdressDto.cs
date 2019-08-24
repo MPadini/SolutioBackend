@@ -11,6 +11,10 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public ProvinceDto Province { get; set; }
 
+        public long CityId { get; set; }
+
+        public long ProvinceId { get; set; }
+
         public string Street { get; set; }
 
         public string Number { get; set; }

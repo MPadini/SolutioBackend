@@ -9,10 +9,7 @@ namespace Solutio.Core.Entities
     {
         public Claim()
         {
-            ClaimInsuredPersons = new List<ClaimInsuredPerson>();
-            ClaimInsuredVehicles = new List<ClaimInsuredVehicle>();
             Files = new List<ClaimFile>();
-            //Adress = new Adress();
         }
 
         public string Story { get; set; }
