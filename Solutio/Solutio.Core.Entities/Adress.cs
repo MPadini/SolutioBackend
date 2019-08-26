@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Solutio.Core.Entities.Base;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Solutio.Core.Entities
 {
-    public class Adress
+    public class Adress : BaseEntity
     {
         public City City { get; set; }
 

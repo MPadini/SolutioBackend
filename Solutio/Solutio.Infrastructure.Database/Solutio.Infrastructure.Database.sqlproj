@@ -83,6 +83,8 @@
     <Build Include="Tables\Cities.sql" />
     <Build Include="Tables\Provinces.sql" />
     <Build Include="Tables\Adresses.sql" />
+    <Build Include="Tables\ClaimThirdInsuredVehicles.sql" />
+    <Build Include="Tables\ClaimThirdInsuredPersons.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />

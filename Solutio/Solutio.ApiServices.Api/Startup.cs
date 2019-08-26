@@ -42,6 +42,7 @@ using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
 using Solutio.Infrastructure.Repositories.Entities;
 using Solutio.Infrastructure.Repositories.Location;
+using Solutio.Infrastructure.Repositories.Mappers;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace Solutio.ApiServices.Api
@@ -135,9 +136,9 @@ namespace Solutio.ApiServices.Api
 
             #region Mappers Settings
 
-            services.AddTransient<INewClaimRequestMapper, NewClaimRequestMapper>();
-            services.AddTransient<IGetClaimByIdMapper, GetClaimByIdMapper>();
-
+            services.AddTransient<IClaimDtoMapper, ClaimDtoMapper>();
+            services.AddTransient<IClaimMapper, ClaimMapper>();
+            
             #endregion
 
             #region Services Settings

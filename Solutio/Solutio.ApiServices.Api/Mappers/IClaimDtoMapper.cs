@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 
 namespace Solutio.ApiServices.Api.Mappers
 {
-    public interface IGetClaimByIdMapper
+    public interface IClaimDtoMapper
     {
+        Claim Map(ClaimDto claimDto);
+
         ClaimDto Map(Claim claim);
     }
 }

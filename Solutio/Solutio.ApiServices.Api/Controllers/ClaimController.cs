@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.ApiServices.Api.Dtos;
-using Solutio.ApiServices.Api.Dtos.Requests;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Microsoft.AspNetCore.Cors;
@@ -26,23 +25,20 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly IGetClaimService getClaimService;
         private readonly IUpdateClaimService updateClaimService;
         private readonly IDeleteClaimService deleteClaimService;
-        private readonly INewClaimRequestMapper newClaimRequestMapper;
-        private readonly IGetClaimByIdMapper getClaimByIdMapper;
+        private readonly IClaimDtoMapper claimDtoMapper;
 
         public ClaimController(
             INewClaimService newClaimService, 
             IGetClaimService getClaimService, 
             IUpdateClaimService updateClaimService, 
             IDeleteClaimService deleteClaimService, 
-            INewClaimRequestMapper newClaimRequestMapper,
-            IGetClaimByIdMapper getClaimByIdMapper)
+            IClaimDtoMapper claimDtoMapper)
         {
             this.newClaimService = newClaimService;
             this.getClaimService = getClaimService;
             this.updateClaimService = updateClaimService;
             this.deleteClaimService = deleteClaimService;
-            this.newClaimRequestMapper = newClaimRequestMapper;
-            this.getClaimByIdMapper = getClaimByIdMapper;
+            this.claimDtoMapper = claimDtoMapper;
         }
 
         [HttpGet]
@@ -77,7 +73,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     return NotFound();
                 }
 
-                var claimDto = getClaimByIdMapper.Map(claim);
+                var claimDto = claimDtoMapper.Map(claim);
 
                 return Ok(new { claimDto });
             }
@@ -88,13 +84,13 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] NewClaimRequest newClaimRequest)
+        public async Task<IActionResult> Post([FromBody] ClaimDto claimDto)
         {
             try
             {
-                if (newClaimRequest == null) return BadRequest("ClaimDto null");
+                if (claimDto == null) return BadRequest("ClaimDto null");
 
-                var claim = newClaimRequestMapper.Map(newClaimRequest); 
+                var claim = claimDtoMapper.Map(claimDto); 
                 var claimId = await newClaimService.Save(claim);
 
                 return Created("claim", new { claimId });

@@ -4,17 +4,17 @@ using System.Text;
 
 namespace Solutio.Infrastructure.Repositories.Entities
 {
-    public class ClaimInsuredPersonDB : BaseEntityDB
+    public class ClaimThirdInsuredPersonDB : BaseEntityDB
     {
-        public ClaimInsuredPersonDB()
+        public ClaimThirdInsuredPersonDB()
         {
             Person = new PersonDB();
             Claim = new ClaimDB();
         }
 
-        public static ClaimInsuredPersonDB NewInstance()
+        public static ClaimThirdInsuredPersonDB NewInstance()
         {
-            return new ClaimInsuredPersonDB();
+            return new ClaimThirdInsuredPersonDB();
         }
 
         public long PersonId { get; set; }

@@ -29,5 +29,7 @@ namespace Solutio.Infrastructure.Repositories.Entities
         public PersonTypeDB PersonType { get; set; }
 
         public List<ClaimInsuredPersonDB> ClaimPersons { get; set; }
+
+        public List<ClaimThirdInsuredPersonDB> ClaimThirdPersons { get; set; }
     }
 }

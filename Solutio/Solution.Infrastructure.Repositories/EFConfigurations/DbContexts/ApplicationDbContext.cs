@@ -53,6 +53,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimInsuredPersonDB> ClaimInsuredPersons { get; set; }
 
+        public DbSet<ClaimThirdInsuredPersonDB> ClaimThirdInsuredPersons { get; set; }
+
         public DbSet<PersonDB> Persons { get; set; }
 
         public DbSet<PersonTypeDB> PersonTypes { get; set; }
@@ -63,6 +65,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimInsuredVehicleDB> ClaimInsuredVehicles { get; set; }
 
+        public DbSet<ClaimThirdInsuredVehicleDB> ClaimThirdInsuredVehicles { get; set; }
+
         public DbSet<ClaimFileDB> ClaimFiles { get; set; }
 
         public DbSet<ProvinceDB> Provinces { get; set; }
@@ -72,8 +76,6 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
         public DbSet<CountryDB> Countries { get; set; }
 
         public DbSet<AdressDB> Adresses { get; set; }
-
-        public DbSet<ExternalKeyTypeDB> ExternalKeyTypes { get; set; }
 
         #endregion DbSet Setups
 
@@ -130,6 +132,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new CityDBMap());
             modelBuilder.ApplyConfiguration(new CountryDBMap());
             modelBuilder.ApplyConfiguration(new AdressDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimThirdInsuredPersonDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimThirdInsuredVehicleDBMap());
         }
     }
 }

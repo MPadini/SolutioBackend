@@ -27,13 +27,11 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public List<ClaimInsuredVehicleDB> ClaimInsuredVehicles { get; set; }
 
+        public List<ClaimThirdInsuredPersonDB> ClaimThirdInsuredPersons { get; set; }
+
+        public List<ClaimThirdInsuredVehicleDB> ClaimThirdInsuredVehicles { get; set; }
+
         public decimal? TotalBudgetAmount { get; set; }
-
-        public string InsuranceCompany { get; set; }
-
-        public bool HaveFullCoverage { get; set; }
-
-        public decimal? Franchise { get; set; }
 
         public List<ClaimFileDB> Files { get; set; }
 

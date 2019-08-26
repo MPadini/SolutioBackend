@@ -5,12 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Mappers\**" />
-    <EmbeddedResource Remove="Mappers\**" />
-    <None Remove="Mappers\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Solutio.Core.Entities\Solutio.Core.Entities.csproj" />
     <ProjectReference Include="..\Solutio.Core.Services\Solutio.Core.Services.csproj" />
   </ItemGroup>
