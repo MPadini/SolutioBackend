@@ -102,7 +102,7 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(long id, [FromBody] string value)
+        public async Task<IActionResult> Put(long id, [FromBody] ClaimDto claimDto)
         {
             try
             {
@@ -112,7 +112,8 @@ namespace Solutio.ApiServices.Api.Controllers
                     return NotFound();
                 }
 
-                await updateClaimService.Update(claim);
+                var updatedClaim = claimDtoMapper.Map(claimDto);
+                await updateClaimService.Update(updatedClaim, id);
 
                 return Created("claim", new { claim.Id });
             }

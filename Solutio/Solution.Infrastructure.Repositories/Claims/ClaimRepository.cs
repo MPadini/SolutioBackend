@@ -25,7 +25,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<long> Save(Claim claim)
         {
-            long  result = 0;
+            long result = 0;
             using (var transaction = applicationDbContext.Database.BeginTransaction())
             {
                 try
@@ -51,7 +51,13 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<Claim> GetById(long id)
         {
-            var claimDb = await applicationDbContext.Claims.AsNoTracking()
+            var claimDb = await Get(id);
+            return claimMapper.Map(claimDb);
+        }
+
+        private async Task<ClaimDB> Get(long id)
+        {
+            return await applicationDbContext.Claims.AsNoTracking()
                 .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
                 .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
                 .Include(x => x.ClaimThirdInsuredPersons).ThenInclude(x => x.Person)
@@ -60,20 +66,82 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 .Include(x => x.Adress).ThenInclude(e => e.City)
                 .Include(x => x.Adress).ThenInclude(e => e.Province)
                 .FirstOrDefaultAsync(x => x.Id == id);
-
-            return claimMapper.Map(claimDb); 
         }
 
         public async Task<List<Claim>> GetAll()
         {
             var claimsDb = await applicationDbContext.Claims.AsNoTracking().ToListAsync();
 
-            return claimMapper.Map(claimsDb); 
+            return claimMapper.Map(claimsDb);
         }
 
-        public Task Update(Claim claim)
+        public async Task Update(Claim claim, long claimId)
         {
-            throw new NotImplementedException();
+            using (var transaction = applicationDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var claimDb = await Get(claimId);
+                    if (claimDb == null) return;
+
+                    await UpdateClaim(claimDb, claim);
+                    await UpdateClaimAdress(claimDb, claim.Adress);
+
+                    applicationDbContext.Claims.Update(claimDb);
+                    applicationDbContext.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw new ApplicationException(ex.Message);
+                }
+            }
+        }
+
+        private async Task<ClaimDB> UpdateClaim(ClaimDB claimDb, Claim claim)
+        {
+            claimDb.Story = claim.Story;
+            claimDb.Hour = claim.Hour;
+            claimDb.StateId = claim.StateId;
+            claimDb.TotalBudgetAmount = claim.TotalBudgetAmount;
+            claimDb.Date = claim.Date;
+
+            return claimDb;
+        }
+
+        private async Task<ClaimDB> UpdateClaimAdress(ClaimDB claimDb, Adress adress)
+        {
+            if (adress == null || claimDb == null) return default;
+
+            if (await AdressExists(claimDb))
+            {
+                claimDb.Adress.Intersection = adress.Intersection;
+                claimDb.Adress.Street = adress.Street;
+                claimDb.Adress.Number = adress.Number;
+                claimDb.Adress.CityId = adress.CityId;
+                claimDb.Adress.ProvinceId = adress.ProvinceId;
+            }
+            else
+            {
+                var adressDb = adress.Adapt<AdressDB>();
+                applicationDbContext.Adresses.Add(adressDb);
+                claimDb.Adress = adressDb;
+                applicationDbContext.SaveChanges();
+            }
+
+            return claimDb;
+        }
+
+        private async Task<bool> AdressExists(ClaimDB claimDb)
+        {
+            if (claimDb.Adress != null && claimDb.AdressId > 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         public async Task Delete(Claim claim)
