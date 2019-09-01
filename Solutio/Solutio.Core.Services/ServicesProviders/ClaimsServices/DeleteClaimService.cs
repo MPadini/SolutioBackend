@@ -1,5 +1,6 @@
 ﻿using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
+using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using System;
 using System.Collections.Generic;

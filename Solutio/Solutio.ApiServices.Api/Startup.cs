@@ -132,6 +132,11 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<ICountryRepository, CountryRepository>();
             services.AddTransient<IProvinceRepository, ProvinceRepository>();
             services.AddTransient<IClaimStateConfigurationRepository, ClaimStateConfigurationRepository>();
+            services.AddTransient<IClaimThirdInsuredVehicleRepository, ClaimThirdInsuredVehicleRepository>();
+            services.AddTransient<IClaimThirdInsuredPersonRepository, ClaimThirdInsuredPersonRepository>();
+            services.AddTransient<IClaimInsuredVehicleRepository, ClaimInsuredVehicleRepository>();
+            services.AddTransient<IClaimInsuredPersonRepository, ClaimInsuredPersonRepository>();
+            services.AddTransient<IClaimAdressRepository, ClaimAdressRepository>();
 
             #endregion Repositories Settings
 
