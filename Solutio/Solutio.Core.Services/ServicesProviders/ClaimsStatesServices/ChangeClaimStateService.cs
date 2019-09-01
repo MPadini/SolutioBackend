@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
 {
@@ -30,14 +31,6 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
         {
             await ValidateInput(claim, newStateId);
 
-            //var stateValidator = await claimStateFactory.GetStateValidator(claim.StateId);
-            //if (stateValidator == null) throw new ApplicationException("El estado al que quiere pasar no existe o no ha sido configurado.");
-
-            //var result = await stateValidator.CanChangeState(newStateId);
-            //if (result)
-            //{
-            //    await Change(claim, newStateId);
-            //}
             await Change(claim, newStateId);
 
             return true;
@@ -46,9 +39,27 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
         private async Task Change(Claim claim, long newStateId)
         {
             var state = await stateRepository.GetById(newStateId);
+            await ValidateStateExists(state, newStateId);
+            await ValidateAllowedState(claim, newStateId);
+
             claim.StateId = newStateId;
 
             await claimRepository.Update(claim, claim.Id);
+        }
+
+        private async Task<bool> ValidateAllowedState(Claim claim, long newStateId)
+        {
+            var allowedState = claim.State.AllowedStates.Where(x => x.Id == newStateId).ToList();
+            if (allowedState == null || !allowedState.Any()) throw new ApplicationException("Invalid status change.");
+
+            return true;
+        }
+
+        private async Task<bool> ValidateStateExists(ClaimState claimState, long newStateId)
+        {
+            if (claimState == null) throw new ApplicationException("Selected state does not exists.");
+
+            return true;
         }
 
         private async Task<bool> ValidateInput(Claim claim, long newStateId)
