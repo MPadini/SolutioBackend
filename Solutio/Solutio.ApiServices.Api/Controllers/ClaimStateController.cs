@@ -20,10 +20,12 @@ namespace Solutio.ApiServices.Api.Controllers
     public class ClaimStateController : ControllerBase
     {
         private readonly IClaimGetStateService claimStateService;
+        private readonly IGetClaimStateConfigurationService getClaimStateConfigurationService;
 
-        public ClaimStateController(IClaimGetStateService claimStateService)
+        public ClaimStateController(IClaimGetStateService claimStateService, IGetClaimStateConfigurationService getClaimStateConfigurationService)
         {
             this.claimStateService = claimStateService;
+            this.getClaimStateConfigurationService = getClaimStateConfigurationService;
         }
 
         [HttpGet]
@@ -34,6 +36,26 @@ namespace Solutio.ApiServices.Api.Controllers
                 var claimStates = await claimStateService.GetAll();
 
                 return Ok(claimStates.Adapt<List<ClaimStateDto>>()); 
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+
+        [HttpGet("{stateId}")]
+        public async Task<IActionResult> GetByStateId(long stateId)
+        {
+            try
+            {
+                var state = await claimStateService.GetById(stateId);
+                if (state == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(state.Adapt<ClaimStateDto>());
             }
             catch (Exception ex)
             {

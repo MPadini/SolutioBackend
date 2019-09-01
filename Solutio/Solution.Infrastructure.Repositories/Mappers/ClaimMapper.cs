@@ -10,10 +10,22 @@ namespace Solutio.Infrastructure.Repositories.Mappers
 {
     public class ClaimMapper : IClaimMapper
     {
+        private readonly IClaimStateMapper claimStateMapper;
+
+        public ClaimMapper(IClaimStateMapper claimStateMapper)
+        {
+            this.claimStateMapper = claimStateMapper;
+        }
+
         public Claim Map(ClaimDB claimDB)
         {
             var claim = claimDB.Adapt<Claim>();
             if (claim == null) return claim;
+
+            if (claim.State != null)
+            {
+                claim.State = claimStateMapper.Map(claimDB.State);
+            }
 
             if (claimDB.ClaimInsuredPersons != null && claimDB.ClaimInsuredPersons.Any())
             {

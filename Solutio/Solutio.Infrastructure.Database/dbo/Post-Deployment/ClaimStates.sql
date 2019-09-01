@@ -5,18 +5,16 @@ MERGE INTO [dbo].[ClaimStates] AS Target
 
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
-	(1, N'Borrador',				24,	0,0,0,0,0,0,0,0,0),
-	(2, N'En Revisión',				24,	0,0,0,0,0,0,0,0,0),
-	(3, N'Presentado/Contestado',	24,	0,0,0,0,0,0,0,0,0),
-	(4, N'Esperando Acción',		24, 0,0,0,0,0,0,0,0,0),
-	(5, N'En Monitoreo',			24,	0,0,0,0,0,0,0,0,0),
-	(6, N'Ofrecido/Reconsiderado',	24,	0,0,0,0,0,0,0,0,0),
-	(7, N'Aceptado',				24,	0,0,0,0,0,0,0,0,0),
-	(8, N'Pendiente de Pago',		24,	0,0,0,0,0,0,0,0,0),
-	(9, N'Cerrado',					24,	0,0,0,0,0,0,0,0,0)
-) AS Source([ClaimStatesId], [Description],[MaximumTimeAllowed],
-[CanInDraft], [CanAudit],[CanPresented],[CanWaitForAction],[CanInMonitoring],
-[CanOffered], [CanAcepted], [CanOutstanding],[CanClose]) -- > AGREGAR COLUMNAS 
+	(1, N'Borrador',				24),
+	(2, N'En Revisión',				24),
+	(3, N'Presentado/Contestado',	24),
+	(4, N'Esperando Acción',		24),
+	(5, N'En Monitoreo',			24),
+	(6, N'Ofrecido/Reconsiderado',	24),
+	(7, N'Aceptado',				24),
+	(8, N'Pendiente de Pago',		24),
+	(9, N'Cerrado',					24)
+) AS Source([ClaimStatesId], [Description],[MaximumTimeAllowed]) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [ClaimStatesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 
 -- EL MERGE PLANTEA RESOLVER 3 CASOS BASICOS
@@ -24,43 +22,16 @@ ON Target.[Id] = [ClaimStatesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 -- 1) MATCH (ORIGEN.ID = DESTINO.ID), ACTUALIZO VALORES DE COLUMNAS EN DESTINO CON LOS DATOS DE ORIGEN
 WHEN MATCHED THEN
 	UPDATE SET [Description] = Source.[Description],
-			[MaximumTimeAllowed] = Source.[MaximumTimeAllowed],
-			[CanInDraft] = Source.[CanInDraft],
-			[CanAudit] = Source.[CanAudit],
-			[CanPresented] = Source.[CanPresented],
-			[CanWaitForAction] = Source.[CanWaitForAction],
-			[CanInMonitoring] = Source.[CanInMonitoring],
-			[CanOffered] = Source.[CanOffered],
-			[CanAcepted] = Source.[CanAcepted],
-			[CanOutstanding] = Source.[CanOutstanding],
-			[CanClose] = Source.[CanClose]
+			[MaximumTimeAllowed] = Source.[MaximumTimeAllowed]
 
 -- 2) NO MATCH TARGET (Existe en ORIGEN pero no en DESTINO -> INSERTO en DESTINO)
 WHEN NOT MATCHED BY TARGET THEN
 	INSERT ([Id],
 			[Description],
-			[MaximumTimeAllowed],
-			[CanInDraft],
-			[CanAudit],
-			[CanPresented],
-			[CanWaitForAction],
-			[CanInMonitoring],
-			[CanOffered],
-			[CanAcepted],
-			[CanOutstanding],
-			[CanClose])
+			[MaximumTimeAllowed])
 	VALUES (Source.[ClaimStatesId],
 			Source.[Description],
-			Source.[MaximumTimeAllowed],
-			Source.[CanInDraft],
-			Source.[CanAudit],
-			Source.[CanPresented],
-			Source.[CanWaitForAction],
-			Source.[CanInMonitoring],
-			Source.[CanOffered],
-			Source.[CanAcepted],
-			Source.[CanOutstanding],
-			Source.[CanClose])
+			Source.[MaximumTimeAllowed])
 
 -- 3) NO MATCH SOURCE (Existe en DESTINO pero no en ORIGEN). Hay 2 OPCIONES
 

@@ -8,14 +8,15 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices.ClaimStat
 {
     public class InMonitoringValidator : IClaimStateValidator
     {
-        public async Task<bool> CanChangeState(Claim claim)
+ 
+        public override async Task<bool> CanChangeState(ClaimState.eId claimState)
         {
-            if (!claim.State.CanInMonitoring)
+            if (claimState == ClaimState.eId.Presented)
             {
-                throw new ApplicationException($"No es posible cambiar el estado { claim.State.Description } a En Monitoreo");
+                return true;
             }
 
-            return true;
+            throw new ApplicationException(ErrorMessage);
         }
     }
 }

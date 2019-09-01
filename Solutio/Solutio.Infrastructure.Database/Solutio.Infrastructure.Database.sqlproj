@@ -85,12 +85,14 @@
     <Build Include="Tables\Adresses.sql" />
     <Build Include="Tables\ClaimThirdInsuredVehicles.sql" />
     <Build Include="Tables\ClaimThirdInsuredPersons.sql" />
+    <Build Include="Tables\ClaimStateConfigurations.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />
     <None Include="dbo\Post-Deployment\ClaimStates.sql" />
     <None Include="dbo\Post-Deployment\PersonTypes.sql" />
     <None Include="dbo\Post-Deployment\VehicleTypes.sql" />
+    <None Include="dbo\Post-Deployment\ClaimStateConfigurations.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="Solutio.Infrastructure.Database.refactorlog" />

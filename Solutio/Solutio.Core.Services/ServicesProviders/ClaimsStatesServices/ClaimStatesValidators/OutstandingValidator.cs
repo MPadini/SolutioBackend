@@ -8,14 +8,24 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices.ClaimStat
 {
     public class OutstandingValidator : IClaimStateValidator
     {
-        public async Task<bool> CanChangeState(Claim claim)
+        public override async Task<bool> CanChangeState(ClaimState.eId claimState)
         {
-            if (!claim.State.CanOutstanding)
+            if (claimState == ClaimState.eId.Offered)
             {
-                throw new ApplicationException($"No es posible cambiar el estado { claim.State.Description } a Pendiente de Pago");
+                return true;
             }
 
-            return true;
+            if (claimState == ClaimState.eId.Acepted)
+            {
+                return true;
+            }
+
+            if (claimState == ClaimState.eId.Close)
+            {
+                return true;
+            }
+
+            throw new ApplicationException(ErrorMessage);
         }
     }
 }

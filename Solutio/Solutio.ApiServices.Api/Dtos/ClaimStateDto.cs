@@ -10,5 +10,7 @@ namespace Solutio.ApiServices.Api.Dtos
         public string Description { get; set; }
 
         public int MaximumTimeAllowed { get; set; }
+
+        public List<ClaimStateDto> AllowedStates { get; set; }
     }
 }

@@ -51,6 +51,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimStateDB> ClaimStates { get; set; }
 
+        public DbSet<ClaimStateConfigurationDB> ClaimStateConfigurations { get; set; }
+
         public DbSet<ClaimInsuredPersonDB> ClaimInsuredPersons { get; set; }
 
         public DbSet<ClaimThirdInsuredPersonDB> ClaimThirdInsuredPersons { get; set; }
@@ -134,6 +136,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new AdressDBMap());
             modelBuilder.ApplyConfiguration(new ClaimThirdInsuredPersonDBMap());
             modelBuilder.ApplyConfiguration(new ClaimThirdInsuredVehicleDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimStateConfigurationDBMap());
         }
     }
 }

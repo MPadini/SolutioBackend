@@ -58,6 +58,7 @@ namespace Solutio.ApiServices.Api.Mappers
             var claimDto = claim.Adapt<ClaimDto>();
             claimDto.ClaimAdress = new AdressDto();
             claimDto.ClaimAdress = claim.Adress.Adapt<AdressDto>();
+            claimDto.State = claim.State.Adapt<ClaimStateDto>();
 
             return claimDto;
         }

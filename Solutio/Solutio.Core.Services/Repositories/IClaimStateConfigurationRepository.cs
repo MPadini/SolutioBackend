@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Solutio.Core.Services.Repositories
 {
-    public interface IClaimStateRepository
+    public interface IClaimStateConfigurationRepository
     {
-        Task<List<ClaimState>> GetAll();
-
-        Task<ClaimState> GetById(long stateId);
+        Task<ClaimStateConfiguration> GetByParentStateId(long parentStateId);
     }
 }

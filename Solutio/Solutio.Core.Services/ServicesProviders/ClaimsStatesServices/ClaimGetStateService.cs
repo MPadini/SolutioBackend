@@ -19,8 +19,12 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
 
         public async Task<List<ClaimState>> GetAll()
         {
-            var claimState  = await claimStateRepository.GetAll();
-            return claimState;
+            return await claimStateRepository.GetAll();
+        }
+
+        public async Task<ClaimState> GetById(long stateId)
+        {
+            return await claimStateRepository.GetById(stateId);
         }
     }
 }

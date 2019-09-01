@@ -15,6 +15,8 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public long StateId { get; set; }
 
+        public ClaimStateDto State { get; set; }
+
         public List<PersonDto> ClaimInsuredPersons { get; set; }
 
         public List<VehicleDto> ClaimInsuredVehicles { get; set; }

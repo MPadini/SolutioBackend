@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 
 namespace Solutio.ApiServices.Api.Controllers
@@ -13,10 +14,12 @@ namespace Solutio.ApiServices.Api.Controllers
     public class ChangeClaimStateController : ControllerBase
     {
         private readonly IChangeClaimStateService changeClaimStateService;
+        private readonly IGetClaimService getClaimService;
 
-        public ChangeClaimStateController(IChangeClaimStateService changeClaimStateService)
+        public ChangeClaimStateController(IChangeClaimStateService changeClaimStateService, IGetClaimService getClaimService)
         {
             this.changeClaimStateService = changeClaimStateService;
+            this.getClaimService = getClaimService;
         }
 
         [HttpPut("{newStateId}")]
@@ -24,11 +27,13 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                //TODO.
-                //search claim
-                //Call change service
+                var claim = await getClaimService.GetById(claimId);
+                if (claim == null)
+                {
+                    return NotFound();
+                }
 
-                //await changeClaimStateService.ChangeState(claimId, newStateId);
+                await changeClaimStateService.ChangeState(claim, newStateId);
                 return Ok();
             }
             catch (Exception ex)

@@ -8,14 +8,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices.ClaimStat
 {
     public class CloseValidator : IClaimStateValidator
     {
-        public async Task<bool> CanChangeState(Claim claim)
+        public override async Task<bool> CanChangeState(ClaimState.eId claimState)
         {
-            if (!claim.State.CanClose)
-            {
-                throw new ApplicationException($"No es posible cambiar el estado { claim.State.Description } a Cerrado");
-            }
-
-            return true;
+            throw new ApplicationException("El reclamo fue cerrado, no es posible modificar su estado.");
         }
     }
 }

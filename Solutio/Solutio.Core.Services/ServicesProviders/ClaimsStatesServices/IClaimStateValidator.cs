@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
 {
-    public interface IClaimStateValidator
+    public abstract class IClaimStateValidator
     {
-        Task<bool> CanChangeState(Claim claim);
+        protected string ErrorMessage => "No es posible cambiar el estado realizar el cambio de estado solicitado";
+
+        public abstract Task<bool> CanChangeState(ClaimState.eId claimState);
     }
 }
  

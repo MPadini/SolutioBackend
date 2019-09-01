@@ -8,14 +8,19 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices.ClaimStat
 {
     public class PresentedValidator : IClaimStateValidator
     {
-        public async Task<bool> CanChangeState(Claim claim)
+        public override async Task<bool> CanChangeState(ClaimState.eId claimState)
         {
-            if (!claim.State.CanPresented)
+            if (claimState == ClaimState.eId.Offered)
             {
-                throw new ApplicationException($"No es posible cambiar el estado { claim.State.Description } a Presentado");
+                return true;
             }
 
-            return true;
+            if (claimState == ClaimState.eId.WaitForAction)
+            {
+                return true;
+            }
+
+            throw new ApplicationException(ErrorMessage);
         }
     }
 }

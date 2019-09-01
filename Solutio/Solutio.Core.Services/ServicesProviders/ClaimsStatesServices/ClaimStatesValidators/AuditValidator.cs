@@ -8,14 +8,19 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices.ClaimStat
 {
     public class AuditValidator : IClaimStateValidator
     {
-        public async Task<bool> CanChangeState(Claim claim)
+        public override async Task<bool> CanChangeState(ClaimState.eId claimState)
         {
-            if (!claim.State.CanAudit)
+            if (claimState == ClaimState.eId.InDraft)
             {
-                throw new ApplicationException($"No es posible cambiar el estado { claim.State.Description } a En revisión");
+                return true;
             }
 
-            return true;
+            if (claimState == ClaimState.eId.Presented)
+            {
+                return true;
+            }
+
+            throw new ApplicationException(ErrorMessage);
         }
     }
 }

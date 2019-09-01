@@ -131,6 +131,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<ICityRepository, CityRepository>();
             services.AddTransient<ICountryRepository, CountryRepository>();
             services.AddTransient<IProvinceRepository, ProvinceRepository>();
+            services.AddTransient<IClaimStateConfigurationRepository, ClaimStateConfigurationRepository>();
 
             #endregion Repositories Settings
 
@@ -138,7 +139,9 @@ namespace Solutio.ApiServices.Api
 
             services.AddTransient<IClaimDtoMapper, ClaimDtoMapper>();
             services.AddTransient<IClaimMapper, ClaimMapper>();
-            
+            services.AddTransient<IClaimStateConfigurationMapper, ClaimStateConfigurationMapper>();
+            services.AddTransient<IClaimStateMapper, ClaimStateMapper>();
+
             #endregion
 
             #region Services Settings
@@ -158,7 +161,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<ICountryService, CountryService>();
             services.AddTransient<IProvinceService, ProvinceService>();
             services.AddTransient<ICityService, CityService>();
-
+            services.AddTransient<IGetClaimStateConfigurationService, GetClaimStateConfigurationService>();
+         
             #endregion Services Settings
 
             #region Builder Settings

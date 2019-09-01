@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Solutio.Infrastructure.Repositories.Claims
 {
@@ -65,6 +66,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 .Include(x => x.Files)
                 .Include(x => x.Adress).ThenInclude(e => e.City)
                 .Include(x => x.Adress).ThenInclude(e => e.Province)
+                .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
@@ -86,6 +88,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
                     await UpdateClaim(claimDb, claim);
                     await UpdateClaimAdress(claimDb, claim.Adress);
+                    //await UpdateClaimPersons(claimDb, claim.ClaimInsuredPer);
 
                     applicationDbContext.Claims.Update(claimDb);
                     applicationDbContext.SaveChanges();
@@ -100,10 +103,34 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
+        private async Task<ClaimDB> UpdateClaimPersons(ClaimDB claimDb, PersonDB person)
+        {
+            if (claimDb.ClaimInsuredPersons == null || person == null) return default;
+            var insuredPerson = claimDb.ClaimInsuredPersons.FirstOrDefault(x => x.PersonId == person.Id);
+            if (insuredPerson != null)
+            {
+                insuredPerson.Person.Cuit = person.Cuit;
+                insuredPerson.Person.DocumentNumber = person.DocumentNumber;
+                insuredPerson.Person.Email = person.Email;
+                insuredPerson.Person.LegalEntityName = person.LegalEntityName;
+                insuredPerson.Person.MobileNumber = person.MobileNumber;
+                insuredPerson.Person.Name = person.Name;
+                insuredPerson.Person.PersonTypeId = person.PersonTypeId;
+                insuredPerson.Person.Surname = person.Surname;
+                insuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
+                return claimDb;
+            }
+            else
+            {
+                return default;
+            }
+        }
+
         private async Task<ClaimDB> UpdateClaim(ClaimDB claimDb, Claim claim)
         {
             claimDb.Story = claim.Story;
             claimDb.Hour = claim.Hour;
+            claimDb.State = null;
             claimDb.StateId = claim.StateId;
             claimDb.TotalBudgetAmount = claim.TotalBudgetAmount;
             claimDb.Date = claim.Date;
