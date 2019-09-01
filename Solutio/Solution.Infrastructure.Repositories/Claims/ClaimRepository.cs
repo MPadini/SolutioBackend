@@ -240,8 +240,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
         {
             claimDb.Story = claim.Story;
             claimDb.Hour = claim.Hour;
-            claimDb.State = null;
-            claimDb.StateId = claim.StateId;
+            //claimDb.State = null;
+            //claimDb.StateId = claim.StateId;
             claimDb.TotalBudgetAmount = claim.TotalBudgetAmount;
             claimDb.Date = claim.Date;
 
