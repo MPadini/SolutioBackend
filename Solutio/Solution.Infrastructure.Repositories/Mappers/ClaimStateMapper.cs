@@ -33,9 +33,9 @@ namespace Solutio.Infrastructure.Repositories.Mappers
         {
             var claimState = claimStateDB.Adapt<ClaimState>();
             if (claimState == null) return default;
+            if (claimStateDB.StateConfigurations == null || !claimStateDB.StateConfigurations.Any()) return claimState;
 
             var stateConfigurations = claimStateDB.StateConfigurations.Where(x => x.ParentClaimStateId == claimState.Id).ToList();
-
             foreach (var stateConfig in stateConfigurations)
             {
                 claimState.AllowedStates.Add(stateConfig.AllowedState.Adapt<ClaimState>());

@@ -58,6 +58,9 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     insuredVehicle.Vehicle.Franchise = vehicle.Franchise;
                     insuredVehicle.Vehicle.HaveFullCoverage = vehicle.HaveFullCoverage;
                     insuredVehicle.Vehicle.Patent = vehicle.Patent;
+
+                    applicationDbContext.Vehicles.Update(insuredVehicle.Vehicle);
+                    applicationDbContext.SaveChanges();
                 }
                 else
                 {

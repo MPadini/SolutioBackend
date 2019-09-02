@@ -59,6 +59,9 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     insuredPerson.Person.PersonTypeId = person.PersonTypeId;
                     insuredPerson.Person.Surname = person.Surname;
                     insuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
+
+                    applicationDbContext.Persons.Update(insuredPerson.Person);
+                    applicationDbContext.SaveChanges();
                 }
                 else
                 {

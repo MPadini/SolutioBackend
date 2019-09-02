@@ -28,13 +28,13 @@ namespace Solutio.Infrastructure.Repositories.Claims
         public async Task DeleteClaimThirdInsuredPersons(Claim claim)
         {
             var claimDB = claimMapper.Map(claim);
-            if (claimDB.ClaimThirdInsuredVehicles != null)
+            if (claimDB.ClaimThirdInsuredPersons != null)
             {
-                claimDB.ClaimThirdInsuredVehicles.ForEach(vehicle =>
+                claimDB.ClaimThirdInsuredPersons.ForEach(person =>
                 {
-                    vehicle.Claim = null;
-                    vehicle.Vehicle = null;
-                    applicationDbContext.ClaimThirdInsuredVehicles.Remove(vehicle);
+                    person.Claim = null;
+                    person.Person = null;
+                    applicationDbContext.ClaimThirdInsuredPersons.Remove(person);
                     applicationDbContext.SaveChanges();
                 });
             }
@@ -59,6 +59,9 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     thirdInsuredPerson.Person.PersonTypeId = person.PersonTypeId;
                     thirdInsuredPerson.Person.Surname = person.Surname;
                     thirdInsuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
+
+                    applicationDbContext.Persons.Update(thirdInsuredPerson.Person);
+                    applicationDbContext.SaveChanges();
                 }
                 else
                 {

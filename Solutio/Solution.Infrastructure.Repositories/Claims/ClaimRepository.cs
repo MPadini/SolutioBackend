@@ -26,7 +26,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
         private readonly IClaimFileRepository claimFileRepository;
 
         public ClaimRepository(
-            ApplicationDbContext applicationDbContext, 
+            ApplicationDbContext applicationDbContext,
             IClaimMapper claimMapper,
             IClaimThirdInsuredVehicleRepository claimThirdInsuredVehicleRepository,
             IClaimThirdInsuredPersonRepository claimThirdInsuredPersonRepository,
@@ -136,9 +136,10 @@ namespace Solutio.Infrastructure.Repositories.Claims
         private async Task DeleteAssociatedEntities(Claim claim)
         {
             await claimInsuredPersonRepository.DeleteClaimInsuredPersons(claim);
+            await claimThirdInsuredVehicleRepository.DeleteClaimThirdInsuredVehicles(claim);
             await claimInsuredVehicleRepository.DeleteClaimInsuredVehicles(claim);
             await claimThirdInsuredPersonRepository.DeleteClaimThirdInsuredPersons(claim);
-            await claimThirdInsuredVehicleRepository.DeleteClaimThirdInsuredVehicles(claim);
+            
             await claimFileRepository.DeleteClaimFiles(claim);
             await claimAdressRepository.DeleteClaimAdress(claim);
         }
@@ -152,7 +153,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 {
                     await DeleteAssociatedEntities(claim);
 
-                    applicationDbContext.Claims.Remove(claimDb);
+                    applicationDbContext.Claims.Remove(await SetClaimNull(claimDb));
                     applicationDbContext.SaveChanges();
 
                     transaction.Commit();
@@ -163,6 +164,16 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     throw new ApplicationException(ex.Message);
                 }
             }
+        }
+
+        private async Task<ClaimDB> SetClaimNull(ClaimDB claimDB)
+        {
+            claimDB.ClaimInsuredPersons = null;
+            claimDB.ClaimInsuredVehicles = null;
+            claimDB.ClaimThirdInsuredPersons = null;
+            claimDB.ClaimThirdInsuredVehicles = null;
+            claimDB.Adress = null;
+            return claimDB;
         }
 
         private async Task<ClaimDB> UpdateClaim(ClaimDB claimDb, Claim claim)

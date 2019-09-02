@@ -80,9 +80,9 @@ namespace Solutio.Infrastructure.Repositories.Mappers
             if (claim.ClaimInsuredPersons != null && claim.ClaimInsuredPersons.Any())
             {
                 claimDb.ClaimInsuredPersons = new List<ClaimInsuredPersonDB>();
-                ClaimInsuredPersonDB claimInsured = ClaimInsuredPersonDB.NewInstance();
                 claim.ClaimInsuredPersons.ForEach(person =>
                 {
+                    ClaimInsuredPersonDB claimInsured = ClaimInsuredPersonDB.NewInstance();
                     claimInsured.Person = person.Adapt<PersonDB>();
                     if (person.Id > 0)
                     {
@@ -99,9 +99,9 @@ namespace Solutio.Infrastructure.Repositories.Mappers
             if (claim.ClaimThirdInsuredPersons != null && claim.ClaimThirdInsuredPersons.Any())
             {
                 claimDb.ClaimThirdInsuredPersons = new List<ClaimThirdInsuredPersonDB>();
-                ClaimThirdInsuredPersonDB claimThirdInsured = ClaimThirdInsuredPersonDB.NewInstance();
                 claim.ClaimThirdInsuredPersons.ForEach(person =>
                 {
+                    ClaimThirdInsuredPersonDB claimThirdInsured = ClaimThirdInsuredPersonDB.NewInstance();
                     claimThirdInsured.Person = person.Adapt<PersonDB>();
                     if (person.Id > 0)
                     {
@@ -118,9 +118,9 @@ namespace Solutio.Infrastructure.Repositories.Mappers
             if (claim.ClaimInsuredVehicles != null && claim.ClaimInsuredVehicles.Any())
             {
                 claimDb.ClaimInsuredVehicles = new List<ClaimInsuredVehicleDB>();
-                ClaimInsuredVehicleDB claimVehicle = ClaimInsuredVehicleDB.NewInstance();
                 claim.ClaimInsuredVehicles.ForEach(vehicle =>
                 {
+                    ClaimInsuredVehicleDB claimVehicle = ClaimInsuredVehicleDB.NewInstance();
                     claimVehicle.Vehicle = vehicle.Adapt<VehicleDB>();
                     if (vehicle.Id > 0)
                     {
@@ -137,9 +137,9 @@ namespace Solutio.Infrastructure.Repositories.Mappers
             if (claim.ClaimThirdInsuredVehicles != null && claim.ClaimThirdInsuredVehicles.Any())
             {
                 claimDb.ClaimThirdInsuredVehicles = new List<ClaimThirdInsuredVehicleDB>();
-                ClaimThirdInsuredVehicleDB claimThirdVehicle = ClaimThirdInsuredVehicleDB.NewInstance();
                 claim.ClaimThirdInsuredVehicles.ForEach(vehicle =>
                 {
+                    ClaimThirdInsuredVehicleDB claimThirdVehicle = ClaimThirdInsuredVehicleDB.NewInstance();
                     claimThirdVehicle.Vehicle = vehicle.Adapt<VehicleDB>();
                     if (vehicle.Id > 0)
                     {
