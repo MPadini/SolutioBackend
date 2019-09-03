@@ -107,7 +107,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     var claimDb = await Get(claimId);
                     if (claimDb == null) return;
 
-                    await UpdateClaim(claimDb, claim);
+                    await UpdateClaim(claimDb, claim);        
                     await UpdateAssociatedEntities(claimDb, claim);
 
                     applicationDbContext.Claims.Update(claimDb);

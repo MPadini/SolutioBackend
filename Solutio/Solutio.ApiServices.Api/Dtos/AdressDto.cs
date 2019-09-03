@@ -20,5 +20,9 @@ namespace Solutio.ApiServices.Api.Dtos
         public string Number { get; set; }
 
         public string Intersection { get; set; }
+
+        public string Lat { get; set; }
+
+        public string Lng { get; set; }
     }
 }

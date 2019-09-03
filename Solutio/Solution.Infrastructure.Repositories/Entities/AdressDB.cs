@@ -20,10 +20,8 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public string Intersection { get; set; }
 
-        //public long ExternalKeyId { get; set; }
+        public string Lat { get; set; }
 
-        //public long ExternalKeyTypeId { get; set; }
-
-        //public ExternalKeyTypeDB ExternalKeyType { get; set; }
+        public string Lng { get; set; }
     }
 }
