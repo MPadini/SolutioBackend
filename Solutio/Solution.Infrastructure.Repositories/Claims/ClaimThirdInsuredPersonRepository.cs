@@ -30,14 +30,19 @@ namespace Solutio.Infrastructure.Repositories.Claims
             var claimDB = claimMapper.Map(claim);
             if (claimDB.ClaimThirdInsuredPersons != null)
             {
-                claimDB.ClaimThirdInsuredPersons.ForEach(person =>
+                claimDB.ClaimThirdInsuredPersons.ForEach(async claimThirdInsuredPerson =>
                 {
-                    person.Claim = null;
-                    person.Person = null;
-                    applicationDbContext.ClaimThirdInsuredPersons.Remove(person);
-                    applicationDbContext.SaveChanges();
+                    await DeleteClaimPerson(claimThirdInsuredPerson);
                 });
             }
+        }
+
+        private async Task DeleteClaimPerson(ClaimThirdInsuredPersonDB claimThirdInsuredPerson)
+        {
+            claimThirdInsuredPerson.Claim = null;
+            claimThirdInsuredPerson.Person = null;
+            applicationDbContext.ClaimThirdInsuredPersons.Remove(claimThirdInsuredPerson);
+            applicationDbContext.SaveChanges();
         }
 
         public async Task<Claim> UpdateClaimThirdInsuredPersons(Claim claim, List<Person> persons)

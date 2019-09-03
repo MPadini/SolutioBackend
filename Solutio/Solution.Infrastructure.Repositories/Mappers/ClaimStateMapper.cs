@@ -22,7 +22,8 @@ namespace Solutio.Infrastructure.Repositories.Mappers
 
                 foreach (var stateConfig in stateConfigurations)
                 {
-                    claimState.AllowedStates.Add(stateConfig.AllowedState.Adapt<ClaimState>());
+                    var allowedState = stateConfig.AllowedState.Adapt<ClaimState>();
+                    claimState.AllowedStates.Add(allowedState);
                 }
             }
 

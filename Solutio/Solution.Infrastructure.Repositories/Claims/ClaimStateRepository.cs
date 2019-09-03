@@ -25,7 +25,10 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<List<ClaimState>> GetAll()
         {
-            var result = context.ClaimStates.AsNoTracking().Include(x => x.StateConfigurations).ToList();
+            var result = context.ClaimStates.AsNoTracking()
+                .Include(x => x.StateConfigurations)
+                .ThenInclude(e => e.AllowedState).ToList();
+
             if (result == null || !result.Any()) return default;
 
             return claimStateMapper.Map(result);

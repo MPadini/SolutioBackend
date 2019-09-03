@@ -23,8 +23,10 @@ using Solutio.ApiServices.Api.Filters;
 using Solutio.ApiServices.Api.Mappers;
 using Solutio.ApiServices.Api.Swagger;
 using Solutio.Core.Entities;
+using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
+using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredPerson;
 using Solutio.Core.Services.ApplicationServices.FileService;
 using Solutio.Core.Services.ApplicationServices.Location;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
@@ -33,8 +35,10 @@ using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using Solutio.Core.Services.Repositories.Location;
 using Solutio.Core.Services.ServicesProviders;
+using Solutio.Core.Services.ServicesProviders.ClaimPersonServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
+using Solutio.Core.Services.ServicesProviders.ClaimThirdInsuredPerson;
 using Solutio.Core.Services.ServicesProviders.FileService;
 using Solutio.Core.Services.ServicesProviders.Location;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
@@ -167,7 +171,9 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IProvinceService, ProvinceService>();
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IGetClaimStateConfigurationService, GetClaimStateConfigurationService>();
-         
+            services.AddTransient<IDeleteClaimThirdPersonService, DeleteClaimThirdPersonService>();
+            services.AddTransient<IDeleteClaimPersonService, DeleteClaimPersonService>();
+
             #endregion Services Settings
 
             #region Builder Settings
