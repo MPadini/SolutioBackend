@@ -130,7 +130,6 @@ namespace Solutio.Infrastructure.Repositories.Claims
             await claimInsuredVehicleRepository.UpdateClaimInsuredVehicles(existingClaim, claim.ClaimInsuredVehicles);
             await claimThirdInsuredPersonRepository.UpdateClaimThirdInsuredPersons(existingClaim, claim.ClaimThirdInsuredPersons);
             await claimThirdInsuredVehicleRepository.UpdateClaimThirdInsuredVehicles(existingClaim, claim.ClaimThirdInsuredVehicles);
-            await claimAdressRepository.UpdateClaimAdress(existingClaim, claim.Adress);
         }
 
         private async Task DeleteAssociatedEntities(Claim claim)
@@ -182,7 +181,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
             claimDb.Hour = claim.Hour;
             claimDb.TotalBudgetAmount = claim.TotalBudgetAmount;
             claimDb.Date = claim.Date;
-
+            var adress = await claimAdressRepository.UpdateClaimAdress(claimDb.Adapt<Claim>(), claim.Adress);
+            claimDb.AdressId = adress.Id;
             return claimDb;
         }
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Solutio.ApiServices.Api.Dtos
 {
-    public class AdressDto
+    public class AdressDto : BaseEntityDto
     {
         public CityDto City { get; set; }
 

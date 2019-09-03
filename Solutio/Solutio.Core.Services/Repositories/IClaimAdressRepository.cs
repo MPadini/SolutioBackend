@@ -10,6 +10,6 @@ namespace Solutio.Core.Services.Repositories
     {
         Task DeleteClaimAdress(Claim claim);
 
-        Task<Claim> UpdateClaimAdress(Claim claim, Adress adress);
+        Task<Adress> UpdateClaimAdress(Claim claim, Adress adress);
     }
 }

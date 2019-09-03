@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
 
 namespace Solutio.Infrastructure.Repositories.Claims
 {
@@ -36,7 +37,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
-        public async Task<Claim> UpdateClaimAdress(Claim claim, Adress adress)
+        public async Task<Adress> UpdateClaimAdress(Claim claim, Adress adress)
         {
             var claimDb = claimMapper.Map(claim);
             if (adress == null || claimDb == null) return default;
@@ -48,6 +49,11 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 claimDb.Adress.Number = adress.Number;
                 claimDb.Adress.CityId = adress.CityId;
                 claimDb.Adress.ProvinceId = adress.ProvinceId;
+                claimDb.Adress.Lat = adress.Lat;
+                claimDb.Adress.Lng = adress.Lng;
+
+                applicationDbContext.Adresses.Update(claimDb.Adress);
+                applicationDbContext.SaveChanges();
             }
             else
             {
@@ -57,7 +63,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 applicationDbContext.SaveChanges();
             }
 
-            return claimMapper.Map(claimDb);
+            return claimDb.Adress.Adapt<Adress>();
         }
 
         private async Task<bool> AdressExists(ClaimDB claimDb)
