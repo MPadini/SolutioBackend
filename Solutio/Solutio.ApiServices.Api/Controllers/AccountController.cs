@@ -131,7 +131,10 @@ namespace Solutio.ApiServices.Api.Controllers
                     return BadRequest(new { message = GetErrorMessage(result) });
                 }
 
-                return BuildToken(userInfo);
+                var user = await userManager.FindByEmailAsync(userInfo.Email);
+                var role = await userManager.GetRolesAsync(user);
+
+                return BuildToken(userInfo, role.ToList());
             }
             catch (Exception ex)
             {
@@ -247,9 +250,9 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         #region private methods
-        private IActionResult BuildToken(UserInfoDto userInfo)
+        private IActionResult BuildToken(UserInfoDto userInfo, List<string> rolesName)
         {
-            var token = tokenBuilder.WithUserInfo(userInfo).Build();
+            var token = tokenBuilder.WithUserInfo(userInfo).WithRole(rolesName).Build();
             var expiration = DateTime.UtcNow.AddHours(1);
             var expirationTimeInSeconds = 1 * 60 * 60;
 

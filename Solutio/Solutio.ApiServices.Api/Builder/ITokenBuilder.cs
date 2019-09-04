@@ -11,6 +11,8 @@ namespace Solutio.ApiServices.Api.Builder
     {
         ITokenBuilder WithUserInfo(UserInfoDto userInfo);
 
+        ITokenBuilder WithRole(List<string> roles);
+
         JwtSecurityToken Build();
     }
 }

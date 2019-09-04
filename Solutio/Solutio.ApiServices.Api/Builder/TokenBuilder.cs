@@ -14,6 +14,7 @@ namespace Solutio.ApiServices.Api.Builder
     public class TokenBuilder : ITokenBuilder
     {
         private UserInfoDto userInfo;
+        private List<string> roles;
         private readonly IConfiguration configuration;
 
         public TokenBuilder(IConfiguration configuration)
@@ -30,7 +31,8 @@ namespace Solutio.ApiServices.Api.Builder
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
                 new Claim("uniquevalue", "nicolasbjkmpadini"),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("role", roles.FirstOrDefault() ?? string.Empty)          
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["SecretKeyValue"]));
@@ -51,6 +53,12 @@ namespace Solutio.ApiServices.Api.Builder
         public ITokenBuilder WithUserInfo(UserInfoDto userInfo)
         {
             this.userInfo = userInfo;
+            return this;
+        }
+
+        public ITokenBuilder WithRole(List<string> roles)
+        {
+            this.roles = roles;
             return this;
         }
     }
