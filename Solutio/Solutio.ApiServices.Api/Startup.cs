@@ -189,7 +189,7 @@ namespace Solutio.ApiServices.Api
             #endregion Factories Settings
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {

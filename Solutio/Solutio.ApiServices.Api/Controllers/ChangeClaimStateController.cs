@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
@@ -11,6 +13,7 @@ namespace Solutio.ApiServices.Api.Controllers
 {
     [Route("api/claim/{claimId}/[controller]/")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ChangeClaimStateController : ControllerBase
     {
         private readonly IChangeClaimStateService changeClaimStateService;

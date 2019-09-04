@@ -18,6 +18,8 @@ using Solutio.Core.Services.ApplicationServices;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
 using System.Web;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -31,10 +33,12 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly ITokenBuilder tokenBuilder;
         private readonly ISendConfirmationEmailService sendConfirmationEmailService;
         private readonly ISendResetPasswordService sendResetPasswordService;
+        private readonly RoleManager<IdentityRole<int>> roleManager;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole<int>> roleManager,
             ITokenBuilder tokenBuilder,
             ISendConfirmationEmailService sendConfirmationEmailService,
             ISendResetPasswordService sendResetPasswordService)
@@ -44,30 +48,75 @@ namespace Solutio.ApiServices.Api.Controllers
             this.tokenBuilder = tokenBuilder;
             this.sendConfirmationEmailService = sendConfirmationEmailService;
             this.sendResetPasswordService = sendResetPasswordService;
+            this.roleManager = roleManager;
         }
 
         [Route("Create")]
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] UserInfoDto userInfo)
+        [EnableCors("AllowOrigin")]
+        public async Task<IActionResult> CreateUser([FromBody] NewUserDto userInfo)
         {
             try
             {
                 var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
                 var result = await userManager.CreateAsync(user, userInfo.Password);
+
                 if (!result.Succeeded)
                 {
                     return BadRequest(result.Errors.ToList());
                 }
 
+                await AddRole(user, userInfo.RoleName);
+
                 await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
 
-                return BuildToken(userInfo);
+                return Ok();// BuildToken(userInfo);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
+
+        [Route("AddRole")]
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> AddRole([FromBody] UserRolDto userInfo)
+        {
+            try
+            {
+                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
+                await AddRole(user, userInfo.RoleName);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [Route("RemoveRole")]
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> RemoveRole([FromBody] UserRolDto userInfo)
+        {
+            try
+            {
+                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
+                await RemoveRole(user, userInfo.RoleName);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+
 
         [HttpPost]
         [Route("Login")]
@@ -223,6 +272,30 @@ namespace Solutio.ApiServices.Api.Controllers
             }
 
             return errorMessage;
+        }
+
+        private async Task AddRole(ApplicationUser applicationUser, string roleName)
+        {
+            var role = await roleManager.FindByNameAsync(roleName);
+            var user = await userManager.FindByEmailAsync(applicationUser.Email);
+            if (role == null || user == null)
+            {
+                throw new ApplicationException("User or Role name invalid.");
+            }
+
+            await userManager.AddToRoleAsync(user, role.Name);
+        }
+
+        private async Task RemoveRole(ApplicationUser applicationUser, string roleName)
+        {
+            var role = await roleManager.FindByNameAsync(roleName);
+            var user = await userManager.FindByEmailAsync(applicationUser.Email);
+            if (role == null || user == null)
+            {
+                throw new ApplicationException("User or Role name invalid.");
+            }
+
+            await userManager.RemoveFromRoleAsync(user, role.Name);
         }
 
         #endregion private methods
