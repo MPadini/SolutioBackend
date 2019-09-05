@@ -79,7 +79,11 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<List<Claim>> GetAll()
         {
-            var claimsDb = await applicationDbContext.Claims.AsNoTracking().ToListAsync();
+            var claimsDb = await applicationDbContext.Claims.AsNoTracking()
+                .Include(x => x.State)
+                .ThenInclude(e => e.StateConfigurations)
+                .ThenInclude(d => d.AllowedState)
+                .ToListAsync();
 
             return claimMapper.Map(claimsDb);
         }

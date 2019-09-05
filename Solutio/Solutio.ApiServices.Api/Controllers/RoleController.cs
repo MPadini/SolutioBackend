@@ -72,6 +72,11 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                //return Ok(User.Claims.Select(c => new
+                //{
+                //    Type = c.Type,
+                //    Value = c.Value
+                //}));
                 return Ok(roleManager.Roles);
             }
             catch (Exception ex)
