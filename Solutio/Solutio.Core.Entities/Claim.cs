@@ -22,6 +22,10 @@ namespace Solutio.Core.Entities
 
         public ClaimState State { get; set; }
 
+        public bool StateAlarmActive { get; set; }
+
+        public DateTime StateModifiedDate { get; set; }
+
         public List<Person> ClaimInsuredPersons { get; set; }
 
         public List<Vehicle> ClaimInsuredVehicles { get; set; }

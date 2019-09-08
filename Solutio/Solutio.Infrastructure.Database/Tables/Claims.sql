@@ -4,6 +4,7 @@
     [Date] DATETIME NOT NULL,
     [Hour] VARCHAR(5) NOT NULL,
     [StateId] bigint NOT NULL,
+	[StateModifiedDate] DATETIME NOT NULL DEFAULT GetDate(),
 	[AdressId] bigint NULL,
     [TotalBudgetAmount] decimal(18,2) NULL,
 	[Created] DATETIME NOT NULL,

@@ -21,6 +21,8 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public long StateId { get; set; }
 
+        public DateTime StateModifiedDate { get; set; }
+
         public ClaimStateDB State { get; set; }
 
         public List<ClaimInsuredPersonDB> ClaimInsuredPersons { get; set; }
