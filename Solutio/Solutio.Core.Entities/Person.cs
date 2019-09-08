@@ -15,11 +15,11 @@ namespace Solutio.Core.Entities
 
         public string Cuit { get; set; }
 
-        public int DocumentNumber { get; set; }
+        public string DocumentNumber { get; set; }
 
-        public int TelephoneNumber { get; set; }
+        public string TelephoneNumber { get; set; }
 
-        public int MobileNumber { get; set; }
+        public string MobileNumber { get; set; }
 
         public string Email { get; set; }
 
