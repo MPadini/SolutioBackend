@@ -30,7 +30,7 @@ namespace Solutio.Infrastructure.Repositories.Mappers
             if (claimDB.ClaimInsuredPersons != null && claimDB.ClaimInsuredPersons.Any())
             {
                 claim.ClaimInsuredPersons = new List<Person>();
-                claimDB.ClaimInsuredPersons.ForEach(x => 
+                claimDB.ClaimInsuredPersons.ForEach(x =>
                 {
                     claim.ClaimInsuredPersons.Add(x.Person.Adapt<Person>());
                 });
@@ -76,6 +76,8 @@ namespace Solutio.Infrastructure.Repositories.Mappers
                 claimDb.Adress = new AdressDB();
                 claimDb.Adress = claim.Adress.Adapt<AdressDB>();
             }
+
+            claimDb.StateModifiedDate = DateTime.Now;
 
             if (claim.ClaimInsuredPersons != null && claim.ClaimInsuredPersons.Any())
             {
