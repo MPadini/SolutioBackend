@@ -43,8 +43,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
             await ValidateAllowedState(claim, newStateId);
 
             claim.StateId = newStateId;
+            claim.StateModifiedDate = DateTime.Now;
 
-            await claimRepository.Update(claim, claim.Id);
+            await claimRepository.UpdateState(claim, claim.Id);
         }
 
         private async Task<bool> ValidateAllowedState(Claim claim, long newStateId)

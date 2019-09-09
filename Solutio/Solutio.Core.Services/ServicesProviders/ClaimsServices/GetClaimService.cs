@@ -5,47 +5,39 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
+using Solutio.Core.Services.ApplicationServices.AlarmServices;
 
 namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
 {
     public class GetClaimService : IGetClaimService
     {
         private readonly IClaimRepository claimRepository;
+        private readonly ISetAlarmActivationService setAlarmActivationService;
 
-        public GetClaimService(IClaimRepository claimRepository)
+        public GetClaimService(IClaimRepository claimRepository, ISetAlarmActivationService setAlarmActivationService)
         {
             this.claimRepository = claimRepository;
+            this.setAlarmActivationService = setAlarmActivationService;
         }
 
         public async Task<Claim> GetById(long id)
         {
             var claim = await claimRepository.GetById(id);
-            return claim;
+            return await setAlarmActivationService.Set(claim);
         }
 
         public async Task<List<Claim>> GetAll()
         {
-            return await claimRepository.GetAll();
-        }
+            var claims = await claimRepository.GetAll();
+            if (claims == null || !claims.Any()) return default;
 
-        private Claim SetAlarmActivation(Claim claim)
-        {
-            if (claim == null) return claim;
-            if (claim.State == null) return claim;
-
-            claim.StateAlarmActive = false;
-            var maximumTimeAllowed = claim.State.MaximumTimeAllowed;
-            var actualDate = DateTime.Now;
-
-            var dateDifference = actualDate - claim.StateModifiedDate;
-            int dateDifferenceInt = int.Parse(dateDifference.TotalHours.ToString());
-
-            if (dateDifferenceInt > maximumTimeAllowed)
+            claims.ForEach(async claim =>
             {
-                claim.StateAlarmActive = true;
-            }
+                await setAlarmActivationService.Set(claim);
+            });
 
-            return claim;
+            return claims;
         }
     }
 }

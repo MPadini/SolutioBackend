@@ -127,6 +127,31 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
+        public async Task UpdateState(Claim claim, long claimId)
+        {
+            using (var transaction = applicationDbContext.Database.BeginTransaction())
+            {
+                try
+                {
+                    var claimDb = await Get(claimId);
+                    if (claimDb == null) return;
+
+                    claimDb.StateId = claim.StateId;
+                    claimDb.StateModifiedDate = claim.StateModifiedDate;
+
+                    applicationDbContext.Claims.Update(claimDb);
+                    applicationDbContext.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    throw new ApplicationException(ex.Message);
+                }
+            }
+        }
+
         private async Task UpdateAssociatedEntities(ClaimDB claimDB, Claim claim)
         {
             var existingClaim = claimMapper.Map(claimDB);

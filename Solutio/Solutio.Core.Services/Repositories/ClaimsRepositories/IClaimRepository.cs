@@ -16,6 +16,8 @@ namespace Solutio.Core.Services.Repositories.ClaimsRepositories
 
         Task Update(Claim claim, long claimId);
 
+        Task UpdateState(Claim claim, long claimId);
+
         Task Delete(Claim claim);
     }
 }
