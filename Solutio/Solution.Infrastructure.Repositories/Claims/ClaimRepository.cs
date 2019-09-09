@@ -54,6 +54,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 {
                     var claimDb = claimMapper.Map(claim);
 
+                    claimDb.StateModifiedDate = DateTime.Now;
+
                     applicationDbContext.Claims.Add(claimDb);
                     applicationDbContext.SaveChanges();
 

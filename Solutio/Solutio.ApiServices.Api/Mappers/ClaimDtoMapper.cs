@@ -22,8 +22,6 @@ namespace Solutio.ApiServices.Api.Mappers
                 claim.Adress.City = null;
             }
 
-            claim.StateModifiedDate = DateTime.Now;
-
             if (claimDto.ClaimInsuredPersons != null && claimDto.ClaimInsuredPersons.Any())
             {
                 claim.ClaimInsuredPersons = new List<Person>();

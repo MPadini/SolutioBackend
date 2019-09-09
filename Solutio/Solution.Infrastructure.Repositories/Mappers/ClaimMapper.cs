@@ -77,7 +77,11 @@ namespace Solutio.Infrastructure.Repositories.Mappers
                 claimDb.Adress = claim.Adress.Adapt<AdressDB>();
             }
 
-            claimDb.StateModifiedDate = DateTime.Now;
+            if (claim.State != null)
+            {
+                claimDb.State = null;
+                claimDb.StateId = claim.StateId;
+            }
 
             if (claim.ClaimInsuredPersons != null && claim.ClaimInsuredPersons.Any())
             {
