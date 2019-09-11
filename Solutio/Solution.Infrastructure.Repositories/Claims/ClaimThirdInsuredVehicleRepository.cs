@@ -41,36 +41,46 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
+        private async Task Update(Vehicle vehicle, ClaimThirdInsuredVehicleDB thirdInsuredVehicle)
+        {
+            thirdInsuredVehicle.Vehicle.VehicleModel = vehicle.VehicleModel;
+            thirdInsuredVehicle.Vehicle.VehicleManufacturer = vehicle.VehicleManufacturer;
+            thirdInsuredVehicle.Vehicle.VehicleTypeId = vehicle.VehicleTypeId;
+            thirdInsuredVehicle.Vehicle.InsuranceCompany = vehicle.InsuranceCompany;
+            thirdInsuredVehicle.Vehicle.DamageDetail = vehicle.DamageDetail;
+            thirdInsuredVehicle.Vehicle.Franchise = vehicle.Franchise;
+            thirdInsuredVehicle.Vehicle.HaveFullCoverage = vehicle.HaveFullCoverage;
+            thirdInsuredVehicle.Vehicle.Patent = vehicle.Patent;
+
+            applicationDbContext.Vehicles.Update(thirdInsuredVehicle.Vehicle);
+            applicationDbContext.SaveChanges();
+        }
+
+        private async Task Save(Vehicle vehicle, long claimDbId)
+        {
+            var claimThirdInsured = ClaimThirdInsuredVehicleDB.NewInstance();
+            claimThirdInsured.Vehicle = vehicle.Adapt<VehicleDB>();
+            claimThirdInsured.ClaimId = claimDbId;
+            claimThirdInsured.Claim = null;
+            applicationDbContext.ClaimThirdInsuredVehicles.Add(claimThirdInsured);
+            applicationDbContext.SaveChanges();
+        }
+
         public async Task<Claim> UpdateClaimThirdInsuredVehicles(Claim claim, List<Vehicle> vehicles)
         {
             var claimDb = claimMapper.Map(claim);
             if (claimDb.ClaimThirdInsuredVehicles == null || vehicles == null) return default;
 
-            vehicles.ForEach(vehicle =>
+            vehicles.ForEach(async vehicle =>
             {
                 var thirdInsuredVehicle = claimDb.ClaimThirdInsuredVehicles.FirstOrDefault(x => x.VehicleId == vehicle.Id);
                 if (thirdInsuredVehicle != null)
                 {
-                    thirdInsuredVehicle.Vehicle.VehicleModel = vehicle.VehicleModel;
-                    thirdInsuredVehicle.Vehicle.VehicleManufacturer = vehicle.VehicleManufacturer;
-                    thirdInsuredVehicle.Vehicle.VehicleTypeId = vehicle.VehicleTypeId;
-                    thirdInsuredVehicle.Vehicle.InsuranceCompany = vehicle.InsuranceCompany;
-                    thirdInsuredVehicle.Vehicle.DamageDetail = vehicle.DamageDetail;
-                    thirdInsuredVehicle.Vehicle.Franchise = vehicle.Franchise;
-                    thirdInsuredVehicle.Vehicle.HaveFullCoverage = vehicle.HaveFullCoverage;
-                    thirdInsuredVehicle.Vehicle.Patent = vehicle.Patent;
-
-                    applicationDbContext.Vehicles.Update(thirdInsuredVehicle.Vehicle);
-                    applicationDbContext.SaveChanges();
+                    await Update(vehicle, thirdInsuredVehicle);
                 }
                 else
                 {
-                    var claimThirdInsured = ClaimThirdInsuredVehicleDB.NewInstance();
-                    claimThirdInsured.Vehicle = vehicle.Adapt<VehicleDB>();
-                    claimThirdInsured.ClaimId = claimDb.Id;
-                    claimThirdInsured.Claim = null;
-                    applicationDbContext.ClaimThirdInsuredVehicles.Add(claimThirdInsured);
-                    applicationDbContext.SaveChanges();
+                    await Save(vehicle, claimDb.Id);
                 }
             });
 

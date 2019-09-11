@@ -54,6 +54,7 @@ namespace Solutio.ApiServices.Api.Controllers
         [Route("Create")]
         [HttpPost]
         [EnableCors("AllowOrigin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateUser([FromBody] NewUserDto userInfo)
         {
             try

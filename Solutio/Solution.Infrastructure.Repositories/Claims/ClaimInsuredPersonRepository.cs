@@ -30,14 +30,48 @@ namespace Solutio.Infrastructure.Repositories.Claims
             var claimDB = claimMapper.Map(claim);
             if (claimDB.ClaimInsuredPersons != null)
             {
-                claimDB.ClaimInsuredPersons.ForEach(person =>
+                claimDB.ClaimInsuredPersons.ForEach(async person =>
                 {
-                    person.Claim = null;
-                    person.Person = null;
-                    applicationDbContext.ClaimInsuredPersons.Remove(person);
-                    applicationDbContext.SaveChanges();
+                    await DeleteClaimPerson(person);
                 });
             }
+        }
+
+        private async Task DeleteClaimPerson(ClaimInsuredPersonDB claimInsuredPerson)
+        {
+            var person = claimInsuredPerson.Person;
+            claimInsuredPerson.Claim = null;
+            claimInsuredPerson.Person = null;
+           
+            applicationDbContext.ClaimInsuredPersons.Remove(claimInsuredPerson);
+            applicationDbContext.Persons.Remove(person);
+            applicationDbContext.SaveChanges();
+        }
+
+        private async Task Update(Person person, ClaimInsuredPersonDB insuredPerson)
+        {
+            insuredPerson.Person.Cuit = person.Cuit;
+            insuredPerson.Person.DocumentNumber = person.DocumentNumber;
+            insuredPerson.Person.Email = person.Email;
+            insuredPerson.Person.LegalEntityName = person.LegalEntityName;
+            insuredPerson.Person.MobileNumber = person.MobileNumber;
+            insuredPerson.Person.Name = person.Name;
+            insuredPerson.Person.PersonTypeId = person.PersonTypeId;
+            insuredPerson.Person.Surname = person.Surname;
+            insuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
+
+            applicationDbContext.Persons.Update(insuredPerson.Person);
+            applicationDbContext.SaveChanges();
+        }
+
+        private async Task Save(Person person, long claimDbId)
+        {
+            var claimInsured = ClaimInsuredPersonDB.NewInstance();
+            claimInsured.Person = person.Adapt<PersonDB>();
+            claimInsured.ClaimId = claimDbId;
+            claimInsured.Claim = null;
+            applicationDbContext.ClaimInsuredPersons.Add(claimInsured);
+            applicationDbContext.SaveChanges();
         }
 
         public async Task<Claim> UpdateClaimInsuredPersons(Claim claim, List<Person> persons)
@@ -45,32 +79,22 @@ namespace Solutio.Infrastructure.Repositories.Claims
             var claimDb = claimMapper.Map(claim);
             if (claimDb.ClaimInsuredPersons == null || persons == null) return default;
 
-            persons.ForEach(person =>
+            //var claimPersonToDelete = claimDb.ClaimInsuredPersons.Where((n) => !persons.Contains(n.Person.Adapt<Person>())).ToList();
+            //if (claimPersonToDelete != null)
+            //{
+            //    claimPersonToDelete.ForEach(async claimPerson => await DeleteClaimPerson(claimPerson));
+            //}
+
+            persons.ForEach(async person =>
             {
                 var insuredPerson = claimDb.ClaimInsuredPersons.FirstOrDefault(x => x.PersonId == person.Id);
                 if (insuredPerson != null)
                 {
-                    insuredPerson.Person.Cuit = person.Cuit;
-                    insuredPerson.Person.DocumentNumber = person.DocumentNumber;
-                    insuredPerson.Person.Email = person.Email;
-                    insuredPerson.Person.LegalEntityName = person.LegalEntityName;
-                    insuredPerson.Person.MobileNumber = person.MobileNumber;
-                    insuredPerson.Person.Name = person.Name;
-                    insuredPerson.Person.PersonTypeId = person.PersonTypeId;
-                    insuredPerson.Person.Surname = person.Surname;
-                    insuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
-
-                    applicationDbContext.Persons.Update(insuredPerson.Person);
-                    applicationDbContext.SaveChanges();
+                    await Update(person, insuredPerson);
                 }
                 else
                 {
-                    var claimInsured = ClaimInsuredPersonDB.NewInstance();
-                    claimInsured.Person = person.Adapt<PersonDB>();
-                    claimInsured.ClaimId = claimDb.Id;
-                    claimInsured.Claim = null;
-                    applicationDbContext.ClaimInsuredPersons.Add(claimInsured);
-                    applicationDbContext.SaveChanges();
+                    await Save(person, claimDb.Id);
                 }
             });
 

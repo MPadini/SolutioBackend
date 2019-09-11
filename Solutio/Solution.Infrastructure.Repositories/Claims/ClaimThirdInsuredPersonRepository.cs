@@ -45,37 +45,47 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
+        private async Task Update(Person person, ClaimThirdInsuredPersonDB thirdInsuredPerson)
+        {
+            thirdInsuredPerson.Person.Cuit = person.Cuit;
+            thirdInsuredPerson.Person.DocumentNumber = person.DocumentNumber;
+            thirdInsuredPerson.Person.Email = person.Email;
+            thirdInsuredPerson.Person.LegalEntityName = person.LegalEntityName;
+            thirdInsuredPerson.Person.MobileNumber = person.MobileNumber;
+            thirdInsuredPerson.Person.Name = person.Name;
+            thirdInsuredPerson.Person.PersonTypeId = person.PersonTypeId;
+            thirdInsuredPerson.Person.Surname = person.Surname;
+            thirdInsuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
+
+            applicationDbContext.Persons.Update(thirdInsuredPerson.Person);
+            applicationDbContext.SaveChanges();
+        }
+
+        private async Task Save(Person person, long claimDbId)
+        {
+            var claimThirdInsured = ClaimThirdInsuredPersonDB.NewInstance();
+            claimThirdInsured.Person = person.Adapt<PersonDB>();
+            claimThirdInsured.ClaimId = claimDbId;
+            claimThirdInsured.Claim = null;
+            applicationDbContext.ClaimThirdInsuredPersons.Add(claimThirdInsured);
+            applicationDbContext.SaveChanges();
+        }
+
         public async Task<Claim> UpdateClaimThirdInsuredPersons(Claim claim, List<Person> persons)
         {
             var claimDb = claimMapper.Map(claim);
             if (claimDb.ClaimThirdInsuredPersons == null || persons == null) return default;
 
-            persons.ForEach(person =>
+            persons.ForEach(async person =>
             {
                 var thirdInsuredPerson = claimDb.ClaimThirdInsuredPersons.FirstOrDefault(x => x.PersonId == person.Id);
                 if (thirdInsuredPerson != null)
                 {
-                    thirdInsuredPerson.Person.Cuit = person.Cuit;
-                    thirdInsuredPerson.Person.DocumentNumber = person.DocumentNumber;
-                    thirdInsuredPerson.Person.Email = person.Email;
-                    thirdInsuredPerson.Person.LegalEntityName = person.LegalEntityName;
-                    thirdInsuredPerson.Person.MobileNumber = person.MobileNumber;
-                    thirdInsuredPerson.Person.Name = person.Name;
-                    thirdInsuredPerson.Person.PersonTypeId = person.PersonTypeId;
-                    thirdInsuredPerson.Person.Surname = person.Surname;
-                    thirdInsuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
-
-                    applicationDbContext.Persons.Update(thirdInsuredPerson.Person);
-                    applicationDbContext.SaveChanges();
+                    await Update(person, thirdInsuredPerson);
                 }
                 else
                 {
-                    var claimThirdInsured = ClaimThirdInsuredPersonDB.NewInstance();
-                    claimThirdInsured.Person = person.Adapt<PersonDB>();
-                    claimThirdInsured.ClaimId = claimDb.Id;
-                    claimThirdInsured.Claim = null;
-                    applicationDbContext.ClaimThirdInsuredPersons.Add(claimThirdInsured);
-                    applicationDbContext.SaveChanges();
+                    await Save(person, claimDb.Id);
                 }
             });
 
