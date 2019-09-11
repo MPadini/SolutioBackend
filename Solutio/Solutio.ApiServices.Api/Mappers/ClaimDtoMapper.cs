@@ -14,7 +14,7 @@ namespace Solutio.ApiServices.Api.Mappers
         {
             var claim = claimDto.Adapt<Claim>();
 
-            if(claimDto.ClaimAdress != null)
+            if (claimDto.ClaimAdress != null)
             {
                 claim.Adress = new Adress();
                 claim.Adress = claimDto.ClaimAdress.Adapt<Adress>();
@@ -22,7 +22,7 @@ namespace Solutio.ApiServices.Api.Mappers
                 claim.Adress.City = null;
             }
 
-            if(claimDto.ClaimInsuredPersons != null && claimDto.ClaimInsuredPersons.Any())
+            if (claimDto.ClaimInsuredPersons != null && claimDto.ClaimInsuredPersons.Any())
             {
                 claim.ClaimInsuredPersons = new List<Person>();
                 claim.ClaimInsuredPersons = claimDto.ClaimInsuredPersons.Adapt<List<Person>>();
