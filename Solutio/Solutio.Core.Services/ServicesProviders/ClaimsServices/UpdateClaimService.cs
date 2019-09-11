@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.AdressServices;
+using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
@@ -16,13 +17,16 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
     {
         private readonly IClaimRepository claimRepository;
         private readonly IUpdateAdressService updateAdressService;
+        private readonly IUpdateClaimInsuredPersonService updateClaimInsuredPersonService;
 
         public UpdateClaimService(
             IClaimRepository claimRepository,
-            IUpdateAdressService updateAdressService)
+            IUpdateAdressService updateAdressService,
+            IUpdateClaimInsuredPersonService updateClaimInsuredPersonService)
         {
             this.claimRepository = claimRepository;
             this.updateAdressService = updateAdressService;
+            this.updateClaimInsuredPersonService = updateClaimInsuredPersonService;
         }
 
         public async Task Update(Claim claim, long claimId)
@@ -59,8 +63,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
 
         private async Task UpdateAssociatedEntities(Claim existingClaim, Claim claimNewData)
         {
-            //var existingClaim = claimMapper.Map(claimDB);
-            //await claimInsuredPersonRepository.UpdateClaimInsuredPersons(existingClaim, claim.ClaimInsuredPersons);
+            await updateClaimInsuredPersonService.UpdateClaimInsuredPersons(existingClaim, claimNewData.ClaimInsuredPersons);
             //await claimInsuredVehicleRepository.UpdateClaimInsuredVehicles(existingClaim, claim.ClaimInsuredVehicles);
             //await claimThirdInsuredPersonRepository.UpdateClaimThirdInsuredPersons(existingClaim, claim.ClaimThirdInsuredPersons);
             //await claimThirdInsuredVehicleRepository.UpdateClaimThirdInsuredVehicles(existingClaim, claim.ClaimThirdInsuredVehicles);

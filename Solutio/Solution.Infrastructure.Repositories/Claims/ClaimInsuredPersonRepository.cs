@@ -25,7 +25,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             this.claimMapper = claimMapper;
         }
 
-        public async Task DeleteClaimInsuredPersons(Claim claim)
+        public async Task Delete(Claim claim)
         {
             var claimDB = claimMapper.Map(claim);
             if (claimDB.ClaimInsuredPersons != null)
@@ -48,7 +48,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
-        private async Task Update(Person person, ClaimInsuredPersonDB insuredPerson)
+        public async Task Update(Person person, ClaimInsuredPersonDB insuredPerson)
         {
             insuredPerson.Person.Cuit = person.Cuit;
             insuredPerson.Person.DocumentNumber = person.DocumentNumber;
@@ -64,7 +64,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
-        private async Task Save(Person person, long claimDbId)
+        public async Task Save(Person person, long claimDbId)
         {
             var claimInsured = ClaimInsuredPersonDB.NewInstance();
             claimInsured.Person = person.Adapt<PersonDB>();
@@ -83,27 +83,23 @@ namespace Solutio.Infrastructure.Repositories.Claims
             //}
         }
 
-        public async Task<Claim> UpdateClaimInsuredPersons(Claim claim, List<Person> persons)
+
+        public async Task Update(Person personNewData, Person existingPerson)
         {
-            var claimDb = claimMapper.Map(claim);
-            if (claimDb.ClaimInsuredPersons == null) return default;
+            var personToUpdate = existingPerson.Adapt<PersonDB>();
 
-            await DeleteClaimInsuredPersons(claim, persons);
+            personToUpdate.Cuit = personNewData.Cuit;
+            personToUpdate.DocumentNumber = personNewData.DocumentNumber;
+            personToUpdate.Email = personNewData.Email;
+            personToUpdate.LegalEntityName = personNewData.LegalEntityName;
+            personToUpdate.MobileNumber = personNewData.MobileNumber;
+            personToUpdate.Name = personNewData.Name;
+            personToUpdate.PersonTypeId = personNewData.PersonTypeId;
+            personToUpdate.Surname = personNewData.Surname;
+            personToUpdate.TelephoneNumber = personNewData.TelephoneNumber;
 
-            persons.ForEach(async person =>
-            {
-                var insuredPerson = claimDb.ClaimInsuredPersons.FirstOrDefault(x => x.PersonId == person.Id);
-                if (insuredPerson != null)
-                {
-                    await Update(person, insuredPerson);
-                }
-                else
-                {
-                    await Save(person, claimDb.Id);
-                }
-            });
-
-            return claimMapper.Map(claimDb);
+            applicationDbContext.Persons.Update(personToUpdate);
+            applicationDbContext.SaveChanges();
         }
     }
 }

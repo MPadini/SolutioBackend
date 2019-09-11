@@ -179,6 +179,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IDeleteClaimPersonService, DeleteClaimPersonService>();
             services.AddTransient<ISetAlarmActivationService, SetAlarmActivationService>();
             services.AddTransient<IUpdateAdressService, UpdateAdressService>();
+            services.AddTransient<IUpdateClaimInsuredPersonService, UpdateClaimInsuredPersonService>();          
 
             #endregion Services Settings
 
