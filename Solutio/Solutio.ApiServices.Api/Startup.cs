@@ -23,6 +23,7 @@ using Solutio.ApiServices.Api.Filters;
 using Solutio.ApiServices.Api.Mappers;
 using Solutio.ApiServices.Api.Swagger;
 using Solutio.Core.Entities;
+using Solutio.Core.Services.ApplicationServices.AdressServices;
 using Solutio.Core.Services.ApplicationServices.AlarmServices;
 using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
@@ -36,6 +37,7 @@ using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using Solutio.Core.Services.Repositories.Location;
 using Solutio.Core.Services.ServicesProviders;
+using Solutio.Core.Services.ServicesProviders.AdressServices;
 using Solutio.Core.Services.ServicesProviders.AlarmServices;
 using Solutio.Core.Services.ServicesProviders.ClaimPersonServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
@@ -176,6 +178,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IDeleteClaimThirdPersonService, DeleteClaimThirdPersonService>();
             services.AddTransient<IDeleteClaimPersonService, DeleteClaimPersonService>();
             services.AddTransient<ISetAlarmActivationService, SetAlarmActivationService>();
+            services.AddTransient<IUpdateAdressService, UpdateAdressService>();
 
             #endregion Services Settings
 

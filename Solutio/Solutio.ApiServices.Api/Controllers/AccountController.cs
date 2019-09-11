@@ -54,7 +54,6 @@ namespace Solutio.ApiServices.Api.Controllers
         [Route("Create")]
         [HttpPost]
         [EnableCors("AllowOrigin")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateUser([FromBody] NewUserDto userInfo)
         {
             try
@@ -67,9 +66,8 @@ namespace Solutio.ApiServices.Api.Controllers
                     return BadRequest(result.Errors.ToList());
                 }
 
-                await AddRole(user, userInfo.RoleName);
-
                 await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
+                await AddRole(user, userInfo.RoleName);
 
                 return Ok();// BuildToken(userInfo);
             }

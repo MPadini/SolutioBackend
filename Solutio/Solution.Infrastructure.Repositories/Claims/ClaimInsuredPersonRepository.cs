@@ -74,16 +74,21 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
-        public async Task<Claim> UpdateClaimInsuredPersons(Claim claim, List<Person> persons)
+        private async Task DeleteClaimInsuredPersons(Claim claim, List<Person> persons)
         {
-            var claimDb = claimMapper.Map(claim);
-            if (claimDb.ClaimInsuredPersons == null || persons == null) return default;
-
             //var claimPersonToDelete = claimDb.ClaimInsuredPersons.Where((n) => !persons.Contains(n.Person.Adapt<Person>())).ToList();
             //if (claimPersonToDelete != null)
             //{
             //    claimPersonToDelete.ForEach(async claimPerson => await DeleteClaimPerson(claimPerson));
             //}
+        }
+
+        public async Task<Claim> UpdateClaimInsuredPersons(Claim claim, List<Person> persons)
+        {
+            var claimDb = claimMapper.Map(claim);
+            if (claimDb.ClaimInsuredPersons == null) return default;
+
+            await DeleteClaimInsuredPersons(claim, persons);
 
             persons.ForEach(async person =>
             {

@@ -106,26 +106,16 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task Update(Claim claim, long claimId)
         {
-            using (var transaction = applicationDbContext.Database.BeginTransaction())
+            try
             {
-                try
-                {
-                    var claimDb = await Get(claimId);
-                    if (claimDb == null) return;
+                var claimDb = claimMapper.Map(claim);
 
-                    await UpdateClaim(claimDb, claim);        
-                    await UpdateAssociatedEntities(claimDb, claim);
-
-                    applicationDbContext.Claims.Update(claimDb);
-                    applicationDbContext.SaveChanges();
-
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    throw new ApplicationException(ex.Message);
-                }
+                applicationDbContext.Claims.Update(await SetClaimNull(claimDb));
+                applicationDbContext.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException(ex.Message);
             }
         }
 
@@ -154,24 +144,14 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
-        private async Task UpdateAssociatedEntities(ClaimDB claimDB, Claim claim)
-        {
-            var existingClaim = claimMapper.Map(claimDB);
-            await claimInsuredPersonRepository.UpdateClaimInsuredPersons(existingClaim, claim.ClaimInsuredPersons);
-            await claimInsuredVehicleRepository.UpdateClaimInsuredVehicles(existingClaim, claim.ClaimInsuredVehicles);
-            await claimThirdInsuredPersonRepository.UpdateClaimThirdInsuredPersons(existingClaim, claim.ClaimThirdInsuredPersons);
-            await claimThirdInsuredVehicleRepository.UpdateClaimThirdInsuredVehicles(existingClaim, claim.ClaimThirdInsuredVehicles);
-        }
-
         private async Task DeleteAssociatedEntities(Claim claim)
         {
             await claimInsuredPersonRepository.DeleteClaimInsuredPersons(claim);
             await claimThirdInsuredVehicleRepository.DeleteClaimThirdInsuredVehicles(claim);
             await claimInsuredVehicleRepository.DeleteClaimInsuredVehicles(claim);
-            await claimThirdInsuredPersonRepository.DeleteClaimThirdInsuredPersons(claim);
-            
+            await claimThirdInsuredPersonRepository.DeleteClaimThirdInsuredPersons(claim);  
             await claimFileRepository.DeleteClaimFiles(claim);
-            await claimAdressRepository.DeleteClaimAdress(claim);
+            await claimAdressRepository.Delete(claim);
         }
 
         public async Task Delete(Claim claim)
@@ -205,18 +185,5 @@ namespace Solutio.Infrastructure.Repositories.Claims
             claimDB.Adress = null;
             return claimDB;
         }
-
-        private async Task<ClaimDB> UpdateClaim(ClaimDB claimDb, Claim claim)
-        {
-            claimDb.Story = claim.Story;
-            claimDb.Hour = claim.Hour;
-            claimDb.TotalBudgetAmount = claim.TotalBudgetAmount;
-            claimDb.Date = claim.Date;
-            var adress = await claimAdressRepository.UpdateClaimAdress(claimDb.Adapt<Claim>(), claim.Adress);
-            claimDb.AdressId = adress.Id;
-            return claimDb;
-        }
-
-
     }
 }

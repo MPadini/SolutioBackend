@@ -25,7 +25,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             this.claimMapper = claimMapper;
         }
 
-        public async Task DeleteClaimAdress(Claim claim)
+        public async Task Delete(Claim claim)
         {
             var claimDB = claimMapper.Map(claim);
             if (claimDB.Adress != null)
@@ -37,43 +37,36 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
-        public async Task<Adress> UpdateClaimAdress(Claim claim, Adress adress)
+        public async Task<Adress> Save(Claim claim, Adress adress)
         {
             var claimDb = claimMapper.Map(claim);
             if (adress == null || claimDb == null) return default;
 
-            if (await AdressExists(claimDb))
-            {
-                claimDb.Adress.Intersection = adress.Intersection;
-                claimDb.Adress.Street = adress.Street;
-                claimDb.Adress.Number = adress.Number;
-                claimDb.Adress.CityId = adress.CityId;
-                claimDb.Adress.ProvinceId = adress.ProvinceId;
-                claimDb.Adress.Lat = adress.Lat;
-                claimDb.Adress.Lng = adress.Lng;
-
-                applicationDbContext.Adresses.Update(claimDb.Adress);
-                applicationDbContext.SaveChanges();
-            }
-            else
-            {
-                var adressDb = adress.Adapt<AdressDB>();
-                applicationDbContext.Adresses.Add(adressDb);
-                claimDb.Adress = adressDb;
-                applicationDbContext.SaveChanges();
-            }
+            var adressDb = adress.Adapt<AdressDB>();
+            applicationDbContext.Adresses.Add(adressDb);
+            claimDb.Adress = adressDb;
+            applicationDbContext.SaveChanges();
 
             return claimDb.Adress.Adapt<Adress>();
         }
 
-        private async Task<bool> AdressExists(ClaimDB claimDb)
+        public async Task<Adress> Update(Claim claim, Adress adress)
         {
-            if (claimDb.Adress != null && claimDb.AdressId > 0)
-            {
-                return true;
-            }
+            var claimDb = claimMapper.Map(claim);
+            if (adress == null || claimDb == null) return default;
 
-            return false;
+            claimDb.Adress.Intersection = adress.Intersection;
+            claimDb.Adress.Street = adress.Street;
+            claimDb.Adress.Number = adress.Number;
+            claimDb.Adress.CityId = adress.CityId;
+            claimDb.Adress.ProvinceId = adress.ProvinceId;
+            claimDb.Adress.Lat = adress.Lat;
+            claimDb.Adress.Lng = adress.Lng;
+
+            applicationDbContext.Adresses.Update(claimDb.Adress);
+            applicationDbContext.SaveChanges();
+
+            return claimDb.Adress.Adapt<Adress>();
         }
     }
 }

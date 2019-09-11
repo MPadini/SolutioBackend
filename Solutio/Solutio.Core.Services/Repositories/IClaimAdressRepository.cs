@@ -8,8 +8,10 @@ namespace Solutio.Core.Services.Repositories
 {
     public interface IClaimAdressRepository
     {
-        Task DeleteClaimAdress(Claim claim);
+        Task Delete(Claim claim);
 
-        Task<Adress> UpdateClaimAdress(Claim claim, Adress adress);
+        Task<Adress> Update(Claim claim, Adress adress);
+
+        Task<Adress> Save(Claim claim, Adress adress);
     }
 }
