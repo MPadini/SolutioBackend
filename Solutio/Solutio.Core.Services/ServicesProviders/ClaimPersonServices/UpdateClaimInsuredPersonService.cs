@@ -20,7 +20,14 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimPersonServices
 
         public async Task UpdateClaimInsuredPersons(Claim claim, List<Person> persons)
         {
-            if(claim != null && persons != null)
+            if (claim == null) return;
+
+            await UpdateOrSavePersons(claim, persons);
+        }
+
+        private async Task UpdateOrSavePersons(Claim claim, List<Person> persons)
+        {
+            if (persons != null)
             {
                 persons.ForEach(async person =>
                 {

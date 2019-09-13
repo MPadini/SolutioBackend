@@ -20,7 +20,14 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimVehicleServices
 
         public async Task UpdateClaimInsuredVehicles(Claim claim, List<Vehicle> vehicles)
         {
-            if (claim != null && vehicles != null)
+            if (claim == null) return;
+
+            await UpdateOrSaveVehicles(claim, vehicles);
+        }
+
+        private async Task UpdateOrSaveVehicles(Claim claim, List<Vehicle> vehicles)
+        {
+            if (vehicles != null)
             {
                 vehicles.ForEach(async vehicle =>
                 {

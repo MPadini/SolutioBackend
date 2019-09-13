@@ -149,7 +149,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             await claimInsuredPersonRepository.Delete(claim);
             await claimThirdInsuredVehicleRepository.Delete(claim);
             await claimInsuredVehicleRepository.Delete(claim);
-            await claimThirdInsuredPersonRepository.Delete(claim);  
+            await claimThirdInsuredPersonRepository.DeleteAll(claim);  
             await claimFileRepository.DeleteClaimFiles(claim);
             await claimAdressRepository.Delete(claim);
         }
