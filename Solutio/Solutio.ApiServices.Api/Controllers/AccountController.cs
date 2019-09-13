@@ -20,6 +20,8 @@ using Solutio.Core.Services.ApplicationServices.LoginServices;
 using System.Web;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Solutio.Core.Services.ApplicationServices.RefreshTokenServices;
+using Solutio.Core.Entities;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -34,6 +36,7 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly ISendConfirmationEmailService sendConfirmationEmailService;
         private readonly ISendResetPasswordService sendResetPasswordService;
         private readonly RoleManager<IdentityRole<int>> roleManager;
+        private readonly IRefreshTokenService refreshTokenService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -41,7 +44,8 @@ namespace Solutio.ApiServices.Api.Controllers
             RoleManager<IdentityRole<int>> roleManager,
             ITokenBuilder tokenBuilder,
             ISendConfirmationEmailService sendConfirmationEmailService,
-            ISendResetPasswordService sendResetPasswordService)
+            ISendResetPasswordService sendResetPasswordService,
+            IRefreshTokenService refreshTokenService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -49,6 +53,7 @@ namespace Solutio.ApiServices.Api.Controllers
             this.sendConfirmationEmailService = sendConfirmationEmailService;
             this.sendResetPasswordService = sendResetPasswordService;
             this.roleManager = roleManager;
+            this.refreshTokenService = refreshTokenService;
         }
 
         [Route("Create")]
@@ -69,7 +74,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
                 await AddRole(user, userInfo.RoleName);
 
-                return Ok();// BuildToken(userInfo);
+                return Ok();
             }
             catch (Exception ex)
             {
@@ -115,8 +120,6 @@ namespace Solutio.ApiServices.Api.Controllers
             }
         }
 
-
-
         [HttpPost]
         [Route("Login")]
         [EnableCors("AllowOrigin")]
@@ -133,7 +136,40 @@ namespace Solutio.ApiServices.Api.Controllers
                 var user = await userManager.FindByEmailAsync(userInfo.Email);
                 var role = await userManager.GetRolesAsync(user);
 
-                return BuildToken(userInfo, role.ToList());
+                return await BuildToken(userInfo.Email, role.ToList());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost]
+        [Route("RefreshToken")]
+        [EnableCors("AllowOrigin")]
+        public async Task<IActionResult> Refresh([FromBody] RefreshTokenDto refreshToken)
+        {
+            try
+            {
+                var refreshTokenDb = await refreshTokenService.GetByRefreshToken(refreshToken.RefreshToken);
+                if (refreshTokenDb == null)
+                {
+                    return NotFound("RefreshToken does not exist");
+                }
+
+                var user = await userManager.FindByEmailAsync(refreshToken.Email);
+                if (refreshToken == null)
+                {
+                    return NotFound("User does not exist");
+                }
+
+                var role = await userManager.GetRolesAsync(user);
+                if (refreshToken == null)
+                {
+                    return NotFound("Role does not exist");
+                }
+
+                return await BuildToken(refreshToken.Email, role.ToList());
             }
             catch (Exception ex)
             {
@@ -249,18 +285,37 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         #region private methods
-        private IActionResult BuildToken(UserInfoDto userInfo, List<string> rolesName)
+        private async Task< IActionResult> BuildToken(string userName, List<string> rolesName)
         {
-            var token = tokenBuilder.WithUserInfo(userInfo).WithRole(rolesName).Build();
+            var token = tokenBuilder.WithUserInfo(userName).WithRole(rolesName).Build();
             var expiration = DateTime.UtcNow.AddHours(1);
             var expirationTimeInSeconds = 1 * 60 * 60;
+
+            var refreshToken = await GenerateRefreshToken(userName);
 
             return Ok(new
             {
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expiration,
-                expiresIn = expirationTimeInSeconds
+                expiresIn = expirationTimeInSeconds,
+                refreshToken = refreshToken.Refreshtoken
             });
+        }
+
+        private async Task<RefreshToken> GenerateRefreshToken(string userName)
+        {
+            var refreshTokenDb = await refreshTokenService.Get(userName);
+            if (refreshTokenDb != null)
+            {
+                await refreshTokenService.Revoke(refreshTokenDb);
+            }
+
+            RefreshToken refreshToken = new RefreshToken();
+            refreshToken.Refreshtoken = Guid.NewGuid().ToString();
+            refreshToken.UserName = userName;
+            await refreshTokenService.Save(refreshToken);
+
+            return refreshToken;
         }
 
         private string GetErrorMessage(Microsoft.AspNetCore.Identity.SignInResult result)

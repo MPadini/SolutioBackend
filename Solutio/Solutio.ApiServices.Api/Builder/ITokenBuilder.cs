@@ -9,7 +9,7 @@ namespace Solutio.ApiServices.Api.Builder
 {
     public interface ITokenBuilder
     {
-        ITokenBuilder WithUserInfo(UserInfoDto userInfo);
+        ITokenBuilder WithUserInfo(string userName);
 
         ITokenBuilder WithRole(List<string> roles);
 

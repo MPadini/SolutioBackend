@@ -86,6 +86,7 @@
     <Build Include="Tables\ClaimThirdInsuredVehicles.sql" />
     <Build Include="Tables\ClaimThirdInsuredPersons.sql" />
     <Build Include="Tables\ClaimStateConfigurations.sql" />
+    <Build Include="Tables\RefreshTokens.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />

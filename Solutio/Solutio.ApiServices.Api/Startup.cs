@@ -34,6 +34,7 @@ using Solutio.Core.Services.ApplicationServices.ClaimVehicleServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
 using Solutio.Core.Services.ApplicationServices.Location;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
+using Solutio.Core.Services.ApplicationServices.RefreshTokenServices;
 using Solutio.Core.Services.Factories;
 using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
@@ -50,6 +51,7 @@ using Solutio.Core.Services.ServicesProviders.ClaimVehicleServices;
 using Solutio.Core.Services.ServicesProviders.FileService;
 using Solutio.Core.Services.ServicesProviders.Location;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
+using Solutio.Core.Services.ServicesProviders.RefreshTokenServices;
 using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
 using Solutio.Infrastructure.Repositories.Entities;
@@ -149,7 +151,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IClaimInsuredVehicleRepository, ClaimInsuredVehicleRepository>();
             services.AddTransient<IClaimInsuredPersonRepository, ClaimInsuredPersonRepository>();
             services.AddTransient<IClaimAdressRepository, ClaimAdressRepository>();
-
+            services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
+            
             #endregion Repositories Settings
 
             #region Mappers Settings
@@ -187,6 +190,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IUpdateClaimThirdInsuredPersonService, UpdateClaimThirdInsuredPersonService>();
             services.AddTransient<IUpdateClaimInsuredVehicleService, UpdateClaimInsuredVehicleService>();
             services.AddTransient<IUpdateClaimThirdInsuredVehicleService, UpdateClaimThirdInsuredVehicleService>();
+            services.AddTransient<IRefreshTokenService, RefreshTokenService>();
 
             #endregion Services Settings
 

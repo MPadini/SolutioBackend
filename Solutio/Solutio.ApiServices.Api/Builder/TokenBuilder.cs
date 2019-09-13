@@ -13,7 +13,7 @@ namespace Solutio.ApiServices.Api.Builder
 {
     public class TokenBuilder : ITokenBuilder
     {
-        private UserInfoDto userInfo;
+        private string userName;
         private List<string> roles;
         private readonly IConfiguration configuration;
 
@@ -25,11 +25,11 @@ namespace Solutio.ApiServices.Api.Builder
 
         public JwtSecurityToken Build()
         {
-            if (userInfo == null) throw new ApplicationException("UserInfo null");
+            if (string.IsNullOrWhiteSpace(userName)) throw new ApplicationException("UserInfo null");
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.UniqueName, userInfo.Email),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userName),
                 new Claim("uniquevalue", "nicolasbjkmpadini"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("role", roles.FirstOrDefault() ?? string.Empty)          
@@ -50,9 +50,9 @@ namespace Solutio.ApiServices.Api.Builder
             return token;
         }
 
-        public ITokenBuilder WithUserInfo(UserInfoDto userInfo)
+        public ITokenBuilder WithUserInfo(string userName)
         {
-            this.userInfo = userInfo;
+            this.userName = userName;
             return this;
         }
 
