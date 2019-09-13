@@ -31,14 +31,37 @@ namespace Solutio.Infrastructure.Repositories.Claims
             var claimDB = claimMapper.Map(claim);
             if (claimDB.ClaimThirdInsuredVehicles != null)
             {
-                claimDB.ClaimThirdInsuredVehicles.ForEach(vehicle =>
+                claimDB.ClaimThirdInsuredVehicles.ForEach(async vehicle =>
                 {
-                    vehicle.Claim = null;
-                    vehicle.Vehicle = null;
-                    applicationDbContext.ClaimThirdInsuredVehicles.Remove(vehicle);
-                    applicationDbContext.SaveChanges();
+                    await DeleteClaimVehicle(vehicle);
                 });
             }
+        }
+
+        public async Task Delete(Claim claim, List<long> vehicleIds)
+        {
+            var claimDB = claimMapper.Map(claim);
+            if (claimDB.ClaimThirdInsuredVehicles == null) return;
+            if (vehicleIds == null || !vehicleIds.Any()) return;
+
+            claimDB.ClaimThirdInsuredVehicles.ForEach(async vehicle =>
+            {
+                if (vehicleIds.Contains(vehicle.VehicleId))
+                {
+                    await DeleteClaimVehicle(vehicle);
+                }
+            });
+        }
+
+        private async Task DeleteClaimVehicle(ClaimThirdInsuredVehicleDB claimThirdInsuredVehicle)
+        {
+            var vehicle = claimThirdInsuredVehicle.Vehicle;
+            claimThirdInsuredVehicle.Claim = null;
+            claimThirdInsuredVehicle.Vehicle = null;
+
+            applicationDbContext.ClaimThirdInsuredVehicles.Remove(claimThirdInsuredVehicle);
+            applicationDbContext.Vehicles.Remove(vehicle);
+            applicationDbContext.SaveChanges();
         }
 
         public async Task Update(Vehicle existingVehicle, Vehicle vehicleNewData)
