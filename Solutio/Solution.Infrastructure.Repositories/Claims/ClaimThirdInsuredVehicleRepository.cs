@@ -26,7 +26,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             this.claimMapper = claimMapper;
         }
 
-        public async Task Delete(Claim claim)
+        public async Task DeleteAll(Claim claim)
         {
             var claimDB = claimMapper.Map(claim);
             if (claimDB.ClaimThirdInsuredVehicles != null)

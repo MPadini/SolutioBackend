@@ -146,9 +146,9 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         private async Task DeleteAssociatedEntities(Claim claim)
         {
-            await claimInsuredPersonRepository.Delete(claim);
-            await claimThirdInsuredVehicleRepository.Delete(claim);
-            await claimInsuredVehicleRepository.Delete(claim);
+            await claimInsuredPersonRepository.DeleteAll(claim);
+            await claimThirdInsuredVehicleRepository.DeleteAll(claim);
+            await claimInsuredVehicleRepository.DeleteAll(claim);
             await claimThirdInsuredPersonRepository.DeleteAll(claim);  
             await claimFileRepository.DeleteClaimFiles(claim);
             await claimAdressRepository.Delete(claim);
