@@ -23,6 +23,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimVehicleServices
             if (claim == null) return;
 
             await UpdateOrSaveVehicles(claim, vehicles);
+            await DeleteVehicles(claim, vehicles);
         }
 
         private async Task UpdateOrSaveVehicles(Claim claim, List<Vehicle> vehicles)
@@ -41,6 +42,27 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimVehicleServices
                         await claimInsuredVehicleRepository.Save(vehicle, claim.Id);
                     }
                 });
+            }
+        }
+
+        private async Task DeleteVehicles(Claim claim, List<Vehicle> vehicles)
+        {
+            if (claim.ClaimInsuredVehicles == null) return;
+
+            if (vehicles == null || !vehicles.Any())
+            {
+                await claimInsuredVehicleRepository.DeleteAll(claim);
+            }
+            else
+            {
+                var vehiclesToDelete = claim.ClaimInsuredVehicles.Select(x => x.Id)
+                    .Except(vehicles.Select(x => x.Id))
+                    .ToList();
+
+                if (vehiclesToDelete != null && vehiclesToDelete.Any())
+                {
+                    await claimInsuredVehicleRepository.Delete(claim, vehiclesToDelete);
+                }
             }
         }
     }
