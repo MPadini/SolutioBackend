@@ -23,6 +23,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimPersonServices
             if (claim == null) return;
 
             await UpdateOrSavePersons(claim, persons);
+            await DeletePersons(claim, persons);
         }
 
         private async Task UpdateOrSavePersons(Claim claim, List<Person> persons)
@@ -41,6 +42,27 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimPersonServices
                         await claimInsuredPersonRepository.Save(person, claim.Id);
                     }
                 });
+            }
+        }
+
+        private async Task DeletePersons(Claim claim, List<Person> persons)
+        {
+            if (claim.ClaimInsuredPersons == null) return;
+
+            if (persons == null || !persons.Any())
+            {
+                await claimInsuredPersonRepository.DeleteAll(claim);
+            }
+            else
+            {
+                var PersonsToDelete = claim.ClaimInsuredPersons.Select(x => x.Id)
+                    .Except(persons.Select(x => x.Id))
+                    .ToList();
+
+                if (PersonsToDelete != null && PersonsToDelete.Any())
+                {
+                    await claimInsuredPersonRepository.Delete(claim, PersonsToDelete);
+                }
             }
         }
     }

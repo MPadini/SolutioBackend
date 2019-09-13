@@ -10,6 +10,8 @@ namespace Solutio.Core.Services.Repositories
     {
         Task DeleteAll(Claim claim);
 
+        Task Delete(Claim claim, List<long> personIds);
+
         Task Update(Person personNewData, Person existingPerson);
 
         Task Save(Person person, long claimDbId);

@@ -37,6 +37,21 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
+        public async Task Delete(Claim claim, List<long> personIds)
+        {
+            var claimDB = claimMapper.Map(claim);
+            if (claimDB.ClaimThirdInsuredPersons == null) return;
+            if (personIds == null || !personIds.Any()) return;
+
+            claimDB.ClaimInsuredPersons.ForEach(async person =>
+            {
+                if (personIds.Contains(person.PersonId))
+                {
+                    await DeleteClaimPerson(person);
+                }
+            });
+        }
+
         private async Task DeleteClaimPerson(ClaimInsuredPersonDB claimInsuredPerson)
         {
             var person = claimInsuredPerson.Person;
@@ -57,16 +72,6 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.ClaimInsuredPersons.Add(claimInsured);
             applicationDbContext.SaveChanges();
         }
-
-        private async Task DeleteClaimInsuredPersons(Claim claim, List<Person> persons)
-        {
-            //var claimPersonToDelete = claimDb.ClaimInsuredPersons.Where((n) => !persons.Contains(n.Person.Adapt<Person>())).ToList();
-            //if (claimPersonToDelete != null)
-            //{
-            //    claimPersonToDelete.ForEach(async claimPerson => await DeleteClaimPerson(claimPerson));
-            //}
-        }
-
 
         public async Task Update(Person personNewData, Person existingPerson)
         {
