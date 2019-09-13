@@ -48,22 +48,6 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
-        public async Task Update(Person person, ClaimInsuredPersonDB insuredPerson)
-        {
-            insuredPerson.Person.Cuit = person.Cuit;
-            insuredPerson.Person.DocumentNumber = person.DocumentNumber;
-            insuredPerson.Person.Email = person.Email;
-            insuredPerson.Person.LegalEntityName = person.LegalEntityName;
-            insuredPerson.Person.MobileNumber = person.MobileNumber;
-            insuredPerson.Person.Name = person.Name;
-            insuredPerson.Person.PersonTypeId = person.PersonTypeId;
-            insuredPerson.Person.Surname = person.Surname;
-            insuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
-
-            applicationDbContext.Persons.Update(insuredPerson.Person);
-            applicationDbContext.SaveChanges();
-        }
-
         public async Task Save(Person person, long claimDbId)
         {
             var claimInsured = ClaimInsuredPersonDB.NewInstance();

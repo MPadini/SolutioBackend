@@ -25,7 +25,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             this.claimMapper = claimMapper;
         }
 
-        public async Task DeleteClaimInsuredVehicles(Claim claim)
+        public async Task Delete(Claim claim)
         {
             var claimDB = claimMapper.Map(claim);
             if (claimDB.ClaimInsuredVehicles != null)
@@ -40,22 +40,24 @@ namespace Solutio.Infrastructure.Repositories.Claims
             }
         }
 
-        private async Task Update(Vehicle vehicle, ClaimInsuredVehicleDB insuredVehicle)
+        public async Task Update(Vehicle existingVehicle, Vehicle vehicleNewData)
         {
-            insuredVehicle.Vehicle.VehicleModel = vehicle.VehicleModel;
-            insuredVehicle.Vehicle.VehicleManufacturer = vehicle.VehicleManufacturer;
-            insuredVehicle.Vehicle.VehicleTypeId = vehicle.VehicleTypeId;
-            insuredVehicle.Vehicle.InsuranceCompany = vehicle.InsuranceCompany;
-            insuredVehicle.Vehicle.DamageDetail = vehicle.DamageDetail;
-            insuredVehicle.Vehicle.Franchise = vehicle.Franchise;
-            insuredVehicle.Vehicle.HaveFullCoverage = vehicle.HaveFullCoverage;
-            insuredVehicle.Vehicle.Patent = vehicle.Patent;
+            var updatedVehicle = existingVehicle.Adapt<VehicleDB>();
 
-            applicationDbContext.Vehicles.Update(insuredVehicle.Vehicle);
+            updatedVehicle.VehicleModel = vehicleNewData.VehicleModel;
+            updatedVehicle.VehicleManufacturer = vehicleNewData.VehicleManufacturer;
+            updatedVehicle.VehicleTypeId = vehicleNewData.VehicleTypeId;
+            updatedVehicle.InsuranceCompany = vehicleNewData.InsuranceCompany;
+            updatedVehicle.DamageDetail = vehicleNewData.DamageDetail;
+            updatedVehicle.Franchise = vehicleNewData.Franchise;
+            updatedVehicle.HaveFullCoverage = vehicleNewData.HaveFullCoverage;
+            updatedVehicle.Patent = vehicleNewData.Patent;
+
+            applicationDbContext.Vehicles.Update(updatedVehicle);
             applicationDbContext.SaveChanges();
         }
 
-        private async Task Save(Vehicle vehicle, long claimDbId)
+        public async Task Save(Vehicle vehicle, long claimDbId)
         {
             var claimInsured = ClaimInsuredVehicleDB.NewInstance();
             claimInsured.Vehicle = vehicle.Adapt<VehicleDB>();
@@ -63,27 +65,6 @@ namespace Solutio.Infrastructure.Repositories.Claims
             claimInsured.Claim = null;
             applicationDbContext.ClaimInsuredVehicles.Add(claimInsured);
             applicationDbContext.SaveChanges();
-        }
-
-        public async Task<Claim> UpdateClaimInsuredVehicles(Claim claim, List<Vehicle> vehicles)
-        {
-            var claimDb = claimMapper.Map(claim);
-            if (claimDb.ClaimInsuredVehicles == null || vehicles == null) return default;
-
-            vehicles.ForEach(async vehicle =>
-            {
-                var insuredVehicle = claimDb.ClaimInsuredVehicles.FirstOrDefault(x => x.VehicleId == vehicle.Id);
-                if (insuredVehicle != null)
-                {
-                    await Update(vehicle, insuredVehicle);
-                }
-                else
-                {
-                    await Save(vehicle, claimDb.Id);
-                }
-            });
-
-            return claimMapper.Map(claimDb);
         }
     }
 }

@@ -8,8 +8,10 @@ namespace Solutio.Core.Services.Repositories
 {
     public interface IClaimInsuredVehicleRepository
     {
-        Task<Claim> UpdateClaimInsuredVehicles(Claim claim, List<Vehicle> vehicles);
+        Task Delete(Claim claim);
 
-        Task DeleteClaimInsuredVehicles(Claim claim);
+        Task Save(Vehicle vehicle, long claimDbId);
+
+        Task Update(Vehicle existingVehicle, Vehicle vehicleNewData);
     }
 }

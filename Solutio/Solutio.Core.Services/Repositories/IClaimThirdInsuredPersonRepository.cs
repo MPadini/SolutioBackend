@@ -8,8 +8,10 @@ namespace Solutio.Core.Services.Repositories
 {
     public interface IClaimThirdInsuredPersonRepository
     {
-        Task<Claim> UpdateClaimThirdInsuredPersons(Claim claim, List<Person> persons);
+        Task Delete(Claim claim);
 
-        Task DeleteClaimThirdInsuredPersons(Claim claim);
+        Task Update(Person personNewData, Person existingPerson);
+
+        Task Save(Person person, long claimDbId);
     }
 }

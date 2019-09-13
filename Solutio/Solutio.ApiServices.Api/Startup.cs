@@ -29,6 +29,8 @@ using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredPerson;
+using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredVehicleServices;
+using Solutio.Core.Services.ApplicationServices.ClaimVehicleServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
 using Solutio.Core.Services.ApplicationServices.Location;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
@@ -43,6 +45,8 @@ using Solutio.Core.Services.ServicesProviders.ClaimPersonServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
 using Solutio.Core.Services.ServicesProviders.ClaimThirdInsuredPerson;
+using Solutio.Core.Services.ServicesProviders.ClaimThirdInsuredVehicleServices;
+using Solutio.Core.Services.ServicesProviders.ClaimVehicleServices;
 using Solutio.Core.Services.ServicesProviders.FileService;
 using Solutio.Core.Services.ServicesProviders.Location;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
@@ -179,7 +183,10 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IDeleteClaimPersonService, DeleteClaimPersonService>();
             services.AddTransient<ISetAlarmActivationService, SetAlarmActivationService>();
             services.AddTransient<IUpdateAdressService, UpdateAdressService>();
-            services.AddTransient<IUpdateClaimInsuredPersonService, UpdateClaimInsuredPersonService>();          
+            services.AddTransient<IUpdateClaimInsuredPersonService, UpdateClaimInsuredPersonService>();
+            services.AddTransient<IUpdateClaimThirdInsuredPersonService, UpdateClaimThirdInsuredPersonService>();
+            services.AddTransient<IUpdateClaimInsuredVehicleService, UpdateClaimInsuredVehicleService>();
+            services.AddTransient<IUpdateClaimThirdInsuredVehicleService, UpdateClaimThirdInsuredVehicleService>();
 
             #endregion Services Settings
 

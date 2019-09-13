@@ -25,7 +25,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             this.claimMapper = claimMapper;
         }
 
-        public async Task DeleteClaimThirdInsuredPersons(Claim claim)
+        public async Task Delete(Claim claim)
         {
             var claimDB = claimMapper.Map(claim);
             if (claimDB.ClaimThirdInsuredPersons != null)
@@ -45,23 +45,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
-        private async Task Update(Person person, ClaimThirdInsuredPersonDB thirdInsuredPerson)
-        {
-            thirdInsuredPerson.Person.Cuit = person.Cuit;
-            thirdInsuredPerson.Person.DocumentNumber = person.DocumentNumber;
-            thirdInsuredPerson.Person.Email = person.Email;
-            thirdInsuredPerson.Person.LegalEntityName = person.LegalEntityName;
-            thirdInsuredPerson.Person.MobileNumber = person.MobileNumber;
-            thirdInsuredPerson.Person.Name = person.Name;
-            thirdInsuredPerson.Person.PersonTypeId = person.PersonTypeId;
-            thirdInsuredPerson.Person.Surname = person.Surname;
-            thirdInsuredPerson.Person.TelephoneNumber = person.TelephoneNumber;
-
-            applicationDbContext.Persons.Update(thirdInsuredPerson.Person);
-            applicationDbContext.SaveChanges();
-        }
-
-        private async Task Save(Person person, long claimDbId)
+        public async Task Save(Person person, long claimDbId)
         {
             var claimThirdInsured = ClaimThirdInsuredPersonDB.NewInstance();
             claimThirdInsured.Person = person.Adapt<PersonDB>();
@@ -71,25 +55,22 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
-        public async Task<Claim> UpdateClaimThirdInsuredPersons(Claim claim, List<Person> persons)
+        public async Task Update(Person personNewData, Person existingPerson)
         {
-            var claimDb = claimMapper.Map(claim);
-            if (claimDb.ClaimThirdInsuredPersons == null || persons == null) return default;
+            var personToUpdate = existingPerson.Adapt<PersonDB>();
 
-            persons.ForEach(async person =>
-            {
-                var thirdInsuredPerson = claimDb.ClaimThirdInsuredPersons.FirstOrDefault(x => x.PersonId == person.Id);
-                if (thirdInsuredPerson != null)
-                {
-                    await Update(person, thirdInsuredPerson);
-                }
-                else
-                {
-                    await Save(person, claimDb.Id);
-                }
-            });
+            personToUpdate.Cuit = personNewData.Cuit;
+            personToUpdate.DocumentNumber = personNewData.DocumentNumber;
+            personToUpdate.Email = personNewData.Email;
+            personToUpdate.LegalEntityName = personNewData.LegalEntityName;
+            personToUpdate.MobileNumber = personNewData.MobileNumber;
+            personToUpdate.Name = personNewData.Name;
+            personToUpdate.PersonTypeId = personNewData.PersonTypeId;
+            personToUpdate.Surname = personNewData.Surname;
+            personToUpdate.TelephoneNumber = personNewData.TelephoneNumber;
 
-            return claimMapper.Map(claimDb);
+            applicationDbContext.Persons.Update(personToUpdate);
+            applicationDbContext.SaveChanges();
         }
     }
 }

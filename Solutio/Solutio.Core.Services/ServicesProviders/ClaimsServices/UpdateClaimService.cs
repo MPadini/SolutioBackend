@@ -3,6 +3,9 @@ using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.AdressServices;
 using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
+using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredPerson;
+using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredVehicleServices;
+using Solutio.Core.Services.ApplicationServices.ClaimVehicleServices;
 using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using System;
@@ -18,15 +21,24 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
         private readonly IClaimRepository claimRepository;
         private readonly IUpdateAdressService updateAdressService;
         private readonly IUpdateClaimInsuredPersonService updateClaimInsuredPersonService;
+        private readonly IUpdateClaimThirdInsuredPersonService updateClaimThirdInsuredPersonService;
+        private readonly IUpdateClaimInsuredVehicleService updateClaimInsuredVehicleService;
+        private readonly IUpdateClaimThirdInsuredVehicleService updateClaimThirdInsuredVehicleService;
 
         public UpdateClaimService(
             IClaimRepository claimRepository,
             IUpdateAdressService updateAdressService,
-            IUpdateClaimInsuredPersonService updateClaimInsuredPersonService)
+            IUpdateClaimInsuredPersonService updateClaimInsuredPersonService,
+            IUpdateClaimThirdInsuredPersonService updateClaimThirdInsuredPersonService,
+            IUpdateClaimInsuredVehicleService updateClaimInsuredVehicleService,
+            IUpdateClaimThirdInsuredVehicleService updateClaimThirdInsuredVehicleService)
         {
             this.claimRepository = claimRepository;
             this.updateAdressService = updateAdressService;
             this.updateClaimInsuredPersonService = updateClaimInsuredPersonService;
+            this.updateClaimThirdInsuredPersonService = updateClaimThirdInsuredPersonService;
+            this.updateClaimInsuredVehicleService = updateClaimInsuredVehicleService;
+            this.updateClaimThirdInsuredVehicleService = updateClaimThirdInsuredVehicleService;
         }
 
         public async Task Update(Claim claim, long claimId)
@@ -64,9 +76,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
         private async Task UpdateAssociatedEntities(Claim existingClaim, Claim claimNewData)
         {
             await updateClaimInsuredPersonService.UpdateClaimInsuredPersons(existingClaim, claimNewData.ClaimInsuredPersons);
-            //await claimInsuredVehicleRepository.UpdateClaimInsuredVehicles(existingClaim, claim.ClaimInsuredVehicles);
-            //await claimThirdInsuredPersonRepository.UpdateClaimThirdInsuredPersons(existingClaim, claim.ClaimThirdInsuredPersons);
-            //await claimThirdInsuredVehicleRepository.UpdateClaimThirdInsuredVehicles(existingClaim, claim.ClaimThirdInsuredVehicles);
+            await updateClaimThirdInsuredPersonService.UpdateClaimThirdInsuredPersons(existingClaim, claimNewData.ClaimThirdInsuredPersons);
+            await updateClaimInsuredVehicleService.UpdateClaimInsuredVehicles(existingClaim, claimNewData.ClaimInsuredVehicles);
+            await updateClaimThirdInsuredVehicleService.UpdateClaimInsuredVehicles(existingClaim, claimNewData.ClaimThirdInsuredVehicles);
         }
     }
 }
