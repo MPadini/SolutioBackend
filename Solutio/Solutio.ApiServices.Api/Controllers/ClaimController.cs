@@ -42,11 +42,13 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string userName)
         {
             try
             {
-                var claims = await getClaimService.GetAll(User.Identity.Name);
+                var userToSearch = await GetUserToSerch(userName);
+
+                var claims = await getClaimService.GetAll(userToSearch);
                 if (claims == null || !claims.Any())
                 {
                     return NotFound();
@@ -143,6 +145,18 @@ namespace Solutio.ApiServices.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
+        }
+
+        private async Task<string> GetUserToSerch(string userName) {
+            string userToSearch = User.Identity.Name;
+
+            var userAdmin = User.Claims.Select(c => new { c.Type, c.Value })
+                .ToList().Where(x => x.Value.ToLower().Equals("admin"));
+            if (userAdmin.Any()) {
+                userToSearch = userName;
+            }
+
+            return userToSearch;
         }
     }
 }
