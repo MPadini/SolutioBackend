@@ -14,6 +14,7 @@ namespace Solutio.ApiServices.Api.Validators
             RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Password).NotEmpty();
             RuleFor(x => x.RoleName).NotEmpty();
+            RuleFor(x => x.PhoneNumber).NotEmpty();
         }
     }
 }

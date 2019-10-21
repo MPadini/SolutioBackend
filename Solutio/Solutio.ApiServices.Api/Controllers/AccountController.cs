@@ -63,7 +63,9 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
+                if (userInfo == null) return BadRequest();
+
+                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email , PhoneNumber = userInfo.PhoneNumber};
                 var result = await userManager.CreateAsync(user, userInfo.Password);
 
                 if (!result.Succeeded)

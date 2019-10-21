@@ -11,6 +11,8 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public string Password { get; set; }
 
+        public string PhoneNumber { get; set; }
+
         public string RoleName { get; set; }
     }
 }

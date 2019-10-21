@@ -98,4 +98,7 @@
   <ItemGroup>
     <RefactorLog Include="Solutio.Infrastructure.Database.refactorlog" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="dbo\Post-Deployment\Roles.sql" />
+  </ItemGroup>
 </Project>
