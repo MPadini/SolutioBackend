@@ -46,7 +46,7 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var claims = await getClaimService.GetAll();
+                var claims = await getClaimService.GetAll(User.Identity.Name);
                 if (claims == null || !claims.Any())
                 {
                     return NotFound();
@@ -88,10 +88,11 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                
                 if (claimDto == null) return BadRequest("ClaimDto null");
 
                 var claim = claimDtoMapper.Map(claimDto); 
-                var claimId = await newClaimService.Save(claim);
+                var claimId = await newClaimService.Save(claim, User.Identity.Name);
 
                 return Created("claim", new { claimId });
             }

@@ -8,6 +8,6 @@ namespace Solutio.Core.Services.ApplicationServices.ClaimsServices
 {
     public interface INewClaimService
     {
-        Task<long> Save(Claim claim);
+        Task<long> Save(Claim claim, string userName);
     }
 }

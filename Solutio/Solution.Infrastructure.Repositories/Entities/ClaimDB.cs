@@ -40,5 +40,7 @@ namespace Solutio.Infrastructure.Repositories.Entities
         public long? AdressId { get; set; }
 
         public AdressDB Adress { get; set; }
+
+        public string UserName { get; set; }
     }
 }

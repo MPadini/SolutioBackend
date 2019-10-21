@@ -8,7 +8,7 @@ namespace Solutio.Core.Services.Repositories.ClaimsRepositories
 {
     public interface IClaimRepository
     {
-        Task<long> Save(Claim claim);
+        Task<long> Save(Claim claim, string userName);
 
         Task<Claim> GetById(long id);
 

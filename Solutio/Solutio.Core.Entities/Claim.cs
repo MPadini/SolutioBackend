@@ -39,5 +39,7 @@ namespace Solutio.Core.Entities
         public List<ClaimFile> Files { get; set; }
 
         public Adress Adress { get; set; }
+
+        public string UserName { get; set; }
     }
 }

@@ -45,7 +45,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             this.claimFileRepository = claimFileRepository;
         }
 
-        public async Task<long> Save(Claim claim)
+        public async Task<long> Save(Claim claim, string userName)
         {
             long result = 0;
             using (var transaction = applicationDbContext.Database.BeginTransaction())
@@ -55,6 +55,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     var claimDb = claimMapper.Map(claim);
 
                     claimDb.StateModifiedDate = DateTime.Now;
+                    claimDb.UserName = userName;
 
                     applicationDbContext.Claims.Add(claimDb);
                     applicationDbContext.SaveChanges();

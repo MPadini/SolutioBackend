@@ -15,6 +15,7 @@ namespace Solutio.ApiServices.Api.Builder
     {
         private string userName;
         private List<string> roles;
+        private int userId;
         private readonly IConfiguration configuration;
 
         public TokenBuilder(IConfiguration configuration)
@@ -30,6 +31,7 @@ namespace Solutio.ApiServices.Api.Builder
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.UniqueName, userName),
+                new Claim("UserId", userId.ToString()),
                 new Claim("uniquevalue", "nicolasbjkmpadini"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim("role", roles.FirstOrDefault() ?? string.Empty)          
@@ -50,7 +52,7 @@ namespace Solutio.ApiServices.Api.Builder
             return token;
         }
 
-        public ITokenBuilder WithUserInfo(string userName)
+        public ITokenBuilder WithUserName(string userName)
         {
             this.userName = userName;
             return this;
@@ -59,6 +61,11 @@ namespace Solutio.ApiServices.Api.Builder
         public ITokenBuilder WithRole(List<string> roles)
         {
             this.roles = roles;
+            return this;
+        }
+
+        public ITokenBuilder WithUserId(int userId) {
+            this.userId = userId;
             return this;
         }
     }

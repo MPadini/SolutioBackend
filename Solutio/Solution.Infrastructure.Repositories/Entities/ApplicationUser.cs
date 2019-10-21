@@ -7,5 +7,10 @@ namespace Solutio.Infrastructure.Repositories.Entities
 {
     public class ApplicationUser : IdentityUser<int>
     {
+        public ApplicationUser() {
+            IsEnabled = false;
+        }
+
+        public bool IsEnabled { get; set; }
     }
 }

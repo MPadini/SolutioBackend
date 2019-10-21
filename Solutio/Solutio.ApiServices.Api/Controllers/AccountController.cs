@@ -65,7 +65,7 @@ namespace Solutio.ApiServices.Api.Controllers
             {
                 if (userInfo == null) return BadRequest();
 
-                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email , PhoneNumber = userInfo.PhoneNumber};
+                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email , PhoneNumber = userInfo.PhoneNumber, IsEnabled = true};
                 var result = await userManager.CreateAsync(user, userInfo.Password);
 
                 if (!result.Succeeded)
@@ -92,6 +92,8 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                if (userInfo == null) return BadRequest();
+
                 var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
                 await AddRole(user, userInfo.RoleName);
 
@@ -111,6 +113,8 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                if (userInfo == null) return BadRequest();
+
                 var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email };
                 await RemoveRole(user, userInfo.RoleName);
 
@@ -129,16 +133,22 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                if (userInfo == null) return BadRequest();
+
+                var user = await userManager.FindByEmailAsync(userInfo.Email);
+                if (user == null) throw new ApplicationException("Usuario no encontrado.");
+                if (!user.IsEnabled) throw new ApplicationException("Usuario deshabilitado.");
+
                 var result = await signInManager.PasswordSignInAsync(userInfo.Email, userInfo.Password, isPersistent: false, lockoutOnFailure: false);
                 if (!result.Succeeded)
                 {
                     return BadRequest(new { message = GetErrorMessage(result) });
                 }
 
-                var user = await userManager.FindByEmailAsync(userInfo.Email);
+               
                 var role = await userManager.GetRolesAsync(user);
 
-                return await BuildToken(userInfo.Email, role.ToList());
+                return await BuildToken(user.Id, userInfo.Email, role.ToList());
             }
             catch (Exception ex)
             {
@@ -153,25 +163,19 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                if (refreshToken == null) return BadRequest();
+
                 var refreshTokenDb = await refreshTokenService.GetByRefreshToken(refreshToken.RefreshToken);
-                if (refreshTokenDb == null)
-                {
-                    return NotFound("RefreshToken does not exist");
-                }
+                if (refreshTokenDb == null)return NotFound("RefreshToken does not exist");
 
                 var user = await userManager.FindByEmailAsync(refreshToken.Email);
-                if (refreshToken == null)
-                {
-                    return NotFound("User does not exist");
-                }
+                if (user == null) return NotFound("User does not exist");
+                if (!user.IsEnabled) throw new ApplicationException("Usuario deshabilitado.");
 
                 var role = await userManager.GetRolesAsync(user);
-                if (refreshToken == null)
-                {
-                    return NotFound("Role does not exist");
-                }
+                if (role == null) return NotFound("Role does not exist");
 
-                return await BuildToken(refreshToken.Email, role.ToList());
+                return await BuildToken(user.Id, refreshToken.Email, role.ToList());
             }
             catch (Exception ex)
             {
@@ -186,12 +190,11 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var user = await userManager.FindByEmailAsync(userEmail.Email);
+                if (userEmail == null) return BadRequest();
 
-                if (user == null)
-                {
-                    return NotFound();
-                }
+                var user = await userManager.FindByEmailAsync(userEmail.Email);
+                if (user == null) return NotFound();
+                if (!user.IsEnabled) throw new ApplicationException("Usuario deshabilitado.");
 
                 if (user.EmailConfirmed)
                 {
@@ -215,11 +218,11 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                if (userConfirmEmail == null) return BadRequest();
+
                 var user = await userManager.FindByEmailAsync(userConfirmEmail.Email);
-                if (user == null)
-                {
-                    return NotFound();
-                }
+                if (user == null) return NotFound();
+                if (!user.IsEnabled) throw new ApplicationException("Usuario deshabilitado.");
 
                 var result = await userManager.ConfirmEmailAsync(user, userConfirmEmail.Token);
                 if (!result.Succeeded)
@@ -242,12 +245,11 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var user = await userManager.FindByEmailAsync(userEmail.Email);
+                if (userEmail == null) return BadRequest();
 
-                if (user == null)
-                {
-                    return NotFound();
-                }
+                var user = await userManager.FindByEmailAsync(userEmail.Email);
+                if (user == null) return NotFound();
+                if (!user.IsEnabled) throw new ApplicationException("Usuario deshabilitado.");
 
                 await sendResetPasswordService.Send(user.Id, user.Email, await userManager.GeneratePasswordResetTokenAsync(user));
 
@@ -266,11 +268,11 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
+                if (userResetPassword == null) return BadRequest();
+
                 var user = await userManager.FindByEmailAsync(userResetPassword.Email);
-                if (user == null)
-                {
-                    return NotFound();
-                }
+                if (user == null) return NotFound();
+                if (!user.IsEnabled) throw new ApplicationException("Usuario deshabilitado.");
 
                 var result = await userManager.ResetPasswordAsync(user, userResetPassword.Token, userResetPassword.NewPassword);
                 if (!result.Succeeded)
@@ -287,9 +289,9 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         #region private methods
-        private async Task< IActionResult> BuildToken(string userName, List<string> rolesName)
+        private async Task< IActionResult> BuildToken(int userId, string userName, List<string> rolesName)
         {
-            var token = tokenBuilder.WithUserInfo(userName).WithRole(rolesName).Build();
+            var token = tokenBuilder.WithUserName(userName).WithUserId(userId).WithRole(rolesName).Build();
             var expiration = DateTime.UtcNow.AddHours(1);
             var expirationTimeInSeconds = 1 * 60 * 60;
 

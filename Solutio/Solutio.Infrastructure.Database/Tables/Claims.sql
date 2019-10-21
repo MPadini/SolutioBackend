@@ -10,6 +10,7 @@
 	[Created] DATETIME NOT NULL,
     [Modified] DATETIME NULL,
     [Deleted] DATETIME NULL,
+	[UserName] varchar(500) NOT null,
     CONSTRAINT [PK_Claims] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Claims_ClaimStates_StateId] FOREIGN KEY ([StateId]) REFERENCES [ClaimStates] ([Id])
 );

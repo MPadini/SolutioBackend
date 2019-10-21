@@ -17,9 +17,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             this.claimRepository = claimRepository;
         }
 
-        public async Task<long> Save(Claim claim)
+        public async Task<long> Save(Claim claim, string userName)
         {
-            return await claimRepository.Save(claim);
+            return await claimRepository.Save(claim, userName);
         }
     }
 }
