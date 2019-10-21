@@ -32,7 +32,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             var claims = await claimRepository.GetAll();
             if (claims == null || !claims.Any()) return default;
 
-            claims = claims.Where(x => x.UserName.ToLower().Equals(userName.ToLower())).ToList();
+            var userToSearch = string.IsNullOrWhiteSpace(userName) ? "" : userName;
+
+            claims = claims.Where(x => x.UserName.ToLower().Equals(userToSearch.ToLower())).ToList();
             if (claims == null || !claims.Any()) return default;
 
             claims.ForEach(async claim =>

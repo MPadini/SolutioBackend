@@ -51,7 +51,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var claims = await getClaimService.GetAll(userToSearch);
                 if (claims == null || !claims.Any())
                 {
-                    return NotFound();
+                    return Ok();
                 }
 
                 var claimsDto = claims.Adapt<List<ClaimDto>>();
@@ -72,7 +72,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var claim = await getClaimService.GetById(id);
                 if (claim == null)
                 {
-                    return NotFound();
+                    return Ok();
                 }
 
                 var claimDto = claimDtoMapper.Map(claim);
@@ -112,7 +112,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var claim = await getClaimService.GetById(id);
                 if (claim == null)
                 {
-                    return NotFound();
+                    return Ok();
                 }
 
                 var updatedClaim = claimDtoMapper.Map(claimDto);
@@ -134,7 +134,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var claim = await getClaimService.GetById(id);
                 if (claim == null)
                 {
-                    return NotFound();
+                    return Ok();
                 }
 
                 await deleteClaimService.Delete(claim);

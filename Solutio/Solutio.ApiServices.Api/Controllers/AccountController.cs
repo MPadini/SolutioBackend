@@ -111,7 +111,7 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         [Route("GetUsers")]
-        [HttpPost]
+        [HttpGet]
         [EnableCors("AllowOrigin")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetUsers() {
