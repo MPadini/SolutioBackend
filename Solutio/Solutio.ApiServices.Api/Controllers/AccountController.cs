@@ -59,6 +59,7 @@ namespace Solutio.ApiServices.Api.Controllers
         [Route("Create")]
         [HttpPost]
         [EnableCors("AllowOrigin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateUser([FromBody] NewUserDto userInfo)
         {
             try
@@ -80,6 +81,27 @@ namespace Solutio.ApiServices.Api.Controllers
             }
             catch (Exception ex)
             {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [Route("DisableUser")]
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DisableUser([FromBody] UserEmailDto userInfo) {
+            try {
+                if (userInfo == null) return BadRequest();
+
+                var user = await userManager.FindByEmailAsync(userInfo.Email);
+                if (user == null) throw new ApplicationException("Usuario no encontrado.");
+
+                user.IsEnabled = false;
+                var result = await userManager.UpdateAsync(user);
+
+                return Ok();
+            }
+            catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
