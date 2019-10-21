@@ -73,8 +73,8 @@ namespace Solutio.ApiServices.Api.Controllers
                     return BadRequest(result.Errors.ToList());
                 }
 
-                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
                 await AddRole(user, userInfo.RoleName);
+                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));           
 
                 return Ok();
             }
