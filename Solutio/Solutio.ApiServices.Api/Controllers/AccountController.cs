@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Solutio.Core.Services.ApplicationServices.RefreshTokenServices;
 using Solutio.Core.Entities;
+using Solutio.Core.Services.ApplicationServices.AppUsers;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -37,6 +38,7 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly ISendResetPasswordService sendResetPasswordService;
         private readonly RoleManager<IdentityRole<int>> roleManager;
         private readonly IRefreshTokenService refreshTokenService;
+        private readonly IGetUserService getUserService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -45,7 +47,8 @@ namespace Solutio.ApiServices.Api.Controllers
             ITokenBuilder tokenBuilder,
             ISendConfirmationEmailService sendConfirmationEmailService,
             ISendResetPasswordService sendResetPasswordService,
-            IRefreshTokenService refreshTokenService)
+            IRefreshTokenService refreshTokenService,
+            IGetUserService getUserService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -54,6 +57,7 @@ namespace Solutio.ApiServices.Api.Controllers
             this.sendResetPasswordService = sendResetPasswordService;
             this.roleManager = roleManager;
             this.refreshTokenService = refreshTokenService;
+            this.getUserService = getUserService;
         }
 
         [Route("Create")]
@@ -100,6 +104,23 @@ namespace Solutio.ApiServices.Api.Controllers
                 var result = await userManager.UpdateAsync(user);
 
                 return Ok();
+            }
+            catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [Route("GetAllUsers")]
+        [HttpPost]
+        [EnableCors("AllowOrigin")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> GetAllUsers() {
+            try {
+
+                var users = await getUserService.GetAllUsers();
+                if (users == null || !users.Any()) return NotFound();
+
+                return Ok(users);
             }
             catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
