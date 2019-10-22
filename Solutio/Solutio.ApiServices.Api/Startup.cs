@@ -26,6 +26,7 @@ using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.AdressServices;
 using Solutio.Core.Services.ApplicationServices.AlarmServices;
 using Solutio.Core.Services.ApplicationServices.AppUsers;
+using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
 using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
@@ -44,6 +45,7 @@ using Solutio.Core.Services.ServicesProviders;
 using Solutio.Core.Services.ServicesProviders.AdressServices;
 using Solutio.Core.Services.ServicesProviders.AlarmServices;
 using Solutio.Core.Services.ServicesProviders.AppUsers;
+using Solutio.Core.Services.ServicesProviders.ClaimDocumentServices;
 using Solutio.Core.Services.ServicesProviders.ClaimPersonServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
@@ -156,6 +158,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IRefreshTokenRepository, RefreshTokenRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IGetUserService, GetUserService>();
+            services.AddTransient<IClaimDocumentTemplateRepository, ClaimDocumentTemplateRepository>();
+            
 
             #endregion Repositories Settings
 
@@ -195,6 +199,10 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IUpdateClaimInsuredVehicleService, UpdateClaimInsuredVehicleService>();
             services.AddTransient<IUpdateClaimThirdInsuredVehicleService, UpdateClaimThirdInsuredVehicleService>();
             services.AddTransient<IRefreshTokenService, RefreshTokenService>();
+            services.AddTransient<IGetClaimDocumentService, GetClaimDocumentService>();
+            services.AddTransient<IPdfMerge, PdfMerge>();
+            services.AddTransient<IGetHtmlTemplatesService, GetHtmlTemplatesService>();
+            services.AddTransient<IHtmlToPdfHelperService, HtmlToPdfHelperService>();
 
             #endregion Services Settings
 

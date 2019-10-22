@@ -81,6 +81,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<RefreshTokenDB> RefreshTokens { get; set; }
 
+        public DbSet<ClaimDocumentDB> ClaimDocuments { get; set; }
+
         #endregion DbSet Setups
 
         public override int SaveChanges()

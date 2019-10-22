@@ -87,6 +87,7 @@
     <Build Include="Tables\ClaimThirdInsuredPersons.sql" />
     <Build Include="Tables\ClaimStateConfigurations.sql" />
     <Build Include="Tables\RefreshTokens.sql" />
+    <Build Include="Tables\ClaimDocuments.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />
@@ -100,5 +101,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Post-Deployment\Roles.sql" />
+    <None Include="dbo\Post-Deployment\ClaimDocuments.sql" />
   </ItemGroup>
 </Project>

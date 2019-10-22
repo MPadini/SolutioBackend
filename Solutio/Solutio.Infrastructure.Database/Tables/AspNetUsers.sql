@@ -14,5 +14,6 @@
     [SecurityStamp] nvarchar(max) NULL,
     [TwoFactorEnabled] bit NOT NULL,
     [UserName] nvarchar(256) NULL,
+    [IsEnabled] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
 );

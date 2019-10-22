@@ -15,3 +15,4 @@ Post-Deployment Script Template
 :r .\VehicleTypes.sql
 :r .\ClaimStateConfigurations.sql
 :r .\Roles.sql
+:r .\ClaimDocuments.sql
