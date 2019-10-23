@@ -345,6 +345,8 @@ namespace Solutio.ApiServices.Api.Controllers
                 token = new JwtSecurityTokenHandler().WriteToken(token),
                 expiration,
                 expiresIn = expirationTimeInSeconds,
+                rol = rolesName.FirstOrDefault(),
+                user = userName,
                 refreshToken = refreshToken.Refreshtoken
             });
         }
