@@ -5,27 +5,37 @@ MERGE INTO [dbo].[ClaimStateConfigurations] AS Target
 
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
+	--BORRADOR
 	(1, 1, 2),
 	(2, 1, 1),
+	--EN REVISION
 	(3, 2, 2),
 	(4, 2, 1),
 	(5, 2, 3),
+	--ESPERANDO DENUNCIA
 	(6, 3, 3),
 	(7, 3, 4),
-	(8, 3, 6),
+	--PENDIENTE DE PRESENTACION
+	(8, 4, 6),
 	(9, 4, 4),
 	(10, 4, 5),
-	(11, 5, 3),
-	(12, 5, 5),
-	(13, 6, 5),
+	--PRESENTADO
+	(11, 5, 5),
+	(12, 5, 6),
+	(13, 5, 7),
+	--ESPERANDO ACCION
 	(14, 6, 6),
-	(15, 6, 7),
+	(15, 6, 4),
+	--CERRADO
 	(16, 7, 7),
-	(17, 7, 6),
-	(18, 7, 8),
-	(19, 8, 7),
-	(20, 8, 9),
-	(21, 8, 8)
+	--A JUICIO
+	(17, 8, 8),
+	--RECHAZADO
+	(18, 8, 8),
+	--DESISTIDO
+	(19, 8, 8),
+	--DESESTIMADO
+	(20, 8, 8)
 ) AS Source([ClaimStatesConfigurationsId], ParentClaimStateId,AllowedStateId) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [ClaimStatesConfigurationsId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 

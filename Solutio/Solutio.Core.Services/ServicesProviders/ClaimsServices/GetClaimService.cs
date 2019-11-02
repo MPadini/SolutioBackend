@@ -34,7 +34,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
 
             var userToSearch = string.IsNullOrWhiteSpace(userName) ? "" : userName;
 
-            claims = claims.Where(x => x.UserName.ToLower().Equals(userToSearch.ToLower())).ToList();
+            claims = claims.Where(x => userToSearch == "" || x.UserName.ToLower().Equals(userToSearch.ToLower())).ToList();
             if (claims == null || !claims.Any()) return default;
 
             claims.ForEach(async claim =>

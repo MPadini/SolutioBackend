@@ -5,15 +5,17 @@ MERGE INTO [dbo].[ClaimStates] AS Target
 
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
-	(1, N'Borrador',				24),
-	(2, N'En Revisión',				24),
-	(3, N'Presentado/Contestado',	24),
-	(4, N'Esperando Acción',		24),
-	(5, N'En Monitoreo',			24),
-	(6, N'Ofrecido/Reconsiderado',	24),
-	(7, N'Aceptado',				24),
-	(8, N'Pendiente de Pago',		24),
-	(9, N'Cerrado',					24)
+	(1, N'Borrador',					24),
+	(2, N'En Revisión',					24),
+	(3, N'Esperando Denuncia',			24),
+	(4, N'Pendiente de Presentación',	24),
+	(5, N'Presentado',					24),
+	(6, N'Esperando Acción',			24),
+	(7, N'Cerrado',						24),
+	(8, N'A Juicio',					24),
+	(9, N'Rechazado',					24),
+	(10, N'Desistido',					24),
+	(11, N'Desestimado',				24)
 ) AS Source([ClaimStatesId], [Description],[MaximumTimeAllowed]) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [ClaimStatesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 
