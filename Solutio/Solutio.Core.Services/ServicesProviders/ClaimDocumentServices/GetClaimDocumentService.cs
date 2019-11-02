@@ -1,5 +1,6 @@
 ﻿using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
+using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,33 +12,47 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private readonly IPdfMerge pdfMerge;
         private readonly IGetHtmlTemplatesService getHtmlTemplatesService;
         private readonly IHtmlToPdfHelperService htmlToPdfHelperService;
+        private readonly IGetClaimService getClaimService;
 
         public GetClaimDocumentService(
             IPdfMerge pdfMerge, 
             IGetHtmlTemplatesService getHtmlTemplatesService,
-            IHtmlToPdfHelperService htmlToPdfHelperService) {
+            IHtmlToPdfHelperService htmlToPdfHelperService,
+            IGetClaimService getClaimService) {
             this.pdfMerge = pdfMerge;
             this.getHtmlTemplatesService = getHtmlTemplatesService;
             this.htmlToPdfHelperService = htmlToPdfHelperService;
+            this.getClaimService = getClaimService;
         }
 
-        public async Task<byte[]> GetFile(Claim claim) {
-            if (claim == null) throw new ArgumentException(nameof(Claim), "null");
+        public async Task<byte[]> GetFile(List<long> claimIds, List<long> documentsIds) {
+            if (claimIds == null) throw new ArgumentException("Claims null");
+            if (documentsIds == null) throw new ArgumentException("Documents null");
 
             var htmlTemplates = await getHtmlTemplatesService.GetHtmlTemplates();
             if (htmlTemplates == null || !htmlTemplates.Any()) throw new ArgumentException("No hay templates configurados.");
 
-            var documents = await ReplaceHtmlTags(htmlTemplates, claim);
-            if (documents == null || !documents.Any()) throw new ArgumentException("No hay templates configurados.");
-
             List<byte[]> files = new List<byte[]>();
 
-            foreach (var document in documents) {
-                var pdf = await htmlToPdfHelperService.GetFile(document.HtmlTemplate);
-                if (await CanAdd(pdf)) {
-                    files.Add(pdf);
+            foreach (var claimId in claimIds) {
+                var claim = await getClaimService.GetById(claimId);
+                if (claim == null) continue;
+
+                var documents = await ReplaceHtmlTags(htmlTemplates, claim);
+                if (documents == null || !documents.Any()) throw new ArgumentException("No hay templates configurados.");
+
+
+                foreach (var document in documents) { 
+                    if (documentsIds.Contains(document.Id)) {
+                        var pdf = await htmlToPdfHelperService.GetFile(document.HtmlTemplate);
+                        if (await CanAdd(pdf)) {
+                            files.Add(pdf);
+                        }
+                    }
                 }
             }
+
+            if (!files.Any()) throw new ApplicationException("No se han podido generar los documentos solicitados");
           
             var result = await pdfMerge.MergeFiles(files);
             return result;
@@ -50,7 +65,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             claimDocuments.ForEach(async document => {
                 ClaimDocument doc = new ClaimDocument();
                 doc.HtmlTemplate = await ReemplaceTags( document.HtmlTemplate, claim);
-
+                doc.Id = document.Id;
                 result.Add(doc);
             });
 

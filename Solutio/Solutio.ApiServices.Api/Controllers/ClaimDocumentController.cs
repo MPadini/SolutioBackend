@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Solutio.ApiServices.Api.Dtos.Requests;
 using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 
@@ -18,38 +19,36 @@ namespace Solutio.ApiServices.Api.Controllers
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ClaimDocumentController : ControllerBase {
-        private readonly IGetClaimService getClaimService;
         private readonly IGetClaimDocumentService getClaimDocumentService;
 
-        public ClaimDocumentController(IGetClaimService getClaimService, IGetClaimDocumentService getClaimDocumentService) {
-            this.getClaimService = getClaimService;
+        public ClaimDocumentController(IGetClaimDocumentService getClaimDocumentService) {
             this.getClaimDocumentService = getClaimDocumentService;
         }
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetByIds(long claimId) {
+        [HttpPost]
+        public async Task<IActionResult> GetByIds([FromBody] ClaimDocumentRequestDto claimDocumentRequest) {
             try {
-                var claim = await getClaimService.GetById(claimId);
-                if (claim == null) {
-                    return NotFound("Reclamo no encontrado.");
-                }
+                if (claimDocumentRequest == null) return BadRequest();
+                if (claimDocumentRequest.ClaimIds == null) return BadRequest();
+                if (claimDocumentRequest.DocumentIds == null) return BadRequest();
 
-                var file = await getClaimDocumentService.GetFile(claim);
+                var file = await getClaimDocumentService.GetFile(claimDocumentRequest.ClaimIds, claimDocumentRequest.DocumentIds);
 
-                return await DownloadFile(file, claim.Id);
+                return await DownloadFile(file);
             }
             catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
 
-        private async Task<IActionResult> DownloadFile(byte[] file, long claimId) {
+        private async Task<IActionResult> DownloadFile(byte[] file) {
             MemoryStream ms = new MemoryStream();
             ms.Write(file, 0, file.Length);
             ms.Position = 0;
+            var docId = DateTime.Now.Day + DateTime.Now.Month + DateTime.Now.Year + DateTime.Now.Minute;
 
-            return File(fileStream: ms, contentType: "application/pdf", fileDownloadName: $"Reclamo_{claimId}" + ".pdf");
+            return File(fileStream: ms, contentType: "application/pdf", fileDownloadName: $"Reclamo_{docId}" + ".pdf");
         }
     }
 }

@@ -7,6 +7,6 @@ using System.Threading.Tasks;
 namespace Solutio.Core.Services.ApplicationServices.ClaimDocumentServices {
     public interface IGetClaimDocumentService {
 
-        Task<byte[]> GetFile(Claim claim);
+        Task<byte[]> GetFile(List<long> claimIds, List<long> documentsIds);
     }
 }
