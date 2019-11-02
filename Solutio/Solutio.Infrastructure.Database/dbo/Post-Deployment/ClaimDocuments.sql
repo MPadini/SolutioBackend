@@ -24,7 +24,7 @@ USING (VALUES
 		}
 		
 		.barraSup{
-			background-color: #484c9d;
+			background-color: #37474f;
 			height: 35px;
 			width: 1225px;
 			font-family: sans-serif;
@@ -36,7 +36,7 @@ USING (VALUES
 </head>
 <body>
 	<div class="barraSup">
-		Solutio!
+		SOLUTIO
 	</div>
 	<div class="container">
 	  <p>
@@ -89,7 +89,7 @@ USING (VALUES
 		}
 		
 		.barraSup{
-			background-color: #484c9d;
+			background-color: #37474f;
 			height: 35px;
 			width: 1225px;
 			font-family: sans-serif;
@@ -101,7 +101,7 @@ USING (VALUES
 </head>
 <body>
 	<div class="barraSup">
-		Solutio!
+		SOLUTIO
 	</div>
 	<div class="container">
 	  <p>
