@@ -33,10 +33,13 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             if (htmlTemplates == null || !htmlTemplates.Any()) throw new ArgumentException("No hay templates configurados.");
 
             List<byte[]> files = new List<byte[]>();
+            List<Claim> claims = new List<Claim>();
 
             foreach (var claimId in claimIds) {
                 var claim = await getClaimService.GetById(claimId);
                 if (claim == null) continue;
+
+                claims.Add(claim);
 
                 var documents = await ReplaceHtmlTags(htmlTemplates, claim);
                 if (documents == null || !documents.Any()) throw new ArgumentException("No hay templates configurados.");
@@ -44,6 +47,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
                 foreach (var document in documents) { 
                     if (documentsIds.Contains(document.Id)) {
+                        if (await IsCover(document.Id)) continue;
+
                         var pdf = await htmlToPdfHelperService.GetFile(document.HtmlTemplate);
                         if (await CanAdd(pdf)) {
                             files.Add(pdf);
@@ -52,10 +57,43 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 }
             }
 
+            var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault());
+            if (await CanAdd(cover)) {
+                files.Add(cover);
+            }
+
             if (!files.Any()) throw new ApplicationException("No se han podido generar los documentos solicitados");
-          
+
             var result = await pdfMerge.MergeFiles(files);
             return result;
+        }
+
+        private async Task<bool> IsCover(long documentId) {
+            if (documentId == 1) return true;
+
+            return false;
+        }
+
+        private async Task<byte[]> GenerateCover(List<Claim> claims,ClaimDocument claimDocument) {
+            if (claims == null) return null;
+            if (claimDocument == null) return null;
+
+            var document = claimDocument.HtmlTemplate;
+            StringBuilder str = new StringBuilder();
+            foreach (var claim in claims) {
+                str.Append($"<tr>" +
+                    $"<td>{claim.Id.ToString()}</td>" +
+                    $"<td>{claim.ClaimInsuredPersons.FirstOrDefault().Name ?? string.Empty} </td>" +
+                    $"<td>{claim.Date.ToString("dd/MM/yyyy") ?? string.Empty} </td>" +
+                    $"<td>{claim.Hour ?? string.Empty} </td>" +
+                    $"<td>{claim.State.Description ?? string.Empty}  </td></tr>");
+            }
+
+            document = document.Replace("[contenido]", str.ToString());
+
+            var pdf = await htmlToPdfHelperService.GetFile(document);
+
+            return pdf;
         }
 
         private async Task<List<ClaimDocument>> ReplaceHtmlTags(List<ClaimDocument> claimDocuments, Claim claim) {

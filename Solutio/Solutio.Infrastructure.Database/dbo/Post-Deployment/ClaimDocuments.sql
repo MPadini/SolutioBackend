@@ -5,7 +5,7 @@ MERGE INTO [dbo].[ClaimDocuments] AS Target
 
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
-	(1,N'Reconsideracion', N'<html>
+	(3,N'Reconsideracion', N'<html>
 <head>
 	<style>
 		.container{
@@ -250,7 +250,7 @@ USING (VALUES
 	</div>
 </body>
 </html>'),
-	(3,N'Caratula', N'<html>
+	(1,N'Caratula', N'<html>
 <head>
 	<style>
 		.container{
@@ -315,20 +315,7 @@ USING (VALUES
 		  <th>Hora</th>
 		  <th>Estado</th>
 		</tr>
-		<tr>
-		  <td>Id</td>
-		  <td>Titular</td>
-		  <td>Fecha</td>
-		  <td>Hora</td>
-		  <td>Estado</td>
-		</tr>
-		<tr>
-		  <td>Id</td>
-		  <td>Titular</td>
-		  <td>Fecha</td>
-		  <td>Hora</td>
-		  <td>Estado</td>
-		</tr>
+		[contenido]
 	  </table>
 	</div>
 </body>
