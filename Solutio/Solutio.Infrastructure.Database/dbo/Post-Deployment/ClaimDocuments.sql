@@ -11,7 +11,7 @@ USING (VALUES
 		.container{
 			width: 1120;
 			padding: 60px;
-			font-size: 18px;
+			font-size: 16px;
 			font-family: sans-serif;
 		}
 		
@@ -20,7 +20,8 @@ USING (VALUES
 			margin-left: 276px;
 			padding: 17px;
 			text-align: left;
-			border: 1px solid #454666;
+			border: 1px solid #ddd;
+			background-color: #f2f2f2;
 		}
 		
 		.barraSup{
@@ -29,29 +30,48 @@ USING (VALUES
 			width: 1225px;
 			font-family: sans-serif;
 			color: white;
-			font-size: 31px;
+			font-size: 21px;
 			padding-left: 10px;
+			padding-top: 9px;
+		}
+		
+		 ul {
+			list-style: none;
+			padding:0;
+			margin:0;
+		}
+
+		li { 
+			padding-left: 1em; 
+			text-indent: -.7em;
+		}
+
+		li:before {
+			content: "• ";
+			color: #4CAF50;
 		}
 	</style>
 </head>
 <body>
 	<div class="barraSup">
-		SOLUTIO
+		SOLUTIO - Reconsideración
 	</div>
 	<div class="container">
 	  <p>
-		[thirdCompany]
+		Reclamo nro: [claimId]
+	  </p>
+	  <p>
+		Compañía de seguro: [thirdCompany]
+	  </p>
 	  </p>
 	  <p>
 		S__________/__________D
 	  </p>
-	  <p class="caja">
-		Fecha de siniestro: [sinisterDate]
-		<br>
-		El dominio de tu asegurado es: [thirdVehicleDomain]
-		<br>
-		El número de siniestro en tu compañía es: [sinisterNumber]
-	  </p>
+	 <ul class="caja">
+			<li>Fecha de siniestro: [sinisterDate]</li>
+			<li>El dominio de tu asegurado es: [thirdVehicleDomain]</li>
+			<li>El número de siniestro en tu compañía es: [sinisterNumber]</li>
+	</ul>
 	  <br>
 	  <br>
 	  <p>
@@ -85,6 +105,166 @@ USING (VALUES
 			margin-left: 276px;
 			padding: 17px;
 			text-align: left;
+			border: 1px solid #ddd;
+			background-color: #f2f2f2;
+		}
+		
+		.barraSup{
+			background-color: #37474f;
+			height: 35px;
+			width: 1225px;
+			font-family: sans-serif;
+			color: white;
+			font-size: 21px;
+			padding-left: 10px;
+			padding-top: 9px;
+		}
+		#tabla td, #reclamos th {
+		  border: 1px solid #ddd;
+		  //padding: 8px;
+		}
+		
+		table {
+		  width: 100%;
+		}
+
+		th {
+		 //height: 50px;
+		   background-color: #4CAF50;
+			color: white;
+		}
+		
+		th, td {
+		 // padding: 15px;
+		  text-align: left;
+		}
+		
+		tr:nth-child(even) {background-color: #f2f2f2;}
+		
+		 ul {
+			list-style: none;
+			padding:0;
+			margin:0;
+		}
+
+		li { 
+			padding-left: 1em; 
+			text-indent: -.7em;
+		}
+
+		li:before {
+			content: "• ";
+			color: #4CAF50;
+		}
+	</style>
+</head>
+<body>
+	<div class="barraSup">
+		SOLUTIO - Reclamo
+	</div>
+	<div class="container">
+	<p>
+		Reclamo nro: [claimId]
+	  </p>
+	  <p>
+		Compañía de seguro: [thirdCompany]
+	  </p>
+	  <p>
+		S__________/__________D
+	  </p>
+		<ul class="caja">
+			<li>Fecha de siniestro: [sinisterDate]</li>
+			<li>El dominio de tu asegurado es: [thirdVehicleDomain]</li>
+			<li>El número de siniestro en tu compañía es: [sinisterNumber]</li>
+		</ul>
+	  <p>
+		Felicitaciones, recibiste un reclamo de SOLUTIO! Esperamos que juntos podamos trabajar para darle una respuesta eficiente y satisfactoria a quienes te detallamos a continuación:
+	  </p>
+	  <p>
+		<b>DAMNIFICADOS:</b><br>
+		<table class="tabla">
+		<tr>
+		  <th>Nombre</th>
+		  <th>Dni</th>
+		  <th>En carácter de</th>
+		</tr>
+		<tr>
+		  <td>[nombrePersona1]</td>
+		  <td>[dniPersona1]</td>
+		  <td>[enCaracterDePersona1]</td>
+		</tr>
+		<tr>
+		  <td>[nombrePersona2]</td>
+		  <td>[dniPersona2]</td>
+		  <td>[enCaracterDePersona2]</td>
+		</tr>
+		<tr>
+		  <td>[nombrePersona3]</td>
+		  <td>[dniPersona3]</td>
+		  <td>[enCaracterDePersona3]</td>
+		</tr>
+	  </table>
+	  </p>
+	  <p>
+		<b>BIEN DAÑADO:</b><br>
+		<table class="tabla">
+		<tr>
+		  <th>Dominio</th>
+		  <th>Tipo de vehiculo</th>
+		</tr>
+		<tr>
+		  <td>[dominioVehiculo1]</td>
+		  <td>[tipoDeVehiculo1]</td>
+		</tr>
+		<tr>
+		  <td>[dominioVehiculo2]</td>
+		  <td>[tipoDeVehiculo2]</td>
+		</tr>
+		<tr>
+		  <td>[dominioVehiculo3]</td>
+		  <td>[tipoDeVehiculo3]</td>
+		</tr>
+	  </table>
+	  </p>
+	  <p>
+		<b>¿CUÁL ES LA JUSTA INDEMNIZACION?</b><br>
+		<ul>
+			<li>Daño emergente: [montoAReclamar]]</li>
+			<li>Lesiones: (si hay lesiones) Monto justo que determinen los estudios médicos realizados 
+		Todo lo arriba mencionado con más los intereses legales desde la fecha de producción del siniestro hasta su real y efectivo pago, gastos y honorarios profesionales seria lo justo.</li>
+		</ul>
+	  </p>
+	  <p>
+		<b>¿QUE HECHOS FUNDAMENTAN ESTO?</b><br>
+		<ul>
+			<li>Direccion del siniestro: [DireccionDelSiniestro]</li>
+			<li>Entre Calles: [entreCalles]</li>
+			<li>Localidad: [Localidad]</li>
+			<li>Provincia: [Provincia]</li>
+			<li>País: [País]</li>
+			<li>Fecha de siniestro: [FechaDeSiniestro]</li>
+			<li>Hora: [HoraSiniestro]</li>
+			<li>Relato del hecho Relato del hecho: [relato]</li>
+		</ul>
+	  </p>
+	</div>
+</body>
+</html>'),
+	(3,N'Caratula', N'<html>
+<head>
+	<style>
+		.container{
+			width: 1120;
+			padding: 60px;
+			font-size: 16px;
+			font-family: sans-serif;
+		}
+		
+		.caja{
+			width: 546px;
+			margin-left: 276px;
+			padding: 17px;
+			text-align: left;
 			border: 1px solid #454666;
 		}
 		
@@ -94,63 +274,62 @@ USING (VALUES
 			width: 1225px;
 			font-family: sans-serif;
 			color: white;
-			font-size: 31px;
+			font-size: 21px;
 			padding-left: 10px;
+			padding-top: 9px;
 		}
+		
+		#reclamos td, #reclamos th {
+		  border: 1px solid #ddd;
+		  padding: 8px;
+		}
+		
+		table {
+		  width: 100%;
+		}
+
+		th {
+		  height: 50px;
+		   background-color: #4CAF50;
+			color: white;
+		}
+		
+		th, td {
+		  padding: 15px;
+		  text-align: left;
+		}
+		
+		tr:nth-child(even) {background-color: #f2f2f2;}
 	</style>
 </head>
 <body>
 	<div class="barraSup">
-		SOLUTIO
+		SOLUTIO - Listado de reclamos
 	</div>
 	<div class="container">
-	  <p>
-		[thirdCompany]
-	  </p>
-	  <p>
-		S__________/__________D
-	  </p>
-	  <p class="caja">
-		Fecha de siniestro: [sinisterDate]
-		<br>
-		El dominio de tu asegurado es: [thirdVehicleDomain]
-		<br>
-		El número de siniestro en tu compañía es: [sinisterNumber]
-	  </p>
-	  <br>
-	  <br>
-	  <p>
-		Felicitaciones, recibiste un reclamo de SOLUTIO! Esperamos que juntos podamos trabajar para darle una respuesta eficiente y satisfactoria a quienes te detallamos a continuación:
-	  </p>
-	  <p>
-		<b>DAMNIFICADOS:</b><br><br>
-		[nombrePersona1] - [dniPersona1] - [enCaracterDePersona1] <br>
-		[nombrePersona2] - [dniPersona2] - [enCaracterDePersona2] <br>
-		[nombrePersona3] - [dniPersona3] - [enCaracterDePersona3] <br>
-	  </p>
-	  <p>
-		<b>BIEN DAÑADO:</b><br><br>
-		[dominioVehiculo1] - [tipoDeVehiculo1] <br>
-		[dominioVehiculo2] - [tipoDeVehiculo2] <br>
-		[dominioVehiculo3] - [tipoDeVehiculo3] <br>
-	  </p>
-	  <p>
-		<b>¿CUÁL ES LA JUSTA INDEMNIZACION?</b><br><br>
-		DAÑO EMERGENTE: [montoAReclamar] <br>
-		LESIONES: (si hay lesiones) Monto justo que determinen los estudios médicos realizados <br>
-		Todo lo arriba mencionado con más los intereses legales desde la fecha de producción del siniestro hasta su real y efectivo pago, gastos y honorarios profesionales seria lo justo.
-	  </p>
-	  <p>
-		<b>¿QUE HECHOS FUNDAMENTAN ESTO?</b><br><br>
-		Direccion del siniestro: [DireccionDelSiniestro]	 <br>		
-		Entre Calles: [entreCalles] <br>
-		Localidad: [Localidad] 		 <br>	
-		Provincia: [Provincia]		 <br>	
-		País: [País]  <br>
-		Fecha de siniestro: [FechaDeSiniestro]		 <br>	
-		Hora: [HoraSiniestro] <br>
-		Relato del hecho Relato del hecho: [relato] <br>
-	  </p>
+	  <table id="reclamos">
+		<tr>
+		  <th>Id</th>
+		  <th>Titular</th>
+		  <th>Fecha</th>
+		  <th>Hora</th>
+		  <th>Estado</th>
+		</tr>
+		<tr>
+		  <td>Id</td>
+		  <td>Titular</td>
+		  <td>Fecha</td>
+		  <td>Hora</td>
+		  <td>Estado</td>
+		</tr>
+		<tr>
+		  <td>Id</td>
+		  <td>Titular</td>
+		  <td>Fecha</td>
+		  <td>Hora</td>
+		  <td>Estado</td>
+		</tr>
+	  </table>
 	</div>
 </body>
 </html>')

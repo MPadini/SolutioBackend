@@ -74,6 +74,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
         private async Task<string> ReemplaceTags(string htmlString, Claim claim) {
 
+            htmlString = htmlString.Replace("[claimId]", claim.Id.ToString());
             htmlString = htmlString.Replace("[thirdCompany]", "Compañia de prueba");
             htmlString = htmlString.Replace("[sinisterDate]", DateTime.Now.ToString("dd/MM/yyyy"));
             htmlString = htmlString.Replace("[thirdVehicleDomain]", "Dominio de prueba");
