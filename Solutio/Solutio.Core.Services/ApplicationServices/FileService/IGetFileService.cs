@@ -9,5 +9,7 @@ namespace Solutio.Core.Services.ApplicationServices.FileService
     public interface IGetFileService
     {
         Task<ClaimFile> GetById(long id);
+
+        Task<List<FileType>> GetFileTypes();
     }
 }

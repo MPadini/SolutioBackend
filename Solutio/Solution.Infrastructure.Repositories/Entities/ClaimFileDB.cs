@@ -13,5 +13,9 @@ namespace Solutio.Infrastructure.Repositories.Entities
         public string FileExtension { get; set; }
 
         public string FileName { get; set; }
+
+        public long FileTypeId { get; set; }
+
+        public FileTypesDB FileType { get; set; }
     }
 }

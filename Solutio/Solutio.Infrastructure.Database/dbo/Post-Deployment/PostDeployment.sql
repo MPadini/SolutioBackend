@@ -16,3 +16,4 @@ Post-Deployment Script Template
 :r .\ClaimStateConfigurations.sql
 :r .\Roles.sql
 :r .\ClaimDocuments.sql
+:r .\FileTypes.sql

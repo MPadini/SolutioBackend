@@ -57,6 +57,19 @@ namespace Solutio.ApiServices.Api.Controllers
             }
         }
 
+        [HttpGet("/FileTypes")]
+        public async Task<IActionResult> GetFileTypes() {
+            try {
+                var fileTypes = await getFileService.GetFileTypes();
+                if (fileTypes == null) return BadRequest();
+
+                return Ok(new { fileTypes });
+            }
+            catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ClaimFileDto claimFile)
         {

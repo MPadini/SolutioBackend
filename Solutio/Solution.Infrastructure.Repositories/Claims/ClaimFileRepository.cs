@@ -53,7 +53,9 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<ClaimFile> GetById(long fileId)
         {
-            var file = applicationDbContext.ClaimFiles.AsNoTracking().FirstOrDefault(x => x.Id == fileId);
+            var file = applicationDbContext.ClaimFiles
+                .AsNoTracking().Include(x => x.FileType)
+                .FirstOrDefault(x => x.Id == fileId);
 
             return file.Adapt<ClaimFile>();
         }
@@ -69,6 +71,11 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     applicationDbContext.SaveChanges();
                 });
             }
+        }
+
+        public async Task<List<FileType>> GetFileTypes() {
+            var result = applicationDbContext.FileTypes.AsNoTracking().ToList();
+            return result.Adapt<List<FileType>>();
         }
     }
 }

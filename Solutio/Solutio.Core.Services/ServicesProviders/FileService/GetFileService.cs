@@ -21,5 +21,9 @@ namespace Solutio.Core.Services.ServicesProviders.FileService
         {
             return await claimFileRepository.GetById(id);
         }
+
+        public async Task<List<FileType>> GetFileTypes() {
+            return await claimFileRepository.GetFileTypes();
+        }
     }
 }

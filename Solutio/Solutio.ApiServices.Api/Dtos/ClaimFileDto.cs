@@ -14,5 +14,9 @@ namespace Solutio.ApiServices.Api.Dtos
         public string FileExtension { get; set; }
 
         public string FileName { get; set; }
+
+        public long FileTypeId { get; set; }
+
+        public FileTypeDto FileType { get; set; }
     }
 }

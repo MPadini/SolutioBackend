@@ -16,5 +16,9 @@ namespace Solutio.Core.Entities
         public string FileExtension { get; set; }
 
         public string FileName { get; set; }
+
+        public long FileTypeId { get; set; }
+
+        public FileType FileType { get; set; }
     }
 }
