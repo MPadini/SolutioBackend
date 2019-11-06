@@ -11,5 +11,7 @@ namespace Solutio.Core.Services.ApplicationServices.FileService
         Task<ClaimFile> GetById(long id);
 
         Task<List<FileType>> GetFileTypes();
+
+        Task<List<ClaimFile>> GetByClaimId(long claimId);
     }
 }

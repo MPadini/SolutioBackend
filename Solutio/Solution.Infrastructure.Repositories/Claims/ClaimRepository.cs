@@ -98,7 +98,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
                 .Include(x => x.ClaimThirdInsuredPersons).ThenInclude(x => x.Person)
                 .Include(x => x.ClaimThirdInsuredVehicles).ThenInclude(x => x.Vehicle)
-                .Include(x => x.Files).ThenInclude(x => x.FileType)
+               //.Include(x => x.Files).ThenInclude(x => x.FileType)
                 .Include(x => x.Adress).ThenInclude(e => e.City)
                 .Include(x => x.Adress).ThenInclude(e => e.Province)
                 .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)

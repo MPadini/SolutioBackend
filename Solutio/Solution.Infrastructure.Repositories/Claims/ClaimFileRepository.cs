@@ -60,6 +60,19 @@ namespace Solutio.Infrastructure.Repositories.Claims
             return file.Adapt<ClaimFile>();
         }
 
+        public async Task<List<ClaimFile>> GetByClaimId(long claimId) {
+            var files = applicationDbContext.ClaimFiles
+                .AsNoTracking().Include(x => x.FileType).Where(x => x.ClaimId == claimId).Select(x => new {
+                    x.Id,
+                    x.ClaimId,
+                    x.FileName,
+                    x.FileType,
+                    x.FileTypeId
+                });
+
+            return files.Adapt<List<ClaimFile>>();
+        }
+
         public async Task DeleteClaimFiles(Claim claim)
         {
             var claimDB = claimMapper.Map(claim);

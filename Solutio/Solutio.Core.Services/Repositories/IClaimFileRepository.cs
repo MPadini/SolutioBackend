@@ -17,5 +17,7 @@ namespace Solutio.Core.Services.Repositories
         Task DeleteClaimFiles(Claim claim);
 
         Task<List<FileType>> GetFileTypes();
+
+        Task<List<ClaimFile>> GetByClaimId(long claimId);
     }
 }

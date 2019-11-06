@@ -57,6 +57,21 @@ namespace Solutio.ApiServices.Api.Controllers
             }
         }
 
+        [HttpGet("GetByClaim/{claimId}")]
+        public async Task<IActionResult> GetByClaimId(long claimId) {
+            try {
+                var files = await getFileService.GetByClaimId(claimId);
+                if (files == null) {
+                    return NotFound();
+                }
+
+                return Ok(new { files = files.Adapt<List<ClaimSimpleFileDto>>() });
+            }
+            catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
         [HttpGet("/FileTypes")]
         public async Task<IActionResult> GetFileTypes() {
             try {
