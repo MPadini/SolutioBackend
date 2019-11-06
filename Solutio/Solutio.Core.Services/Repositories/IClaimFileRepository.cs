@@ -12,7 +12,7 @@ namespace Solutio.Core.Services.Repositories
 
         Task Delete(ClaimFile file);
 
-        Task<ClaimFile> GetById(long fileId);
+        Task<ClaimFile> GetById(long fileId, bool withBase64);
 
         Task DeleteClaimFiles(Claim claim);
 

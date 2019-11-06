@@ -114,7 +114,7 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var file = await getFileService.GetById(fileId);
+                var file = await getFileService.GetById(fileId, false);
                 if (file == null)
                 {
                     return NotFound();

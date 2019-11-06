@@ -17,9 +17,9 @@ namespace Solutio.Core.Services.ServicesProviders.FileService
             this.claimFileRepository = claimFileRepository;
         }
 
-        public async Task<ClaimFile> GetById(long id)
+        public async Task<ClaimFile> GetById(long id, bool withBase64 = true)
         {
-            return await claimFileRepository.GetById(id);
+            return await claimFileRepository.GetById(id, withBase64);
         }
 
         public async Task<List<FileType>> GetFileTypes() {

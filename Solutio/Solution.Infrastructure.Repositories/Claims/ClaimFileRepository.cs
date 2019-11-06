@@ -51,13 +51,29 @@ namespace Solutio.Infrastructure.Repositories.Claims
             applicationDbContext.SaveChanges();
         }
 
-        public async Task<ClaimFile> GetById(long fileId)
+        public async Task<ClaimFile> GetById(long fileId, bool withBase64)
         {
-            var file = applicationDbContext.ClaimFiles
-                .AsNoTracking().Include(x => x.FileType)
-                .FirstOrDefault(x => x.Id == fileId);
+            if (withBase64) {
+                var file = applicationDbContext.ClaimFiles
+               .AsNoTracking().Include(x => x.FileType)
+               .FirstOrDefault(x => x.Id == fileId);
 
-            return file.Adapt<ClaimFile>();
+                return file.Adapt<ClaimFile>();
+            }
+            else {
+                var file = applicationDbContext.ClaimFiles
+                .AsNoTracking().Include(x => x.FileType)
+                .Where(x => x.Id == fileId).Select(x => new {
+                    x.Id,
+                    x.ClaimId,
+                    x.FileName,
+                    x.FileType,
+                    x.FileTypeId
+                }).FirstOrDefault();
+
+                return file.Adapt<ClaimFile>();
+            }
+            
         }
 
         public async Task<List<ClaimFile>> GetByClaimId(long claimId) {
