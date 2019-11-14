@@ -70,7 +70,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             updatedVehicle.VehicleModel = vehicleNewData.VehicleModel;
             updatedVehicle.VehicleManufacturer = vehicleNewData.VehicleManufacturer;
             updatedVehicle.VehicleTypeId = vehicleNewData.VehicleTypeId;
-            updatedVehicle.InsuranceCompany = vehicleNewData.InsuranceCompany;
+            updatedVehicle.InsuranceCompanyId = vehicleNewData.InsuranceCompanyId;
             updatedVehicle.DamageDetail = vehicleNewData.DamageDetail;
             updatedVehicle.Franchise = vehicleNewData.Franchise;
             updatedVehicle.HaveFullCoverage = vehicleNewData.HaveFullCoverage;

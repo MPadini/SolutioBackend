@@ -19,7 +19,9 @@ namespace Solutio.Core.Entities
 
         public string DamageDetail { get; set; }
 
-        public string InsuranceCompany { get; set; }
+        public long InsuranceCompanyId { get; set; }
+
+        public InsuranceCompany InsuranceCompany { get; set; }
 
         public bool HaveFullCoverage { get; set; }
 

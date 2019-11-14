@@ -33,6 +33,7 @@ using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredPerson;
 using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredVehicleServices;
 using Solutio.Core.Services.ApplicationServices.ClaimVehicleServices;
+using Solutio.Core.Services.ApplicationServices.CompanyServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
 using Solutio.Core.Services.ApplicationServices.Location;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
@@ -52,6 +53,7 @@ using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
 using Solutio.Core.Services.ServicesProviders.ClaimThirdInsuredPerson;
 using Solutio.Core.Services.ServicesProviders.ClaimThirdInsuredVehicleServices;
 using Solutio.Core.Services.ServicesProviders.ClaimVehicleServices;
+using Solutio.Core.Services.ServicesProviders.CompanyServices;
 using Solutio.Core.Services.ServicesProviders.FileService;
 using Solutio.Core.Services.ServicesProviders.Location;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
@@ -159,8 +161,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IGetUserService, GetUserService>();
             services.AddTransient<IClaimDocumentTemplateRepository, ClaimDocumentTemplateRepository>();
+            services.AddTransient<IInsuranceCompanyRepository, InsuranceCompanyRepository>();
             
-
             #endregion Repositories Settings
 
             #region Mappers Settings
@@ -203,7 +205,9 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IPdfMerge, PdfMerge>();
             services.AddTransient<IGetHtmlTemplatesService, GetHtmlTemplatesService>();
             services.AddTransient<IHtmlToPdfHelperService, HtmlToPdfHelperService>();
+            services.AddTransient<IGetInsuranceCompanyService, GetInsuranceCompanyService>();
 
+            
             #endregion Services Settings
 
             #region Builder Settings

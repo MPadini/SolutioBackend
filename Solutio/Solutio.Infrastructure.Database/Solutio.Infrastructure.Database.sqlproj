@@ -89,6 +89,7 @@
     <Build Include="Tables\RefreshTokens.sql" />
     <Build Include="Tables\ClaimDocuments.sql" />
     <Build Include="Tables\FileTypes.sql" />
+    <Build Include="Tables\InsuranceCompanies.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />
@@ -104,5 +105,6 @@
     <None Include="dbo\Post-Deployment\Roles.sql" />
     <None Include="dbo\Post-Deployment\ClaimDocuments.sql" />
     <None Include="dbo\Post-Deployment\FileTypes.sql" />
+    <None Include="dbo\Post-Deployment\InsuranceCompanies.sql" />
   </ItemGroup>
 </Project>

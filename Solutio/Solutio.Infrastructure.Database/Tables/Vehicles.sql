@@ -5,7 +5,7 @@
     [VehicleModel] nvarchar(max) NULL,
     [VehicleManufacturer] nvarchar(max) NULL,
     [DamageDetail] nvarchar(max) NULL,
-	[InsuranceCompany] nvarchar(max) NULL,
+	[InsuranceCompanyId] BIGINT NULL,
     [HaveFullCoverage] bit NULL DEFAULT 0,
     [Franchise] decimal(18,2) NULL,
 	[Created] DATETIME NOT null DEFAULT GETDATE(),

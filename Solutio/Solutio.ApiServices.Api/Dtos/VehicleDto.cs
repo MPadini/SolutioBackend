@@ -19,7 +19,9 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public string DamageDetail { get; set; }
 
-        public string InsuranceCompany { get; set; }
+        public long InsuranceCompanyId { get; set; }
+
+        public InsuranceCompanyDto InsuranceCompany { get; set; }
 
         public bool HaveFullCoverage { get; set; }
 

@@ -22,7 +22,9 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public string DamageDetail { get; set; }
 
-        public string InsuranceCompany { get; set; }
+        public long InsuranceCompanyId { get; set; }
+
+        public InsuranceCompanyDB InsuranceCompany { get; set; }
 
         public bool HaveFullCoverage { get; set; }
 

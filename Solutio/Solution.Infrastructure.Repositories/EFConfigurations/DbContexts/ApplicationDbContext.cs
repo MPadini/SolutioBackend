@@ -85,6 +85,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<FileTypesDB> FileTypes { get; set; }
 
+        public DbSet<InsuranceCompanyDB> InsuranceCompanies { get; set; }
+
         #endregion DbSet Setups
 
         public override int SaveChanges()
@@ -145,6 +147,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new ClaimStateConfigurationDBMap());
             modelBuilder.ApplyConfiguration(new RefreshTokenMap());
             modelBuilder.ApplyConfiguration(new FileTypesMap());
+            modelBuilder.ApplyConfiguration(new InsuranceCompanyMap());
         }
     }
 }

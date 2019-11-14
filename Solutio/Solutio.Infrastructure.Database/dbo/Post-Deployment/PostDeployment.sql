@@ -17,3 +17,4 @@ Post-Deployment Script Template
 :r .\Roles.sql
 :r .\ClaimDocuments.sql
 :r .\FileTypes.sql
+:r .\InsuranceCompanies.sql
