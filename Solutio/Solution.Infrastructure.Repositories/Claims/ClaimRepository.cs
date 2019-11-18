@@ -93,16 +93,23 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         private async Task<ClaimDB> Get(long id)
         {
-            return await applicationDbContext.Claims.AsNoTracking()
-                .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
-                .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
-                .Include(x => x.ClaimThirdInsuredPersons).ThenInclude(x => x.Person)
-                .Include(x => x.ClaimThirdInsuredVehicles).ThenInclude(x => x.Vehicle)
+            try {
+                return await applicationDbContext.Claims.AsNoTracking()
+               .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
+               .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
+               .Include(x => x.ClaimThirdInsuredPersons).ThenInclude(x => x.Person)
+               .Include(x => x.ClaimThirdInsuredVehicles).ThenInclude(x => x.Vehicle)
                //.Include(x => x.Files).ThenInclude(x => x.FileType)
-                .Include(x => x.Adress).ThenInclude(e => e.City)
-                .Include(x => x.Adress).ThenInclude(e => e.Province)
-                .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)
-                .FirstOrDefaultAsync(x => x.Id == id);
+               .Include(x => x.Adress).ThenInclude(e => e.City)
+               .Include(x => x.Adress).ThenInclude(e => e.Province)
+               .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)
+               .FirstOrDefaultAsync(x => x.Id == id);
+            }
+            catch (Exception ex) {
+
+                throw;
+            }
+           
         }
 
         public async Task Update(Claim claim, long claimId)
