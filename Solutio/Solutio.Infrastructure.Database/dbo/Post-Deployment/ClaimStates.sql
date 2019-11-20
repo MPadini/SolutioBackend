@@ -5,17 +5,36 @@ MERGE INTO [dbo].[ClaimStates] AS Target
 
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
-	(1, N'Borrador',					24),
-	(2, N'En Revisión',					24),
-	(3, N'Esperando Denuncia',			24),
-	(4, N'Pendiente de Presentación',	24),
-	(5, N'Presentado',					24),
-	(6, N'Esperando Acción',			24),
-	(7, N'Cerrado',						24),
-	(8, N'A Juicio',					24),
-	(9, N'Rechazado',					24),
-	(10, N'Desistido',					24),
-	(11, N'Desestimado',				24)
+
+	--PRIMER BUCLE: ALTA DEL RECLAMO
+	(11, N'Borrador',								24),
+	(12, N'En Revisión',								24),
+	(13, N'Rechazado Mejores Datos (UI)',			24),
+	(81, N'Rechazado',								24),
+
+	--SEGUNDO BUCLE: PRESENTACIÓN EN COMPAÑIA
+	(21, N'Esperando Denuncia',						24),
+	(22, N'Pendiente de Presentación',				24),
+	(23, N'Presentado',								24),
+	(24, N'Rechazado Mejores Datos (COMPAÑIA)',		24),
+	(82, N'Desestimado',							24),
+	
+	--TERCER BUCLE: NEGOCIACIÓN
+	(31, N'Nuevo Ofrecimiento',						24),
+	(32, N'Ofrecimiento Rechazado',					24),
+	(33, N'Esperando Ofrecimiento',					24),
+	(84, N'A Juicio',								24),
+
+	--CUARTO BUCLE: TRÁMITAR EL PAGO
+	(41, N'Ofrecimiento Aceptado',					24),
+	(42, N'Firmar Convenio',						24),
+	(43, N'Convenio Firmado',						24),
+	(44, N'Pendiente de Pago',						24),
+	(100, N'Cerrado',								24),
+
+	--SE DA DE BAJA EL RECLAMO
+	(83, N'Desistido',								24)
+
 ) AS Source([ClaimStatesId], [Description],[MaximumTimeAllowed]) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [ClaimStatesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 

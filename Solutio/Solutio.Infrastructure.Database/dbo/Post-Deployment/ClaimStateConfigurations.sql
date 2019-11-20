@@ -6,36 +6,83 @@ MERGE INTO [dbo].[ClaimStateConfigurations] AS Target
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
 	--BORRADOR
-	(1, 1, 2),
-	(2, 1, 1),
+	(1, 11, 11),
+	(2, 11, 12),
+
 	--EN REVISION
-	(3, 2, 2),
-	(4, 2, 1),
-	(5, 2, 3),
-	--ESPERANDO DENUNCIA
-	(6, 3, 3),
-	(7, 3, 4),
-	--PENDIENTE DE PRESENTACION
-	(8, 4, 6),
-	(9, 4, 4),
-	(10, 4, 5),
-	--PRESENTADO
-	(11, 5, 5),
-	(12, 5, 6),
-	(13, 5, 7),
-	--ESPERANDO ACCION
-	(14, 6, 6),
-	(15, 6, 4),
-	--CERRADO
-	(16, 7, 7),
-	--A JUICIO
-	(17, 8, 8),
+	(3, 12, 12),
+	(4, 12, 13),
+	(5, 12, 21),
+
+	--RECHAZADO MEJORES DATOS (UI)
+	(6, 13, 13),
+	(7, 13, 12),
+	
 	--RECHAZADO
-	(18, 8, 8),
-	--DESISTIDO
-	(19, 8, 8),
+	(8, 81, 81),
+
+	--ESPERANDO DENUNCIA
+	(9, 21, 21),
+	(10, 21, 22),
+	(11, 21, 82),
+
+	--PENDIENTE PRESENTACION
+	(12, 22, 22),
+	(13, 22, 23),
+	
+	--PRESENTADO
+	(14, 23, 23),
+	(15, 23, 24), 
+	(16, 23, 31), 
+
+	--RECHAZADO MEJORES DATOS (COMPAÑIA)
+	(17, 24, 24),
+	(18, 24, 22),
+
 	--DESESTIMADO
-	(20, 8, 8)
+	(19, 82, 82),
+		
+	--NUEVO OFRECIMIENTO
+	(20, 31, 31),
+	(21, 31, 32),
+	(22, 31, 41),
+	   	
+	--OFRECIMIENTO RECHAZADO
+	(23, 32, 32),
+	(24, 32, 33),
+	(25, 32, 84),
+
+	--ESPERANDO OFRECIMIENTO
+	(26, 33, 33),
+	(27, 33, 31),
+	
+	--A JUICIO
+	(28, 84, 84),
+
+	--OFRECIMIENTO ACEPTADO
+	(29, 41, 41),
+	(30, 41, 42),
+	(31, 41, 44),
+
+	--FIRMAR CONVENIO
+	(32, 42, 42),
+	(33, 42, 43),
+
+	--CONVENIO FIRMADO
+	(34, 43, 43),
+	(35, 43, 44),
+	
+	--PENDIENTE DE PAGO
+	(36, 44, 44),
+	(37, 44, 100),
+	
+	--CERRADO
+	(38, 100, 100),
+
+	--DESISTIDO
+	(39, 83, 83)
+	
+
 ) AS Source([ClaimStatesConfigurationsId], ParentClaimStateId,AllowedStateId) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [ClaimStatesConfigurationsId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 
