@@ -13,7 +13,7 @@ namespace Solutio.ApiServices.Api.Validators
         {
             RuleFor(x => x.Hour).MaximumLength(5);
             RuleFor(x => x.StateId).NotEmpty();
-            RuleFor(x => x.Files).Null();
+           // RuleFor(x => x.Files).Null();
         }
     }
 }
