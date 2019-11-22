@@ -10,6 +10,6 @@ namespace Solutio.ApiServices.Api.Dtos.Requests {
 
         public List<long> DocumentIds { get; set; }
 
-        public List<BaseEntityDto> ClaimFiles { get; set; }
+        public List<long> ClaimFiles { get; set; }
     }
 }

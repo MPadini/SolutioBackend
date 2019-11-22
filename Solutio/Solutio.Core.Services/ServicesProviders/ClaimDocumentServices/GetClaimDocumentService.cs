@@ -1,6 +1,7 @@
 ﻿using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
+using Solutio.Core.Services.ApplicationServices.FileService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,19 +14,22 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private readonly IGetHtmlTemplatesService getHtmlTemplatesService;
         private readonly IHtmlToPdfHelperService htmlToPdfHelperService;
         private readonly IGetClaimService getClaimService;
+        private readonly IGetFileService getFileService;
 
         public GetClaimDocumentService(
             IPdfMerge pdfMerge, 
             IGetHtmlTemplatesService getHtmlTemplatesService,
             IHtmlToPdfHelperService htmlToPdfHelperService,
-            IGetClaimService getClaimService) {
+            IGetClaimService getClaimService,
+            IGetFileService getFileService) {
             this.pdfMerge = pdfMerge;
             this.getHtmlTemplatesService = getHtmlTemplatesService;
             this.htmlToPdfHelperService = htmlToPdfHelperService;
             this.getClaimService = getClaimService;
+            this.getFileService = getFileService;
         }
 
-        public async Task<byte[]> GetFile(List<long> claimIds, List<long> documentsIds) {
+        public async Task<byte[]> GetFile(List<long> claimIds, List<long> documentsIds, List<long> claimFileIds) {
             if (claimIds == null) throw new ArgumentException("Claims null");
             if (documentsIds == null) throw new ArgumentException("Documents null");
 
@@ -57,9 +61,21 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 }
             }
 
-            var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault());
-            if (await CanAdd(cover)) {
-                files.Add(cover);
+            foreach (var claimfileId in claimFileIds) {
+                var file = await getFileService.GetById(claimfileId);
+               if (file != null) {
+                    byte[] bFile = Convert.FromBase64String(file.Base64);
+                    if (await CanAdd(bFile)) {
+                        files.Add(bFile);
+                    }
+                }
+            }
+
+            if (documentsIds.Contains(1)) {
+                var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault());
+                if (await CanAdd(cover)) {
+                    files.Add(cover);
+                }
             }
 
             if (!files.Any()) throw new ApplicationException("No se han podido generar los documentos solicitados");

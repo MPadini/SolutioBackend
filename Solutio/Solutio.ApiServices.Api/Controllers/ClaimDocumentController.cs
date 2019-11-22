@@ -33,7 +33,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 if (claimDocumentRequest.ClaimIds == null) return BadRequest();
                 if (claimDocumentRequest.DocumentIds == null) return BadRequest();
 
-                var file = await getClaimDocumentService.GetFile(claimDocumentRequest.ClaimIds, claimDocumentRequest.DocumentIds);
+                var file = await getClaimDocumentService.GetFile(claimDocumentRequest.ClaimIds, claimDocumentRequest.DocumentIds, claimDocumentRequest.ClaimFiles);
 
                 return await DownloadFile(file);
             }
