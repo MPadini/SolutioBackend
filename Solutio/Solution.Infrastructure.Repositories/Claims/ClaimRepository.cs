@@ -136,6 +136,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     var claimDb = await Get(claimId);
                     if (claimDb == null) return;
 
+                    claimDb.State = null;
                     claimDb.StateId = claim.StateId;
                     claimDb.StateModifiedDate = claim.StateModifiedDate;
 
