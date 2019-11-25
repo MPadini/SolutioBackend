@@ -44,5 +44,18 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
 
             return claims;
         }
+
+        //public async Task<List<Claim>> GetAllGroupByCompany()
+        //{
+        //    var claims = await claimRepository.GetAll();
+        //    if (claims == null || !claims.Any()) return default;
+
+        //    claims.ForEach(async claim =>
+        //    {
+        //        await setAlarmActivationService.Set(claim);
+        //    });
+
+        //    return claims;
+        //}
     }
 }

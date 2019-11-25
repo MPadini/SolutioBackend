@@ -85,6 +85,29 @@ namespace Solutio.ApiServices.Api.Controllers
             }
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetAllGroupByCompany(string userName)
+        //{
+        //    try
+        //    {
+        //        var userToSearch = await GetUserToSerch(userName);
+
+        //        var claims = await getClaimService.GetAll(userToSearch);
+        //        if (claims == null || !claims.Any())
+        //        {
+        //            return Ok();
+        //        }
+
+        //        var claimsDto = claims.Adapt<List<ClaimDto>>();
+
+        //        return Ok(new { claimsDto });
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+        //    }
+        //}
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ClaimDto claimDto)
         {

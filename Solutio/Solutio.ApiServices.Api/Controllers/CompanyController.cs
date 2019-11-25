@@ -37,5 +37,20 @@ namespace Solutio.ApiServices.Api.Controllers
             }
         }
 
+        [HttpGet ("GetInsuranceCompanyClaims")]
+        public async Task<IActionResult> GetInsuranceCompanyClaims()
+        {
+            try
+            {
+                var claimStates = await getInsuranceCompanyService.GetInsuranceCompanyClaims();
+
+                return Ok(claimStates.Adapt<List<InsuranceCompanyClaimsDto>>());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
     }
 }

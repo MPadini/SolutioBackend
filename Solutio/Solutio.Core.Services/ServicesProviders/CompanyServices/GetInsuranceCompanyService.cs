@@ -17,5 +17,10 @@ namespace Solutio.Core.Services.ServicesProviders.CompanyServices {
         public async Task<List<InsuranceCompany>> GetCompanies() {
             return await insuranceCompanyRepository.GetCompanies();
         }
+
+        public async Task<List<InsuranceCompanyClaims>> GetInsuranceCompanyClaims()
+        {
+            return await insuranceCompanyRepository.GetInsuranceCompanyClaims();
+        }
     }
 }

@@ -8,5 +8,8 @@ namespace Solutio.Core.Services.ApplicationServices.CompanyServices {
     public interface IGetInsuranceCompanyService {
 
         Task<List<InsuranceCompany>> GetCompanies();
+
+        Task<List<InsuranceCompanyClaims>> GetInsuranceCompanyClaims();
+
     }
 }

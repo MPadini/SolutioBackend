@@ -8,5 +8,6 @@ namespace Solutio.Core.Services.Repositories {
     public interface IInsuranceCompanyRepository {
 
         Task<List<InsuranceCompany>> GetCompanies();
+        Task<List<InsuranceCompanyClaims>> GetInsuranceCompanyClaims();
     }
 }

@@ -86,6 +86,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
         public DbSet<FileTypesDB> FileTypes { get; set; }
 
         public DbSet<InsuranceCompanyDB> InsuranceCompanies { get; set; }
+        public DbSet<InsuranceCompanyClaimsDB> InsuranceCompanyClaims { get; set; }
 
         #endregion DbSet Setups
 

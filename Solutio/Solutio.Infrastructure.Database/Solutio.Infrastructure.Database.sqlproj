@@ -90,6 +90,7 @@
     <Build Include="Tables\ClaimDocuments.sql" />
     <Build Include="Tables\FileTypes.sql" />
     <Build Include="Tables\InsuranceCompanies.sql" />
+    <Build Include="dbo\Post-Deployment\GetInsuranceCompanyClaims.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />

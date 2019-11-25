@@ -22,5 +22,12 @@ namespace Solutio.Infrastructure.Repositories.Claims {
 
             return result.Adapt<List<InsuranceCompany>>();
         }
+
+        public async Task<List<InsuranceCompanyClaims>> GetInsuranceCompanyClaims()
+        {
+            var result = applicationDbContext.InsuranceCompanyClaims.FromSql("GetInsuranceCompanyClaims").ToList();
+
+            return result.Adapt<List<InsuranceCompanyClaims>>();
+        }
     }
 }

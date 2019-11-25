@@ -91,9 +91,11 @@ namespace Solutio.Infrastructure.Repositories.Claims
             return claimMapper.Map(claimsDb);
         }
 
+ 
         private async Task<ClaimDB> Get(long id)
         {
-            try {
+            try
+            {
                 return await applicationDbContext.Claims.AsNoTracking()
                .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
                .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
@@ -105,11 +107,12 @@ namespace Solutio.Infrastructure.Repositories.Claims
                .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)
                .FirstOrDefaultAsync(x => x.Id == id);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 throw;
             }
-           
+
         }
 
         public async Task Update(Claim claim, long claimId)
@@ -158,7 +161,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             await claimInsuredPersonRepository.DeleteAll(claim);
             await claimThirdInsuredVehicleRepository.DeleteAll(claim);
             await claimInsuredVehicleRepository.DeleteAll(claim);
-            await claimThirdInsuredPersonRepository.DeleteAll(claim);  
+            await claimThirdInsuredPersonRepository.DeleteAll(claim);
             await claimFileRepository.DeleteClaimFiles(claim);
             await claimAdressRepository.Delete(claim);
         }
