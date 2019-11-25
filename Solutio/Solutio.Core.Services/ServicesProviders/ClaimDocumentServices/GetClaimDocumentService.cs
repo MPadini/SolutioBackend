@@ -72,7 +72,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             }
 
             if (documentsIds.Contains(1)) {
-                var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault());
+                var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault(),"");
                 if (await CanAdd(cover)) {
                     files.Add(cover);
                 }
@@ -90,7 +90,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             return false;
         }
 
-        private async Task<byte[]> GenerateCover(List<Claim> claims,ClaimDocument claimDocument) {
+        private async Task<byte[]> GenerateCover(List<Claim> claims,ClaimDocument claimDocument, string company) {
             if (claims == null) return null;
             if (claimDocument == null) return null;
 
@@ -106,6 +106,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             }
 
             document = document.Replace("[contenido]", str.ToString());
+            document = document.Replace("[compania]", company);
+            document = document.Replace("[fechaImpresion]", DateTime.Now.ToString("dd/MM/yyyy"));
 
             var pdf = await htmlToPdfHelperService.GetFile(document);
 
@@ -148,6 +150,28 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             }
 
             return true;
+        }
+
+        public async Task<byte[]> GetFileByInsuranceCompany(List<InsuranceCompany> insuranceCompanies) {
+            var claims = await getClaimService.GetAll(string.Empty);
+            if (claims == null) throw new ApplicationException("No hay reclamos registrados para la compañia ingresada");
+
+            var htmlTemplates = await getHtmlTemplatesService.GetHtmlTemplates();
+            if (htmlTemplates == null || !htmlTemplates.Any()) throw new ArgumentException("No hay templates configurados.");
+
+            List<byte[]> files = new List<byte[]>();
+
+            foreach(var company in insuranceCompanies) {
+                var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault(), company.Name);
+                if (await CanAdd(cover)) {
+                    files.Add(cover);
+                }
+            }
+          
+            //TODO: agregar los documentos de cada reclamo
+
+            var result = await pdfMerge.MergeFiles(files);
+            return result;
         }
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.ApiServices.Api.Dtos.Requests;
+using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 
@@ -34,6 +35,29 @@ namespace Solutio.ApiServices.Api.Controllers
                 if (claimDocumentRequest.DocumentIds == null) return BadRequest();
 
                 var file = await getClaimDocumentService.GetFile(claimDocumentRequest.ClaimIds, claimDocumentRequest.DocumentIds, claimDocumentRequest.ClaimFiles);
+
+                return await DownloadFile(file);
+            }
+            catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+
+        [HttpPost("GetByInsuranceCompanyID")]
+        public async Task<IActionResult> GetByInsuranceCompanyID([FromBody] List<ClaimDocumentByCompaniesRequestDto> claimDocumentByCompaniesRequest) {
+            try {
+                if (claimDocumentByCompaniesRequest == null) return BadRequest();
+               
+                List<InsuranceCompany> insuranceCompanies = new List<InsuranceCompany>();
+                foreach(var request in claimDocumentByCompaniesRequest) {
+                    InsuranceCompany insuranceCompany = new InsuranceCompany();
+                    insuranceCompany.Id = request.Id;
+                    insuranceCompany.Name = request.CompanyName;
+                    insuranceCompanies.Add(insuranceCompany);
+                }
+
+                var file = await getClaimDocumentService.GetFileByInsuranceCompany(insuranceCompanies);
 
                 return await DownloadFile(file);
             }

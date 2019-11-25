@@ -86,6 +86,9 @@ namespace Solutio.Infrastructure.Repositories.Claims
                 .Include(x => x.State)
                 .ThenInclude(e => e.StateConfigurations)
                 .ThenInclude(d => d.AllowedState)
+                .Include(x => x.ClaimThirdInsuredVehicles)
+                .ThenInclude(x => x.Vehicle)
+                .ThenInclude(x => x.InsuranceCompany)
                 .ToListAsync();
 
             return claimMapper.Map(claimsDb);

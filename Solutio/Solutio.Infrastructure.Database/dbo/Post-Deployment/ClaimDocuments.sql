@@ -307,6 +307,8 @@ USING (VALUES
 		SOLUTIO - Listado de reclamos
 	</div>
 	<div class="container">
+	  <h4>Compañía de seguros: [compania]</h4>
+	  <label>Fecha de impresion: [fechaImpresion]</label><br><br>
 	  <table id="reclamos">
 		<tr>
 		  <th>Id</th>

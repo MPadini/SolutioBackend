@@ -164,7 +164,13 @@ namespace Solutio.Infrastructure.Repositories.Mappers
 
         public List<Claim> Map(List<ClaimDB> claim)
         {
-            return claim.Adapt<List<Claim>>();
+            List<Claim> claims = new List<Claim>();
+            foreach (var c in claim) {
+                var result = Map(c);
+                claims.Add(result);
+            }
+
+            return claims;
         }
     }
 }
