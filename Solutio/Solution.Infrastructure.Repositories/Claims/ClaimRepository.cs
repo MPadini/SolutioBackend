@@ -94,7 +94,13 @@ namespace Solutio.Infrastructure.Repositories.Claims
             return claimMapper.Map(claimsDb);
         }
 
- 
+        public async Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany) {
+            var claimsDb = applicationDbContext.Claims.FromSql($"SELECT c.* FROM [dbo].[Vehicles] V  INNER JOIN [dbo].[ClaimThirdInsuredVehicles] IV ON IV.VehicleId = V.Id INNER JOIN [dbo].[Claims] C ON C.Id = IV.ClaimId where V.InsuranceCompanyId = {insuranceCompany} ").ToList();
+
+            return claimMapper.Map(claimsDb);
+        }
+
+
         private async Task<ClaimDB> Get(long id)
         {
             try

@@ -96,13 +96,23 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
             var document = claimDocument.HtmlTemplate;
             StringBuilder str = new StringBuilder();
+
+            
             foreach (var claim in claims) {
+
+                int daysDiff = ((TimeSpan)(DateTime.Now - claim.Created)).Days;
+
                 str.Append($"<tr>" +
                     $"<td>{claim.Id.ToString()}</td>" +
-                    $"<td>{claim.ClaimInsuredPersons.FirstOrDefault().Name ?? string.Empty} </td>" +
-                    $"<td>{claim.Date.ToString("dd/MM/yyyy") ?? string.Empty} </td>" +
-                    $"<td>{claim.Hour ?? string.Empty} </td>" +
-                    $"<td>{claim.State.Description ?? string.Empty}  </td></tr>");
+                    //$"<td>{claim.ClaimInsuredVehicles.FirstOrDefault().Patent ?? string.Empty} </td>" +
+                    $"<td>{"GAD125"} </td>" +
+                    $"<td>{"123456"} </td>" +
+                    //$"<td>{claim.State.Description ?? string.Empty} </td>" +
+                    $"<td>{"Presentado"} </td>" +
+                    $"<td>{daysDiff.ToString()}  </td>" +
+                    $"<td> </td>" +
+                    $"</tr>" +
+                    $"<tr><td colspan='6'> Notas: </td></tr>");
             }
 
             document = document.Replace("[contenido]", str.ToString());
@@ -153,15 +163,15 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         }
 
         public async Task<byte[]> GetFileByInsuranceCompany(List<InsuranceCompany> insuranceCompanies) {
-            var claims = await getClaimService.GetAll(string.Empty);
-            if (claims == null) throw new ApplicationException("No hay reclamos registrados para la compañia ingresada");
-
             var htmlTemplates = await getHtmlTemplatesService.GetHtmlTemplates();
             if (htmlTemplates == null || !htmlTemplates.Any()) throw new ArgumentException("No hay templates configurados.");
 
             List<byte[]> files = new List<byte[]>();
 
             foreach(var company in insuranceCompanies) {
+                var claims = await getClaimService.GetClaimByInsuranceCompany(company.Id);
+                if (claims == null) continue;
+
                 var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault(), company.Name);
                 if (await CanAdd(cover)) {
                     files.Add(cover);

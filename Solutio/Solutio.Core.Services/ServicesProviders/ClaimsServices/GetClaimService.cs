@@ -45,6 +45,10 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             return claims;
         }
 
+        public async Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany) {
+            return await claimRepository.GetClaimByInsuranceCompany(insuranceCompany);
+        }
+
         //public async Task<List<Claim>> GetAllGroupByCompany()
         //{
         //    var claims = await claimRepository.GetAll();

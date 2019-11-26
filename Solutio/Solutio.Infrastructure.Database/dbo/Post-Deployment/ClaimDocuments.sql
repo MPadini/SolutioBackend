@@ -312,10 +312,11 @@ USING (VALUES
 	  <table id="reclamos">
 		<tr>
 		  <th>Id</th>
-		  <th>Titular</th>
-		  <th>Fecha</th>
-		  <th>Hora</th>
+		  <th>Patente</th>
+		  <th>Nro siniestro</th>
 		  <th>Estado</th>
+		  <th>Cant dias</th>
+		  <th>Obs.</th>
 		</tr>
 		[contenido]
 	  </table>
