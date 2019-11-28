@@ -76,7 +76,21 @@ namespace Solutio.Infrastructure.Repositories.Claims
             
         }
 
-        public async Task<List<ClaimFile>> GetByClaimId(long claimId) {
+        public async Task<List<ClaimFile>> GetByClaimId(long claimId, bool withBase64) {
+            if (withBase64) {
+                var filesWithBase64 = applicationDbContext.ClaimFiles
+              .AsNoTracking().Include(x => x.FileType).Where(x => x.ClaimId == claimId).Select(x => new {
+                  x.Id,
+                  x.ClaimId,
+                  x.Base64,
+                  x.FileName,
+                  x.FileType,
+                  x.FileTypeId
+              });
+
+                return filesWithBase64.Adapt<List<ClaimFile>>();
+
+            } 
             var files = applicationDbContext.ClaimFiles
                 .AsNoTracking().Include(x => x.FileType).Where(x => x.ClaimId == claimId).Select(x => new {
                     x.Id,

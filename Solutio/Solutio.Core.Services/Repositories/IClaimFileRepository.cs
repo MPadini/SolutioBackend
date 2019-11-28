@@ -18,6 +18,6 @@ namespace Solutio.Core.Services.Repositories
 
         Task<List<FileType>> GetFileTypes();
 
-        Task<List<ClaimFile>> GetByClaimId(long claimId);
+        Task<List<ClaimFile>> GetByClaimId(long claimId, bool withBase64);
     }
 }

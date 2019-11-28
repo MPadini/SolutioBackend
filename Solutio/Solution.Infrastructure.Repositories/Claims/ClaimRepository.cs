@@ -95,9 +95,23 @@ namespace Solutio.Infrastructure.Repositories.Claims
         }
 
         public async Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany) {
-            var claimsDb = applicationDbContext.Claims.FromSql($"SELECT c.* FROM [dbo].[Vehicles] V  INNER JOIN [dbo].[ClaimThirdInsuredVehicles] IV ON IV.VehicleId = V.Id INNER JOIN [dbo].[Claims] C ON C.Id = IV.ClaimId where V.InsuranceCompanyId = {insuranceCompany} ").ToList();
+            var claimsDb = applicationDbContext.Claims.FromSql($"SELECT c.* FROM [dbo].[Vehicles] V  INNER JOIN [dbo].[ClaimThirdInsuredVehicles] "+ "" +
+                $"IV ON IV.VehicleId = V.Id INNER JOIN [dbo].[Claims] C ON C.Id = IV.ClaimId where V.InsuranceCompanyId = {insuranceCompany} " +
+                "and c.StateId in (21, 22, 23, 32, 33, 41, 43, 44) ").ToList();
+            if (claimsDb == null) return null;     
 
-            return claimMapper.Map(claimsDb);
+            List<long> claimsId = new List<long>();
+            claimsId.AddRange(claimsDb.Select(x => x.Id));
+
+            var claims = applicationDbContext.Claims.AsNoTracking()
+              .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
+              .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
+              .Include(x => x.ClaimThirdInsuredPersons).ThenInclude(x => x.Person)
+              .Include(x => x.ClaimThirdInsuredVehicles).ThenInclude(x => x.Vehicle)
+              .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)
+              .Where(x => claimsId.Contains(x.Id)).ToList();
+
+            return claimMapper.Map(claims);
         }
 
 

@@ -104,11 +104,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
                 str.Append($"<tr>" +
                     $"<td>{claim.Id.ToString()}</td>" +
-                    //$"<td>{claim.ClaimInsuredVehicles.FirstOrDefault().Patent ?? string.Empty} </td>" +
-                    $"<td>{"GAD125"} </td>" +
+                    $"<td>{claim.ClaimInsuredVehicles.FirstOrDefault().Patent ?? string.Empty} </td>" +
                     $"<td>{"123456"} </td>" +
-                    //$"<td>{claim.State.Description ?? string.Empty} </td>" +
-                    $"<td>{"Presentado"} </td>" +
+                    $"<td>{claim.State.Description ?? string.Empty} </td>" +
                     $"<td>{daysDiff.ToString()}  </td>" +
                     $"<td> </td>" +
                     $"</tr>" +
@@ -166,21 +164,41 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             var htmlTemplates = await getHtmlTemplatesService.GetHtmlTemplates();
             if (htmlTemplates == null || !htmlTemplates.Any()) throw new ArgumentException("No hay templates configurados.");
 
-            List<byte[]> files = new List<byte[]>();
+            //List<byte[]> files = new List<byte[]>();
+            List<ClaimFilePage> claimFilePages = new List<ClaimFilePage>();
 
-            foreach(var company in insuranceCompanies) {
+            foreach (var company in insuranceCompanies) {
+                ClaimFilePage claimFilePage = new ClaimFilePage();
+
                 var claims = await getClaimService.GetClaimByInsuranceCompany(company.Id);
                 if (claims == null) continue;
 
                 var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault(), company.Name);
                 if (await CanAdd(cover)) {
-                    files.Add(cover);
+                    //files.Add(cover);
+                    claimFilePage.Page = cover;
+                    claimFilePages.Add(claimFilePage);
+                }
+
+                foreach (var claim in claims) {
+                    var claimFiles = await getFileService.GetByClaimId(claim.Id, true);
+                    if (claimFiles != null) {
+                        foreach (var file in claimFiles) {
+                            ClaimFilePage claimDocPage = new ClaimFilePage();
+                            byte[] bFile = Convert.FromBase64String(file.Base64);
+                            if (await CanAdd(bFile)) {
+                                //files.Add(bFile);
+                                claimDocPage.Page = bFile;
+                                claimDocPage.ClaimId = claim.Id;
+                                claimFilePages.Add(claimDocPage);
+                            }
+                        }
+                    }
                 }
             }
-          
-            //TODO: agregar los documentos de cada reclamo
+         
 
-            var result = await pdfMerge.MergeFiles(files);
+            var result = await pdfMerge.MergeFiles(claimFilePages);
             return result;
         }
     }
