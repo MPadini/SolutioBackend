@@ -108,7 +108,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                     $"<td>{"123456"} </td>" +
                     $"<td>{claim.State.Description ?? string.Empty} </td>" +
                     $"<td>{daysDiff.ToString()}  </td>" +
-                    $"<td> </td>" +
+                    $"<td> {AddOfferedAmount(claim)} </td>" +
                     $"</tr>" +
                     $"<tr><td colspan='6'> Notas: </td></tr>");
             }
@@ -181,25 +181,52 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 }
 
                 foreach (var claim in claims) {
-                    var claimFiles = await getFileService.GetByClaimId(claim.Id, true);
-                    if (claimFiles != null) {
-                        foreach (var file in claimFiles) {
-                            ClaimFilePage claimDocPage = new ClaimFilePage();
-                            byte[] bFile = Convert.FromBase64String(file.Base64);
-                            if (await CanAdd(bFile)) {
-                                //files.Add(bFile);
-                                claimDocPage.Page = bFile;
-                                claimDocPage.ClaimId = claim.Id;
-                                claimFilePages.Add(claimDocPage);
+                    //Presentados
+                    if (claim.StateId == (long)ClaimState.eId.Presentado) {
+                        var claimFiles = await getFileService.GetByClaimId(claim.Id, true);
+                        if (claimFiles != null) {
+                            foreach (var file in claimFiles) {
+                                ClaimFilePage claimDocPage = new ClaimFilePage();
+                                byte[] bFile = Convert.FromBase64String(file.Base64);
+                                if (await CanAdd(bFile)) {
+                                    //files.Add(bFile);
+                                    claimDocPage.Page = bFile;
+                                    claimDocPage.ClaimId = claim.Id;
+                                    claimFilePages.Add(claimDocPage);
+                                }
                             }
                         }
                     }
+
+                    //Ofrecimiento rechazado
+                    if (claim.StateId == (long)ClaimState.eId.Ofrecimiento_Rechazado) {
+                        var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
+                        var pdf = await htmlToPdfHelperService.GetFile(reconsideration.HtmlTemplate);
+                        if (await CanAdd(pdf)) {
+                            ClaimFilePage claimDocPage = new ClaimFilePage();
+                            claimDocPage.Page = pdf;
+                            claimDocPage.ClaimId = claim.Id;
+                            claimFilePages.Add(claimDocPage);
+                        }
+                    }
+
                 }
             }
          
 
             var result = await pdfMerge.MergeFiles(claimFilePages);
             return result;
+        }
+
+        private async Task<string> AddOfferedAmount(Claim claim) {
+            //Ofrecimiento Aceptado - Esperando ofrecimiento
+            if (claim.StateId == (long)ClaimState.eId.Ofrecimiento_Rechazado ||
+                claim.StateId == (long)ClaimState.eId.Esperando_Ofrecimiento) {
+                //TODO: sacar hardcoded
+                return "$15000";
+            }
+
+            return string.Empty;
         }
     }
 }

@@ -203,6 +203,21 @@ USING (VALUES
 		  <td>[dniPersona3]</td>
 		  <td>[enCaracterDePersona3]</td>
 		</tr>
+		<tr>
+		  <td>[nombrePersona4]</td>
+		  <td>[dniPersona4]</td>
+		  <td>[enCaracterDePersona4]</td>
+		</tr>
+		<tr>
+		  <td>[nombrePersona5]</td>
+		  <td>[dniPersona5]</td>
+		  <td>[enCaracterDePersona5]</td>
+		</tr>
+		<tr>
+		  <td>[nombrePersona6]</td>
+		  <td>[dniPersona6]</td>
+		  <td>[enCaracterDePersona6]</td>
+		</tr>
 	  </table>
 	  </p>
 	  <p>
@@ -223,6 +238,18 @@ USING (VALUES
 		<tr>
 		  <td>[dominioVehiculo3]</td>
 		  <td>[tipoDeVehiculo3]</td>
+		</tr>
+		<tr>
+		  <td>[dominioVehiculo4]</td>
+		  <td>[tipoDeVehiculo4]</td>
+		</tr>
+		<tr>
+		  <td>[dominioVehiculo5]</td>
+		  <td>[tipoDeVehiculo5]</td>
+		</tr>
+		<tr>
+		  <td>[dominioVehiculo6]</td>
+		  <td>[tipoDeVehiculo6]</td>
 		</tr>
 	  </table>
 	  </p>

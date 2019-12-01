@@ -10,17 +10,18 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices.ClaimStat
     {
         public override async Task<bool> CanChangeState(ClaimState.eId claimState)
         {
-            if (claimState == ClaimState.eId.InMonitoring)
-            {
-                return true;
-            }
+            //if (claimState == ClaimState.eId.InMonitoring)
+            //{
+            //    return true;
+            //}
 
-            if (claimState == ClaimState.eId.Acepted)
-            {
-                return true;
-            }
+            //if (claimState == ClaimState.eId.Acepted)
+            //{
+            //    return true;
+            //}
 
-            throw new ApplicationException(ErrorMessage);
+            //throw new ApplicationException(ErrorMessage);
+            return true;
         }
     }
 }

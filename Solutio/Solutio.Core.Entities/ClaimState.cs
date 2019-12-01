@@ -20,15 +20,25 @@ namespace Solutio.Core.Entities
 
         public enum eId:long
         {
-            InDraft = 1,
-            Audit = 2,
-            Presented = 3,
-            WaitForAction = 4,
-            InMonitoring = 5,
-            Offered = 6,
-            Acepted = 7,
-            Outstanding = 8,
-            Close = 9
+            Borrador = 11,
+            En_Revision = 12,
+            Rechazado_Mejores_Datos_ui = 13,
+            Esperando_Denuncia = 21,
+            Pendiente_de_Presentación = 22,
+            Presentado = 23,
+            Rechazado_Mejores_Datos_com = 24,
+            Nuevo_Ofrecimiento = 31,
+            Ofrecimiento_Rechazado = 32,
+            Esperando_Ofrecimiento = 33,
+            Ofrecimiento_Aceptado = 41,
+            Firmar_Convenio = 42,
+            Convenio_Firmado = 43,
+            Pendiente_de_Pago = 44,
+            Rechazado = 81,
+            Desestimado = 82,
+            Desistido = 83,
+            A_Juicio = 84,
+            Cerrado = 100
         }
     }
 }

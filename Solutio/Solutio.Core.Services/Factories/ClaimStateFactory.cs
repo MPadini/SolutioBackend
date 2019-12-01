@@ -12,39 +12,39 @@ namespace Solutio.Core.Services.Factories
     {
         public async Task<IClaimStateValidator> GetStateValidator(long claimStateId)
         {
-            if (claimStateId == (long)ClaimState.eId.InDraft)
+            if (claimStateId == (long)ClaimState.eId.Borrador)
             {
                 return new InDraftValidator();
             }
-            if (claimStateId == (long)ClaimState.eId.Audit)
-            {
-                return new AuditValidator();
-            }
-            if (claimStateId == (long)ClaimState.eId.Presented)
+            //if (claimStateId == (long)ClaimState.eId.a)
+            //{
+            //    return new AuditValidator();
+            //}
+            if (claimStateId == (long)ClaimState.eId.Presentado)
             {
                 return new PresentedValidator();
             }
-            if (claimStateId == (long)ClaimState.eId.WaitForAction)
-            {
-                return new WaitForActionValidator();
-            }
-            if (claimStateId == (long)ClaimState.eId.InMonitoring)
-            {
-                return new InMonitoringValidator();
-            }
-            if (claimStateId == (long)ClaimState.eId.Offered)
+            //if (claimStateId == (long)ClaimState.eId.)
+            //{
+            //    return new WaitForActionValidator();
+            //}
+            //if (claimStateId == (long)ClaimState.eId.mo)
+            //{
+            //    return new InMonitoringValidator();
+            //}
+            if (claimStateId == (long)ClaimState.eId.Nuevo_Ofrecimiento)
             {
                 return new OfferedValidator();
             }
-            if (claimStateId == (long)ClaimState.eId.Acepted)
+            if (claimStateId == (long)ClaimState.eId.Ofrecimiento_Aceptado)
             {
                 return new AceptedValidator();
             }
-            if (claimStateId == (long)ClaimState.eId.Outstanding)
-            {
-                return new OutstandingValidator();
-            }
-            if (claimStateId == (long)ClaimState.eId.Close)
+            //if (claimStateId == (long)ClaimState.eId.Outstanding)
+            //{
+            //    return new OutstandingValidator();
+            //}
+            if (claimStateId == (long)ClaimState.eId.Cerrado)
             {
                 return new CloseValidator();
             }
