@@ -17,7 +17,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private readonly IGetFileService getFileService;
 
         public GetClaimDocumentService(
-            IPdfMerge pdfMerge, 
+            IPdfMerge pdfMerge,
             IGetHtmlTemplatesService getHtmlTemplatesService,
             IHtmlToPdfHelperService htmlToPdfHelperService,
             IGetClaimService getClaimService,
@@ -49,7 +49,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 if (documents == null || !documents.Any()) throw new ArgumentException("No hay templates configurados.");
 
 
-                foreach (var document in documents) { 
+                foreach (var document in documents) {
                     if (documentsIds.Contains(document.Id)) {
                         if (await IsCover(document.Id)) continue;
 
@@ -63,7 +63,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
             foreach (var claimfileId in claimFileIds) {
                 var file = await getFileService.GetById(claimfileId);
-               if (file != null) {
+                if (file != null) {
                     byte[] bFile = Convert.FromBase64String(file.Base64);
                     if (await CanAdd(bFile)) {
                         files.Add(bFile);
@@ -72,7 +72,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             }
 
             if (documentsIds.Contains(1)) {
-                var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault(),"");
+                var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault(), "");
                 if (await CanAdd(cover)) {
                     files.Add(cover);
                 }
@@ -90,14 +90,14 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             return false;
         }
 
-        private async Task<byte[]> GenerateCover(List<Claim> claims,ClaimDocument claimDocument, string company) {
+        private async Task<byte[]> GenerateCover(List<Claim> claims, ClaimDocument claimDocument, string company) {
             if (claims == null) return null;
             if (claimDocument == null) return null;
 
             var document = claimDocument.HtmlTemplate;
             StringBuilder str = new StringBuilder();
 
-            
+
             foreach (var claim in claims) {
 
                 int daysDiff = ((TimeSpan)(DateTime.Now - claim.Created)).Days;
@@ -108,7 +108,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                     $"<td>{"123456"} </td>" +
                     $"<td>{claim.State.Description ?? string.Empty} </td>" +
                     $"<td>{daysDiff.ToString()}  </td>" +
-                    $"<td> {AddOfferedAmount(claim)} </td>" +
+                    $"<td> {await AddOfferedAmount(claim)} </td>" +
                     $"</tr>" +
                     $"<tr><td colspan='6'> Notas: </td></tr>");
             }
@@ -128,7 +128,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             List<ClaimDocument> result = new List<ClaimDocument>();
             claimDocuments.ForEach(async document => {
                 ClaimDocument doc = new ClaimDocument();
-                doc.HtmlTemplate = await ReemplaceTags( document.HtmlTemplate, claim);
+                doc.HtmlTemplate = await ReemplaceTags(document.HtmlTemplate, claim);
                 doc.Id = document.Id;
                 result.Add(doc);
             });
@@ -139,14 +139,33 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private async Task<string> ReemplaceTags(string htmlString, Claim claim) {
 
             htmlString = htmlString.Replace("[claimId]", claim.Id.ToString());
-            htmlString = htmlString.Replace("[thirdCompany]", "Compañia de prueba");
+            htmlString = htmlString.Replace("[thirdCompany]", await GetCompanyName(claim));
             htmlString = htmlString.Replace("[sinisterDate]", DateTime.Now.ToString("dd/MM/yyyy"));
-            htmlString = htmlString.Replace("[thirdVehicleDomain]", "Dominio de prueba");
+            htmlString = htmlString.Replace("[thirdVehicleDomain]", await GetThirdVehicleDomain(claim));
             htmlString = htmlString.Replace("[sinisterNumber]", "1234567");
             htmlString = htmlString.Replace("[montoOfrecimiento]", "$500");
             htmlString = htmlString.Replace("[montoReclamado]", "$100000000");
 
             return htmlString;
+        }
+
+        private async Task<string> GetCompanyName(Claim claim) {
+            if (claim.ClaimThirdInsuredVehicles == null) return string.Empty;
+
+            var vehicle = claim.ClaimThirdInsuredVehicles.FirstOrDefault();
+            if (vehicle == null) return string.Empty;
+            if (vehicle.InsuranceCompany == null) return string.Empty;
+
+            return vehicle.InsuranceCompany.Name;
+        }
+
+        private async Task<string> GetThirdVehicleDomain(Claim claim) {
+            if (claim.ClaimThirdInsuredVehicles == null) return string.Empty;
+
+            var vehicle = claim.ClaimThirdInsuredVehicles.FirstOrDefault();
+            if (vehicle == null) return string.Empty;
+
+            return vehicle.Patent;
         }
 
         public async static Task<bool> CanAdd(byte[] data) {
@@ -164,7 +183,6 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             var htmlTemplates = await getHtmlTemplatesService.GetHtmlTemplates();
             if (htmlTemplates == null || !htmlTemplates.Any()) throw new ArgumentException("No hay templates configurados.");
 
-            //List<byte[]> files = new List<byte[]>();
             List<ClaimFilePage> claimFilePages = new List<ClaimFilePage>();
 
             foreach (var company in insuranceCompanies) {
@@ -175,51 +193,30 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
                 var cover = await GenerateCover(claims, htmlTemplates.Where(x => x.Id == 1).FirstOrDefault(), company.Name);
                 if (await CanAdd(cover)) {
-                    //files.Add(cover);
                     claimFilePage.Page = cover;
                     claimFilePages.Add(claimFilePage);
                 }
 
                 foreach (var claim in claims) {
-                    //Presentados
-                    if (claim.StateId == (long)ClaimState.eId.Presentado) {
-                        var claimFiles = await getFileService.GetByClaimId(claim.Id, true);
-                        if (claimFiles != null) {
-                            foreach (var file in claimFiles) {
-                                ClaimFilePage claimDocPage = new ClaimFilePage();
-                                byte[] bFile = Convert.FromBase64String(file.Base64);
-                                if (await CanAdd(bFile)) {
-                                    //files.Add(bFile);
-                                    claimDocPage.Page = bFile;
-                                    claimDocPage.ClaimId = claim.Id;
-                                    claimFilePages.Add(claimDocPage);
-                                }
-                            }
-                        }
+                    var claimDocPage = await GenerateAllDocumentation(claim);
+                    if (claimDocPage != null && claimDocPage.Any()) {
+                        claimFilePages.AddRange(claimDocPage);
                     }
 
-                    //Ofrecimiento rechazado
-                    if (claim.StateId == (long)ClaimState.eId.Ofrecimiento_Rechazado) {
-                        var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
-                        var pdf = await htmlToPdfHelperService.GetFile(reconsideration.HtmlTemplate);
-                        if (await CanAdd(pdf)) {
-                            ClaimFilePage claimDocPage = new ClaimFilePage();
-                            claimDocPage.Page = pdf;
-                            claimDocPage.ClaimId = claim.Id;
-                            claimFilePages.Add(claimDocPage);
-                        }
+                    var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
+                    var reconsiderationPage = await GenerateReconsideration(claim, reconsideration.HtmlTemplate);
+                    if (reconsiderationPage != null) {
+                        claimFilePages.Add(reconsiderationPage);
                     }
-
                 }
             }
-         
+
 
             var result = await pdfMerge.MergeFiles(claimFilePages);
             return result;
         }
 
         private async Task<string> AddOfferedAmount(Claim claim) {
-            //Ofrecimiento Aceptado - Esperando ofrecimiento
             if (claim.StateId == (long)ClaimState.eId.Ofrecimiento_Rechazado ||
                 claim.StateId == (long)ClaimState.eId.Esperando_Ofrecimiento) {
                 //TODO: sacar hardcoded
@@ -227,6 +224,42 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             }
 
             return string.Empty;
+        }
+
+        private async Task<List<ClaimFilePage>> GenerateAllDocumentation(Claim claim) {
+            List<ClaimFilePage> claimFilePages = new List<ClaimFilePage>();
+
+            if (claim.StateId != (long)ClaimState.eId.Pendiente_de_Presentación) return null;
+
+            var claimFiles = await getFileService.GetByClaimId(claim.Id, true);
+            if (claimFiles == null) return null;
+
+            foreach (var file in claimFiles) {
+                ClaimFilePage claimDocPage = new ClaimFilePage();
+                byte[] bFile = Convert.FromBase64String(file.Base64);
+                if (await CanAdd(bFile)) {
+                    claimDocPage.Page = bFile;
+                    claimDocPage.ClaimId = claim.Id;
+                    claimFilePages.Add(claimDocPage);
+                }
+            }
+
+            return claimFilePages;
+        }
+
+        private async Task<ClaimFilePage> GenerateReconsideration(Claim claim, string htmlTemplate) {
+            if (claim.StateId != (long)ClaimState.eId.Ofrecimiento_Rechazado) return null;
+            ClaimFilePage claimDocPage = new ClaimFilePage();
+
+            var template = await ReemplaceTags(htmlTemplate, claim);
+
+            var pdf = await htmlToPdfHelperService.GetFile(template);
+            if (await CanAdd(pdf)) {
+                claimDocPage.Page = pdf;
+                claimDocPage.ClaimId = claim.Id;
+            }
+
+            return claimDocPage;
         }
     }
 }
