@@ -21,5 +21,7 @@ namespace Solutio.Core.Services.Repositories.ClaimsRepositories
         Task Delete(Claim claim);
 
         Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany);
+
+        Task MarkAsPrinted(List<Claim> claims);
     }
 }

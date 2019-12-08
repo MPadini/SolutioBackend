@@ -221,5 +221,14 @@ namespace Solutio.Infrastructure.Repositories.Claims
             claimDB.Adress = null;
             return claimDB;
         }
+
+        public async Task MarkAsPrinted(List<Claim> claims) {
+            if (claims == null) return;
+            if (!claims.Any()) return;
+
+            foreach (var claim in claims) {
+                applicationDbContext.Database.ExecuteSqlCommand("update claims set printed = 1 where id = {0}", claim.Id);
+            }
+        }
     }
 }

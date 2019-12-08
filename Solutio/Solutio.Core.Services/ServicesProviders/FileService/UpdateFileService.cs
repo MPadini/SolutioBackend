@@ -19,15 +19,7 @@ namespace Solutio.Core.Services.ServicesProviders.FileService {
             if (claimFiles == null) return;
             if (!claimFiles.Any()) return;
 
-            List<ClaimFile> files = new List<ClaimFile>();
-
             try {
-                foreach (var file in claimFiles) {
-                   // ClaimFile updatedFile = new ClaimFile();
-                    file.Printed = true;
-                  //  files.Add(updatedFile);
-                }
-
                 await claimFileRepository.Update(claimFiles);
             }
             catch (Exception) {

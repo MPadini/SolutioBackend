@@ -41,5 +41,7 @@ namespace Solutio.Core.Entities
         public Adress Adress { get; set; }
 
         public string UserName { get; set; }
+
+        public bool Printed { get; set; }
     }
 }

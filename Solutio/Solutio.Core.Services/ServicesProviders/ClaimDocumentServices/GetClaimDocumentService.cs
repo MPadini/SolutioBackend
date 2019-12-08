@@ -16,6 +16,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private readonly IGetClaimService getClaimService;
         private readonly IGetFileService getFileService;
         private readonly IUpdateFileService updateFileService;
+        private readonly IUpdateClaimService updateClaimService;
 
         public GetClaimDocumentService(
             IPdfMerge pdfMerge,
@@ -23,13 +24,15 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             IHtmlToPdfHelperService htmlToPdfHelperService,
             IGetClaimService getClaimService,
             IGetFileService getFileService,
-            IUpdateFileService updateFileService) {
+            IUpdateFileService updateFileService,
+            IUpdateClaimService updateClaimService) {
             this.pdfMerge = pdfMerge;
             this.getHtmlTemplatesService = getHtmlTemplatesService;
             this.htmlToPdfHelperService = htmlToPdfHelperService;
             this.getClaimService = getClaimService;
             this.getFileService = getFileService;
             this.updateFileService = updateFileService;
+            this.updateClaimService = updateClaimService;
         }
 
         public async Task<byte[]> GetFile(List<long> claimIds, List<long> documentsIds, List<long> claimFileIds) {
@@ -201,17 +204,27 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 }
 
                 foreach (var claim in claims) {
-                    var claimDocPage = await GenerateAllDocumentation(claim);
-                    if (claimDocPage != null && claimDocPage.Any()) {
-                        claimFilePages.AddRange(claimDocPage);
+                    var allDoc = await GenerateAllDocumentation(claim);
+                    if (allDoc != null && allDoc.Any()) {
+                        claimFilePages.AddRange(allDoc);
                     }
 
-                    var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
-                    var reconsiderationPage = await GenerateReconsideration(claim, reconsideration.HtmlTemplate);
-                    if (reconsiderationPage != null) {
-                        claimFilePages.Add(reconsiderationPage);
+                    if(!claim.Printed) {
+                        var claimDoc = htmlTemplates.Where(x => x.Id == 2).FirstOrDefault();
+                        var claimDocPage = await GenerateClaimPage(claim, claimDoc.HtmlTemplate);
+                        if (claimDocPage != null) {
+                            claimFilePages.Add(claimDocPage);
+                        }
+
+                        var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
+                        var reconsiderationPage = await GenerateReconsideration(claim, reconsideration.HtmlTemplate);
+                        if (reconsiderationPage != null) {
+                            claimFilePages.Add(reconsiderationPage);
+                        }
                     }
                 }
+
+                await updateClaimService.MarkAsPrinted(claims);
             }
 
 
@@ -256,6 +269,21 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
         private async Task<ClaimFilePage> GenerateReconsideration(Claim claim, string htmlTemplate) {
             if (claim.StateId != (long)ClaimState.eId.Ofrecimiento_Rechazado) return null;
+            ClaimFilePage claimDocPage = new ClaimFilePage();
+
+            var template = await ReemplaceTags(htmlTemplate, claim);
+
+            var pdf = await htmlToPdfHelperService.GetFile(template);
+            if (await CanAdd(pdf)) {
+                claimDocPage.Page = pdf;
+                claimDocPage.ClaimId = claim.Id;
+            }
+
+            return claimDocPage;
+        }
+
+        private async Task<ClaimFilePage> GenerateClaimPage(Claim claim, string htmlTemplate) {
+            if (claim.StateId != (long)ClaimState.eId.Pendiente_de_Presentación) return null;
             ClaimFilePage claimDocPage = new ClaimFilePage();
 
             var template = await ReemplaceTags(htmlTemplate, claim);

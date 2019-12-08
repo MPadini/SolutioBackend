@@ -10,6 +10,7 @@ using Solutio.Core.Services.Repositories;
 using Solutio.Core.Services.Repositories.ClaimsRepositories;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -79,6 +80,13 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             await updateClaimThirdInsuredPersonService.UpdateClaimThirdInsuredPersons(existingClaim, claimNewData.ClaimThirdInsuredPersons);
             await updateClaimInsuredVehicleService.UpdateClaimInsuredVehicles(existingClaim, claimNewData.ClaimInsuredVehicles);
             await updateClaimThirdInsuredVehicleService.UpdateClaimInsuredVehicles(existingClaim, claimNewData.ClaimThirdInsuredVehicles);
+        }
+
+        public async Task MarkAsPrinted(List<Claim> claims) {
+            if (claims == null) return;
+            if (!claims.Any()) return;
+
+            await claimRepository.MarkAsPrinted(claims);
         }
     }
 }
