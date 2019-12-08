@@ -85,7 +85,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
                   x.Base64,
                   x.FileName,
                   x.FileType,
-                  x.FileTypeId
+                  x.FileTypeId,
+                  x.Printed
               });
 
                 return filesWithBase64.Adapt<List<ClaimFile>>();
@@ -97,7 +98,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     x.ClaimId,
                     x.FileName,
                     x.FileType,
-                    x.FileTypeId
+                    x.FileTypeId,
+                    x.Printed
                 });
 
             return files.Adapt<List<ClaimFile>>();
@@ -119,6 +121,17 @@ namespace Solutio.Infrastructure.Repositories.Claims
         public async Task<List<FileType>> GetFileTypes() {
             var result = applicationDbContext.FileTypes.AsNoTracking().ToList();
             return result.Adapt<List<FileType>>();
+        }
+
+        public async Task Update(List<ClaimFile> claimFiles) {
+            if (claimFiles == null) return;
+
+            var claimFilesDB = claimFiles.Adapt<List<ClaimFileDB>>();
+
+            foreach (var file in claimFiles) {
+                applicationDbContext.Database.ExecuteSqlCommand("update ClaimFiles set printed = 1 where id = {0}", file.Id);
+            }
+           
         }
     }
 }

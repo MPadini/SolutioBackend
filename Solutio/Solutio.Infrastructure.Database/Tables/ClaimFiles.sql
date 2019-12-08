@@ -9,5 +9,6 @@
     [Created] DATETIME NULL DEFAULT Getdate(), 
     [Modified] DATETIME NULL, 
     [Deleted] DATETIME NULL,
+    [Printed] BIT NOT NULL DEFAULT 0, 
     CONSTRAINT [FK_ClaimFiles_Claim_ClaimId] FOREIGN KEY ([ClaimId]) REFERENCES [Claims] ([Id])
 )

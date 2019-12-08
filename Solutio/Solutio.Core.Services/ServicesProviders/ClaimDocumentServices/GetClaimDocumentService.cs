@@ -15,18 +15,21 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private readonly IHtmlToPdfHelperService htmlToPdfHelperService;
         private readonly IGetClaimService getClaimService;
         private readonly IGetFileService getFileService;
+        private readonly IUpdateFileService updateFileService;
 
         public GetClaimDocumentService(
             IPdfMerge pdfMerge,
             IGetHtmlTemplatesService getHtmlTemplatesService,
             IHtmlToPdfHelperService htmlToPdfHelperService,
             IGetClaimService getClaimService,
-            IGetFileService getFileService) {
+            IGetFileService getFileService,
+            IUpdateFileService updateFileService) {
             this.pdfMerge = pdfMerge;
             this.getHtmlTemplatesService = getHtmlTemplatesService;
             this.htmlToPdfHelperService = htmlToPdfHelperService;
             this.getClaimService = getClaimService;
             this.getFileService = getFileService;
+            this.updateFileService = updateFileService;
         }
 
         public async Task<byte[]> GetFile(List<long> claimIds, List<long> documentsIds, List<long> claimFileIds) {
@@ -234,7 +237,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             var claimFiles = await getFileService.GetByClaimId(claim.Id, true);
             if (claimFiles == null) return null;
 
-            foreach (var file in claimFiles) {
+            var filesToPrint = claimFiles.Where(file => !file.Printed).ToList();
+
+            foreach (var file in filesToPrint) {
                 ClaimFilePage claimDocPage = new ClaimFilePage();
                 byte[] bFile = Convert.FromBase64String(file.Base64);
                 if (await CanAdd(bFile)) {
@@ -243,6 +248,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                     claimFilePages.Add(claimDocPage);
                 }
             }
+
+            await updateFileService.MarkAsPrinted(filesToPrint);
 
             return claimFilePages;
         }

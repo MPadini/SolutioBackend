@@ -206,8 +206,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IGetHtmlTemplatesService, GetHtmlTemplatesService>();
             services.AddTransient<IHtmlToPdfHelperService, HtmlToPdfHelperService>();
             services.AddTransient<IGetInsuranceCompanyService, GetInsuranceCompanyService>();
+            services.AddTransient<IUpdateFileService, UpdateFileService>();
 
-            
             #endregion Services Settings
 
             #region Builder Settings

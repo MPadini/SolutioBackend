@@ -20,5 +20,7 @@ namespace Solutio.Core.Entities
         public long FileTypeId { get; set; }
 
         public FileType FileType { get; set; }
+
+        public bool Printed { get; set; }
     }
 }
