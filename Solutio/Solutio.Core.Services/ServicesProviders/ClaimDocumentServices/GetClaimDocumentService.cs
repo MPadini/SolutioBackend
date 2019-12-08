@@ -152,6 +152,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             htmlString = htmlString.Replace("[montoOfrecimiento]", "$500");
             htmlString = htmlString.Replace("[montoReclamado]", "$100000000");
 
+            //Claim page
+
             return htmlString;
         }
 

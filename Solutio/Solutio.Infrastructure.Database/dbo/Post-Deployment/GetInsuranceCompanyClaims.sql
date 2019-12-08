@@ -4,7 +4,7 @@ BEGIN
 
 	SELECT Id, Description
 	INTO #tempStates
-	FROM [dbo].[ClaimStates]   
+	FROM [dbo].[ClaimStates] where id in (21, 22, 23, 32, 33, 41, 43, 44)  
 
 	DECLARE @Columns as VARCHAR(MAX)
 	SELECT @Columns =
@@ -38,7 +38,7 @@ BEGIN
 	[dbo].[Vehicles] V 
 	INNER JOIN [dbo].[ClaimThirdInsuredVehicles] IV ON IV.VehicleId = V.Id
 	INNER JOIN [dbo].[Claims] C ON C.Id = IV.ClaimId
-	INNER JOIN [dbo].[ClaimStates] CS ON CS.Id = C.StateId
+	INNER JOIN [dbo].[ClaimStates] CS ON CS.Id = C.StateId and CS.id in (21, 22, 23, 32, 33, 41, 43, 44)
 	) AS B ON B.InsuranceCompanyId = IC.Id 
 	WHERE B.ClaimDeleted is null 
 	GROUP BY IC.Id, IC.Name, 'S'+CONVERT(VARCHAR,B.stateId)
@@ -46,6 +46,7 @@ BEGIN
 	--SELECT * FROM #tempTable
 	--SELECT @Columns
 	--SELECT @Columns2
+	--drop table #tempTable
 
 	DECLARE @SQL as VARCHAR(MAX)
 	SET @SQL = 'SELECT Id, Name as CompanyName,' + @Columns2 + ', (select SUM(Cantidad) from #tempTable B where B.Id = TablaPivot.Id) as TOTAL
@@ -53,6 +54,7 @@ BEGIN
 	PIVOT(Sum(Cantidad) for
 	stateId in (' + @Columns + '))
 	As TablaPivot'
+
 
 	EXEC(@SQL)
 
