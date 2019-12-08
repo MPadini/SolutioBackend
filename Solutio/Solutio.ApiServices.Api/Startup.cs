@@ -37,6 +37,7 @@ using Solutio.Core.Services.ApplicationServices.CompanyServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
 using Solutio.Core.Services.ApplicationServices.Location;
 using Solutio.Core.Services.ApplicationServices.LoginServices;
+using Solutio.Core.Services.ApplicationServices.OfficeServices;
 using Solutio.Core.Services.ApplicationServices.RefreshTokenServices;
 using Solutio.Core.Services.Factories;
 using Solutio.Core.Services.Repositories;
@@ -57,6 +58,7 @@ using Solutio.Core.Services.ServicesProviders.CompanyServices;
 using Solutio.Core.Services.ServicesProviders.FileService;
 using Solutio.Core.Services.ServicesProviders.Location;
 using Solutio.Core.Services.ServicesProviders.LoginServices;
+using Solutio.Core.Services.ServicesProviders.OfficeServices;
 using Solutio.Core.Services.ServicesProviders.RefreshTokenServices;
 using Solutio.Infrastructure.Repositories.Claims;
 using Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts;
@@ -162,6 +164,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IGetUserService, GetUserService>();
             services.AddTransient<IClaimDocumentTemplateRepository, ClaimDocumentTemplateRepository>();
             services.AddTransient<IInsuranceCompanyRepository, InsuranceCompanyRepository>();
+            services.AddTransient<IOfficeRepository, OfficeRepository>();
             
             #endregion Repositories Settings
 
@@ -207,6 +210,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IHtmlToPdfHelperService, HtmlToPdfHelperService>();
             services.AddTransient<IGetInsuranceCompanyService, GetInsuranceCompanyService>();
             services.AddTransient<IUpdateFileService, UpdateFileService>();
+            services.AddTransient<IOfficeService, OfficeService>();
 
             #endregion Services Settings
 

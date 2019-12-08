@@ -86,7 +86,10 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
         public DbSet<FileTypesDB> FileTypes { get; set; }
 
         public DbSet<InsuranceCompanyDB> InsuranceCompanies { get; set; }
+
         public DbSet<InsuranceCompanyClaimsDB> InsuranceCompanyClaims { get; set; }
+
+        public DbSet<OfficeDB> Offices { get; set; }
 
         #endregion DbSet Setups
 
@@ -149,6 +152,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new RefreshTokenMap());
             modelBuilder.ApplyConfiguration(new FileTypesMap());
             modelBuilder.ApplyConfiguration(new InsuranceCompanyMap());
+            modelBuilder.ApplyConfiguration(new OfficeDBMap());
         }
     }
 }

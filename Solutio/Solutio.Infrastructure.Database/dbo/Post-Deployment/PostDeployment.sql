@@ -18,3 +18,4 @@ Post-Deployment Script Template
 :r .\ClaimDocuments.sql
 :r .\FileTypes.sql
 :r .\InsuranceCompanies.sql
+:r .\Offices.sql
