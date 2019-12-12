@@ -10,5 +10,7 @@ namespace Solutio.Core.Services.Repositories {
         Task<List<Office>> GetAll();
 
         Task SaveUserOffices(List<UserOffice> userOffices);
+
+        Task<List<Office>> GetOfficesByUser(int userId);
     }
 }

@@ -19,6 +19,10 @@ namespace Solutio.Core.Services.ServicesProviders.OfficeServices {
             return await officeRepository.GetAll();
         }
 
+        public async Task<List<Office>> GetOfficesByUser(int userId) {
+            return await officeRepository.GetOfficesByUser(userId);
+        }
+
         public async Task SaveUserOffices(int userId, List<long> officesId) {
             if (officesId == null) return;
             if (!officesId.Any()) return;

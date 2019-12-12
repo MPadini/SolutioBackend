@@ -24,6 +24,20 @@ namespace Solutio.Infrastructure.Repositories.Claims {
             return offices.Adapt<List<Office>>();
         }
 
+        public async Task<List<Office>> GetOfficesByUser(int userId) {
+           var userOffices =  applicationDbContext.AspNetUserOffices.AsNoTracking().Where(x => x.UserId == userId).ToList();
+
+            if (userOffices == null) return null;
+            List<long> officesId = new List<long>();
+            foreach(var userOffice in userOffices) {
+                officesId.Add(userOffice.OfficeId);
+            }
+
+            var offices = applicationDbContext.Offices.Where(x => officesId.Contains(x.Id)).ToList();
+
+            return offices.Adapt<List<Office>>();
+        }
+
         public async Task SaveUserOffices(List<UserOffice> userOffices) {
             if (userOffices == null) return;
             if (!userOffices.Any()) return;
