@@ -12,5 +12,9 @@ namespace Solutio.Infrastructure.Repositories.Entities
         }
 
         public bool IsEnabled { get; set; }
+
+        public string Matricula { get; set; }
+
+        public long? AdressId { get; set; }
     }
 }

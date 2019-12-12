@@ -14,5 +14,19 @@ namespace Solutio.ApiServices.Api.Dtos
         public string PhoneNumber { get; set; }
 
         public string RoleName { get; set; }
+
+        public string Matricula { get; set; }
+
+        public string Street { get; set; }
+
+        public string StreetNumber { get; set; }
+
+        public List<long> Offices { get; set; }
+
+        public long? Country { get; set; }
+
+        public long? Province   { get; set; }
+
+        public long? City { get; set; }
     }
 }

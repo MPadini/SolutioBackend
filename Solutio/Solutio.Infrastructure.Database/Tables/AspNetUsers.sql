@@ -15,5 +15,7 @@
     [TwoFactorEnabled] bit NOT NULL,
     [UserName] nvarchar(256) NULL,
     [IsEnabled] BIT NOT NULL DEFAULT 0, 
+    [Matricula] NVARCHAR(50) NULL, 
+    [AdressId] BIGINT NULL, 
     CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
 );

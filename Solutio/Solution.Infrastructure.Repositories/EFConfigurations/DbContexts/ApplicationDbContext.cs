@@ -14,6 +14,7 @@ using Solutio.Infrastructure.Repositories.Entities;
 using Microsoft.AspNetCore.Identity;
 using Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups;
 using System.Threading.Tasks;
+using Solutio.Core.Entities;
 
 namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 {
@@ -91,6 +92,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<OfficeDB> Offices { get; set; }
 
+        public DbSet<UserOfficeDB> AspNetUserOffices { get; set; }
+
         #endregion DbSet Setups
 
         public override int SaveChanges()
@@ -153,6 +156,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new FileTypesMap());
             modelBuilder.ApplyConfiguration(new InsuranceCompanyMap());
             modelBuilder.ApplyConfiguration(new OfficeDBMap());
+            modelBuilder.ApplyConfiguration(new UserOfficeDBMap());
         }
     }
 }

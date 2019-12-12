@@ -23,6 +23,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Solutio.Core.Services.ApplicationServices.RefreshTokenServices;
 using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.AppUsers;
+using Solutio.Core.Services.ApplicationServices.AdressServices;
+using Solutio.Core.Services.ApplicationServices.OfficeServices;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -39,6 +41,8 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly RoleManager<IdentityRole<int>> roleManager;
         private readonly IRefreshTokenService refreshTokenService;
         private readonly IGetUserService getUserService;
+        private readonly ICreateAdressService createAdressService;
+        private readonly IOfficeService officeService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
@@ -48,7 +52,9 @@ namespace Solutio.ApiServices.Api.Controllers
             ISendConfirmationEmailService sendConfirmationEmailService,
             ISendResetPasswordService sendResetPasswordService,
             IRefreshTokenService refreshTokenService,
-            IGetUserService getUserService)
+            IGetUserService getUserService,
+            ICreateAdressService createAdressService,
+            IOfficeService officeService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
@@ -58,6 +64,8 @@ namespace Solutio.ApiServices.Api.Controllers
             this.roleManager = roleManager;
             this.refreshTokenService = refreshTokenService;
             this.getUserService = getUserService;
+            this.createAdressService = createAdressService;
+            this.officeService = officeService;
         }
 
         [Route("Create")]
@@ -66,12 +74,22 @@ namespace Solutio.ApiServices.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> CreateUser([FromBody] NewUserDto userInfo)
         {
-            try
-            {
+            try {
                 if (userInfo == null) return BadRequest();
 
-                var user = new ApplicationUser { UserName = userInfo.Email, Email = userInfo.Email , PhoneNumber = userInfo.PhoneNumber, IsEnabled = true};
+                var adressId = await CreateAdress(userInfo);
+
+                var user = new ApplicationUser {
+                    UserName = userInfo.Email,
+                    Email = userInfo.Email,
+                    PhoneNumber = userInfo.PhoneNumber,
+                    Matricula = userInfo.Matricula,
+                    AdressId = adressId,
+                    IsEnabled = true};
+
                 var result = await userManager.CreateAsync(user, userInfo.Password);
+
+                await officeService.SaveUserOffices(user.Id, userInfo.Offices);
 
                 if (!result.Succeeded)
                 {
@@ -87,6 +105,22 @@ namespace Solutio.ApiServices.Api.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
+        }
+
+        private async Task<long> CreateAdress(NewUserDto userInfo) {
+            if (userInfo.City == null) return 0;
+            if (userInfo.Country == null) return 0;
+            if (userInfo.Province == null) return 0;
+            if (string.IsNullOrWhiteSpace(userInfo.Street)) return 0;
+            if (string.IsNullOrWhiteSpace(userInfo.StreetNumber)) return 0;
+
+            Adress adress = new Adress();
+            adress.CityId = (long)userInfo.City;
+            adress.ProvinceId = (long)userInfo.Province;
+            adress.Street = userInfo.Street;
+            adress.Number = userInfo.StreetNumber;
+
+           return await createAdressService.Save(adress);
         }
 
         [Route("DisableUser")]

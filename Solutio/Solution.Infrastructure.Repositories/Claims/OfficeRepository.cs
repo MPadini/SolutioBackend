@@ -23,5 +23,15 @@ namespace Solutio.Infrastructure.Repositories.Claims {
 
             return offices.Adapt<List<Office>>();
         }
+
+        public async Task SaveUserOffices(List<UserOffice> userOffices) {
+            if (userOffices == null) return;
+            if (!userOffices.Any()) return;
+
+            var mappedUserOffices = userOffices.Adapt<List<UserOfficeDB>>();
+
+            applicationDbContext.AspNetUserOffices.AddRange(mappedUserOffices);
+            applicationDbContext.SaveChanges();
+        }
     }
 }

@@ -13,5 +13,7 @@ namespace Solutio.Core.Services.Repositories
         Task<Adress> Update(Claim claim, Adress adress);
 
         Task<Adress> Save(Claim claim, Adress adress);
+
+        Task<long> Save(Adress adress);
     }
 }

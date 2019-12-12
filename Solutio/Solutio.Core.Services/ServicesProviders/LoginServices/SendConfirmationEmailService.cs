@@ -21,7 +21,12 @@ namespace Solutio.Core.Services.ServicesProviders.LoginServices
 
         public async Task Send(int userId, string email, string ConfirmationToken)
         {
-            await emailSender.SendEmailAsync(email, "Solutio - Por favor confirme su correo electronico", GenerateMessage(email, ConfirmationToken));
+            try {
+                await emailSender.SendEmailAsync(email, "Solutio - Por favor confirme su correo electronico", GenerateMessage(email, ConfirmationToken));
+            }
+            catch (System.Exception) {
+                //log
+            }
         }
 
         private string GenerateMessage(string email, string ConfirmationToken)

@@ -50,6 +50,16 @@ namespace Solutio.Infrastructure.Repositories.Claims
             return claimDb.Adress.Adapt<Adress>();
         }
 
+        public async Task<long> Save(Adress adress) {
+            if (adress == null) return default;
+
+            var adressDb = adress.Adapt<AdressDB>();
+            applicationDbContext.Adresses.Add(adressDb);
+            applicationDbContext.SaveChanges();
+
+            return adressDb.Id;
+        }
+
         public async Task<Adress> Update(Claim claim, Adress adress)
         {
             var claimDb = claimMapper.Map(claim);

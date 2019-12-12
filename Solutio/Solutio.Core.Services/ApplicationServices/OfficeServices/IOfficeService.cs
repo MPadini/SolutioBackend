@@ -8,5 +8,7 @@ namespace Solutio.Core.Services.ApplicationServices.OfficeServices {
     public interface IOfficeService {
 
         Task<List<Office>> GetAll();
+
+        Task SaveUserOffices(int userId, List<long> officesId);
     }
 }

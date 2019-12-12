@@ -211,7 +211,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IGetInsuranceCompanyService, GetInsuranceCompanyService>();
             services.AddTransient<IUpdateFileService, UpdateFileService>();
             services.AddTransient<IOfficeService, OfficeService>();
-
+            services.AddTransient<ICreateAdressService, CreateAdressService>();
+            
             #endregion Services Settings
 
             #region Builder Settings
