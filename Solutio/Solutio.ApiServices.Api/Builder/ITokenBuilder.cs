@@ -15,6 +15,8 @@ namespace Solutio.ApiServices.Api.Builder
 
         ITokenBuilder WithRole(List<string> roles);
 
+        ITokenBuilder WithOfficeId(long officeId);
+
         JwtSecurityToken Build();
     }
 }

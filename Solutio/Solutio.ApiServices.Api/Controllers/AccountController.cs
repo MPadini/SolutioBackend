@@ -225,7 +225,7 @@ namespace Solutio.ApiServices.Api.Controllers
                
                 var role = await userManager.GetRolesAsync(user);
 
-                return await BuildToken(user.Id, userInfo.Email, role.ToList());
+                return await BuildToken(user.Id, userInfo.Email, role.ToList(), userInfo.OfficeId);
             }
             catch (Exception ex)
             {
@@ -252,7 +252,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 var role = await userManager.GetRolesAsync(user);
                 if (role == null) return NotFound("Role does not exist");
 
-                return await BuildToken(user.Id, refreshToken.Email, role.ToList());
+                return await BuildToken(user.Id, refreshToken.Email, role.ToList(), refreshToken.OfficeId);
             }
             catch (Exception ex)
             {
@@ -366,9 +366,9 @@ namespace Solutio.ApiServices.Api.Controllers
         }
 
         #region private methods
-        private async Task< IActionResult> BuildToken(int userId, string userName, List<string> rolesName)
+        private async Task< IActionResult> BuildToken(int userId, string userName, List<string> rolesName, long officeId)
         {
-            var token = tokenBuilder.WithUserName(userName).WithUserId(userId).WithRole(rolesName).Build();
+            var token = tokenBuilder.WithUserName(userName).WithUserId(userId).WithRole(rolesName).WithOfficeId(officeId).Build();
             var expiration = DateTime.UtcNow.AddHours(1);
             var expirationTimeInSeconds = 1 * 60 * 60;
 

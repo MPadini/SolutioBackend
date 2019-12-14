@@ -46,7 +46,7 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                var userToSearch = await GetUserToSerch(userName);
+                var userToSearch = await GetUserToSearch(userName);
 
                 var claims = await getClaimService.GetAll(userToSearch);
                 if (claims == null || !claims.Any())
@@ -170,7 +170,7 @@ namespace Solutio.ApiServices.Api.Controllers
             }
         }
 
-        private async Task<string> GetUserToSerch(string userName) {
+        private async Task<string> GetUserToSearch(string userName) {
             string userToSearch = User.Identity.Name;
 
             var userAdmin = User.Claims.Select(c => new { c.Type, c.Value })

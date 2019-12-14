@@ -13,6 +13,7 @@ namespace Solutio.ApiServices.Api.Validators
         {
             RuleFor(x => x.Email).NotEmpty();
             RuleFor(x => x.Password).NotEmpty();
+            RuleFor(x => x.OfficeId).NotEmpty();
         }
     }
 }
