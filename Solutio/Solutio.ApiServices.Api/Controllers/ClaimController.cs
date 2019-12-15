@@ -12,6 +12,7 @@ using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Microsoft.AspNetCore.Cors;
 using Solutio.ApiServices.Api.Mappers;
+using System.Security.Claims;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -48,7 +49,10 @@ namespace Solutio.ApiServices.Api.Controllers
             {
                 var userToSearch = await GetUserToSearch(userName);
 
-                var claims = await getClaimService.GetAll(userToSearch);
+                var officeId = await GetOfficeId();
+                if (officeId <= 0) throw new ApplicationException("Oficina inválida");
+
+                var claims = await getClaimService.GetAll(userToSearch, await GetOfficeToSearch());
                 if (claims == null || !claims.Any())
                 {
                     return Ok();
@@ -113,10 +117,12 @@ namespace Solutio.ApiServices.Api.Controllers
         {
             try
             {
-                
                 if (claimDto == null) return BadRequest("ClaimDto null");
 
-                var claim = claimDtoMapper.Map(claimDto); 
+                var officeId = await GetOfficeId();
+                if (officeId <= 0) throw new ApplicationException("Oficina inválida");
+
+                var claim = claimDtoMapper.Map(claimDto, officeId); 
                 var claimId = await newClaimService.Save(claim, User.Identity.Name);
 
                 return Created("claim", new { claimId });
@@ -138,7 +144,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     return Ok();
                 }
 
-                var updatedClaim = claimDtoMapper.Map(claimDto);
+                var updatedClaim = claimDtoMapper.Map(claimDto, 0);
                 await updateClaimService.Update(updatedClaim, id);
 
                 return Created("claim", new { claim.Id });
@@ -180,6 +186,32 @@ namespace Solutio.ApiServices.Api.Controllers
             }
 
             return userToSearch;
+        }
+
+        private async Task<long> GetOfficeToSearch() {
+            var officeId = await GetOfficeId();
+
+            var userAdmin = User.Claims.Select(c => new { c.Type, c.Value })
+                .ToList().Where(x => x.Value.ToLower().Equals("admin"));
+
+            if (userAdmin.Any()) {
+                officeId = 0;
+            }
+
+            return officeId;
+        }
+
+        private async Task<long> GetOfficeId() {
+            string officeId = string.Empty;
+
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            if (identity != null) {
+                IEnumerable<System.Security.Claims.Claim> claims = identity.Claims;
+                // or
+                officeId = identity.FindFirst("officeId").Value;
+            }
+
+            return Convert.ToInt64(officeId);
         }
     }
 }

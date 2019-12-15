@@ -27,7 +27,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             return await setAlarmActivationService.Set(claim);
         }
 
-        public async Task<List<Claim>> GetAll(string userName)
+        public async Task<List<Claim>> GetAll(string userName, long officeId)
         {
             var claims = await claimRepository.GetAll();
             if (claims == null || !claims.Any()) return default;
@@ -36,6 +36,12 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
 
             claims = claims.Where(x => userToSearch == "" || x.UserName.ToLower().Equals(userToSearch.ToLower())).ToList();
             if (claims == null || !claims.Any()) return default;
+
+            if (officeId > 0) {
+                claims = claims.Where(x => x.OfficeId == officeId).ToList();
+                if (claims == null || !claims.Any()) return default;
+            }
+           
 
             claims.ForEach(async claim =>
             {

@@ -9,7 +9,7 @@ namespace Solutio.ApiServices.Api.Mappers
 {
     public interface IClaimDtoMapper
     {
-        Claim Map(ClaimDto claimDto);
+        Claim Map(ClaimDto claimDto, long officeId);
 
         ClaimDto Map(Claim claim);
     }

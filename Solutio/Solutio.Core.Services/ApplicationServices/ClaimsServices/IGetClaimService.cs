@@ -10,7 +10,7 @@ namespace Solutio.Core.Services.ApplicationServices.ClaimsServices
     {
         Task<Claim> GetById(long id);
 
-        Task<List<Claim>> GetAll(string userName);
+        Task<List<Claim>> GetAll(string userName, long officeId);
 
         Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany);
     }

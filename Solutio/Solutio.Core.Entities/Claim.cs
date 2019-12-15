@@ -43,5 +43,7 @@ namespace Solutio.Core.Entities
         public string UserName { get; set; }
 
         public bool Printed { get; set; }
+
+        public long OfficeId { get; set; }
     }
 }

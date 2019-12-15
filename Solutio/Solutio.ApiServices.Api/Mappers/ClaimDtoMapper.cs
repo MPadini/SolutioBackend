@@ -10,9 +10,14 @@ namespace Solutio.ApiServices.Api.Mappers
 {
     public class ClaimDtoMapper : IClaimDtoMapper
     {
-        public Claim Map(ClaimDto claimDto)
+        public Claim Map(ClaimDto claimDto, long officeId)
         {
             var claim = claimDto.Adapt<Claim>();
+
+            if (officeId > 0) {
+                claim.OfficeId = officeId;
+            }
+            
 
             if (claimDto.ClaimAdress != null)
             {
