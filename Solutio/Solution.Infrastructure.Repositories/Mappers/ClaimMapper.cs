@@ -63,6 +63,15 @@ namespace Solutio.Infrastructure.Repositories.Mappers
                 });
             }
 
+            if (claimDB.ClaimMessages != null && claimDB.ClaimMessages.Any())
+            {
+                claim.ClaimMessages = new List<ClaimMessage>();
+                claimDB.ClaimMessages.ForEach(x =>
+                {
+                    claim.ClaimMessages.Add(x.Adapt<ClaimMessage>());
+                });
+            }
+
             return claim;
         }
 
@@ -159,13 +168,23 @@ namespace Solutio.Infrastructure.Repositories.Mappers
                 });
             }
 
+            if (claim.ClaimMessages != null && claim.ClaimMessages.Any())
+            {
+                claimDb.ClaimMessages = new List<ClaimMessageDB>();
+                claim.ClaimThirdInsuredVehicles.ForEach(claimMessage =>
+                {
+                    claimDb.ClaimMessages.Add(claimMessage.Adapt<ClaimMessageDB>());
+                });
+            }
+
             return claimDb;
         }
 
         public List<Claim> Map(List<ClaimDB> claim)
         {
             List<Claim> claims = new List<Claim>();
-            foreach (var c in claim) {
+            foreach (var c in claim)
+            {
                 var result = Map(c);
                 claims.Add(result);
             }

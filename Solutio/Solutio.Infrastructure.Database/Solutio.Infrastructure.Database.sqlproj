@@ -93,6 +93,7 @@
     <Build Include="dbo\Post-Deployment\GetInsuranceCompanyClaims.sql" />
     <Build Include="Tables\Offices.sql" />
     <Build Include="Tables\AspNetUserOffices.sql" />
+    <Build Include="Tables\ClaimMessages.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />

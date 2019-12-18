@@ -34,6 +34,8 @@ namespace Solutio.Core.Entities
 
         public List<Vehicle> ClaimThirdInsuredVehicles { get; set; }
 
+        public List<ClaimMessage> ClaimMessages { get; set; }
+
         public decimal? TotalBudgetAmount { get; set; }
 
         public List<ClaimFile> Files { get; set; }

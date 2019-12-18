@@ -55,6 +55,12 @@ namespace Solutio.ApiServices.Api.Mappers
                 claim.ClaimThirdInsuredVehicles.ForEach(vehicle => vehicle.VehicleType = null);
             }
 
+            if (claimDto.ClaimMessages != null && claimDto.ClaimMessages.Any())
+            {
+                claim.ClaimMessages = new List<ClaimMessage>();
+                claim.ClaimMessages = claimDto.ClaimMessages.Adapt<List<ClaimMessage>>();
+            }
+
             return claim;
         }
 

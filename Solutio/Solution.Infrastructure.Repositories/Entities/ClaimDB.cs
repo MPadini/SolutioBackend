@@ -33,6 +33,8 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public List<ClaimThirdInsuredVehicleDB> ClaimThirdInsuredVehicles { get; set; }
 
+        public List<ClaimMessageDB> ClaimMessages { get; set; }
+
         public decimal? TotalBudgetAmount { get; set; }
 
         public List<ClaimFileDB> Files { get; set; }

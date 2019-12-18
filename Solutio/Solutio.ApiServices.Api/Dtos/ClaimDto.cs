@@ -27,6 +27,8 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public List<VehicleDto> ClaimThirdInsuredVehicles { get; set; }
 
+        public List<ClaimMessageDto> ClaimMessages { get; set; }
+
         public decimal? TotalBudgetAmount { get; set; }
 
         public AdressDto ClaimAdress { get; set; }
