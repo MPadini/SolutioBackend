@@ -34,6 +34,7 @@ using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredPerson;
 using Solutio.Core.Services.ApplicationServices.ClaimThirdInsuredVehicleServices;
 using Solutio.Core.Services.ApplicationServices.ClaimVehicleServices;
+using Solutio.Core.Services.ApplicationServices.ClaimWorkflowServices;
 using Solutio.Core.Services.ApplicationServices.CompanyServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
 using Solutio.Core.Services.ApplicationServices.Location;
@@ -56,6 +57,7 @@ using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
 using Solutio.Core.Services.ServicesProviders.ClaimThirdInsuredPerson;
 using Solutio.Core.Services.ServicesProviders.ClaimThirdInsuredVehicleServices;
 using Solutio.Core.Services.ServicesProviders.ClaimVehicleServices;
+using Solutio.Core.Services.ServicesProviders.ClaimWorkflowServices;
 using Solutio.Core.Services.ServicesProviders.CompanyServices;
 using Solutio.Core.Services.ServicesProviders.FileService;
 using Solutio.Core.Services.ServicesProviders.Location;
@@ -168,6 +170,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IInsuranceCompanyRepository, InsuranceCompanyRepository>();
             services.AddTransient<IOfficeRepository, OfficeRepository>();
             services.AddTransient<IClaimMessagesRepository, ClaimMessagesRepository>();
+            services.AddTransient<IClaimWorkflowRepository, ClaimWorkflowRepository>();
 
             #endregion Repositories Settings
 
@@ -219,7 +222,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IGetClaimMessagesService, GetClaimMessagesService>();
             services.AddTransient<IUpdateClaimMessagesService, UpdateClaimMessagesService>();
             services.AddTransient<IUploadClaimMessagesService, UploadClaimMessagesService>();
-
+            services.AddTransient<IClaimWorkflowService, ClaimWorkflowService>();
 
             #endregion Services Settings
 

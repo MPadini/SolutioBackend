@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq;
+using Solutio.Core.Services.ApplicationServices.ClaimWorkflowServices;
 
 namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
 {
@@ -16,15 +17,18 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
         private readonly IClaimStateFactory claimStateFactory;
         private readonly IClaimRepository claimRepository;
         private readonly IClaimStateRepository stateRepository;
+        private readonly IClaimWorkflowService claimWorkflowService;
 
         public ChangeClaimStateService(
             IClaimStateFactory claimStateFactory, 
             IClaimRepository claimRepository,
-            IClaimStateRepository stateRepository)
+            IClaimStateRepository stateRepository,
+            IClaimWorkflowService claimWorkflowService)
         {
             this.claimStateFactory = claimStateFactory;
             this.claimRepository = claimRepository;
             this.stateRepository = stateRepository;
+            this.claimWorkflowService = claimWorkflowService;
         }
 
         public async Task<bool> ChangeState(Claim claim, long newStateId)
@@ -32,6 +36,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
             await ValidateInput(claim, newStateId);
 
             await Change(claim, newStateId);
+
+            await claimWorkflowService.RegisterWorkflow(newStateId ,claim.Id);
 
             return true;
         }

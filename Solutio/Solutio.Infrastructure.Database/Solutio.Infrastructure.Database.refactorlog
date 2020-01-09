@@ -35,4 +35,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="UserId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="64c3e504-8460-4c05-b4c2-0ee2f46af988" ChangeDateTime="01/09/2020 20:17:51">
+    <Property Name="ElementName" Value="[dbo].[ClaimWorkflows].[StateId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ClaimWorkflows]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ClaimStateId" />
+  </Operation>
 </Operations>

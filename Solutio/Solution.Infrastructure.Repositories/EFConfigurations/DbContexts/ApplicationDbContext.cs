@@ -93,7 +93,10 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
         public DbSet<OfficeDB> Offices { get; set; }
 
         public DbSet<UserOfficeDB> AspNetUserOffices { get; set; }
+
         public DbSet<ClaimMessageDB> ClaimMessages { get; set; }
+
+        public DbSet<ClaimWorkflowDB> ClaimWorkflows { get; set; }
 
         #endregion DbSet Setups
 
@@ -159,6 +162,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
             modelBuilder.ApplyConfiguration(new OfficeDBMap());
             modelBuilder.ApplyConfiguration(new UserOfficeDBMap());
             modelBuilder.ApplyConfiguration(new ClaimMessageDBMap());
+            modelBuilder.ApplyConfiguration(new ClaimWorkflowDBMap());
         }
     }
 }

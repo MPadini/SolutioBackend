@@ -94,6 +94,7 @@
     <Build Include="Tables\Offices.sql" />
     <Build Include="Tables\AspNetUserOffices.sql" />
     <Build Include="Tables\ClaimMessages.sql" />
+    <Build Include="Tables\ClaimWorkflows.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />
