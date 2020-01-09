@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[ClaimMessages]
 (
-	[Id] INT NOT NULL IDENTITY, 
+	[Id] BIGINT NOT NULL IDENTITY, 
     [ClaimId] BIGINT NOT NULL, 
     [UserId] int NOT NULL, 
     [Message] VARCHAR(MAX) NOT NULL, 

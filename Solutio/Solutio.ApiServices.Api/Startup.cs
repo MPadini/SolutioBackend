@@ -27,6 +27,7 @@ using Solutio.Core.Services.ApplicationServices.AdressServices;
 using Solutio.Core.Services.ApplicationServices.AlarmServices;
 using Solutio.Core.Services.ApplicationServices.AppUsers;
 using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
+using Solutio.Core.Services.ApplicationServices.ClaimMessagesService;
 using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
@@ -48,6 +49,7 @@ using Solutio.Core.Services.ServicesProviders.AdressServices;
 using Solutio.Core.Services.ServicesProviders.AlarmServices;
 using Solutio.Core.Services.ServicesProviders.AppUsers;
 using Solutio.Core.Services.ServicesProviders.ClaimDocumentServices;
+using Solutio.Core.Services.ServicesProviders.ClaimMessagesService;
 using Solutio.Core.Services.ServicesProviders.ClaimPersonServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
@@ -165,7 +167,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IClaimDocumentTemplateRepository, ClaimDocumentTemplateRepository>();
             services.AddTransient<IInsuranceCompanyRepository, InsuranceCompanyRepository>();
             services.AddTransient<IOfficeRepository, OfficeRepository>();
-            
+            services.AddTransient<IClaimMessagesRepository, ClaimMessagesRepository>();
+
             #endregion Repositories Settings
 
             #region Mappers Settings
@@ -212,7 +215,12 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IUpdateFileService, UpdateFileService>();
             services.AddTransient<IOfficeService, OfficeService>();
             services.AddTransient<ICreateAdressService, CreateAdressService>();
-            
+            services.AddTransient<IDeleteClaimMessagesService, DeleteClaimMessagesService>();
+            services.AddTransient<IGetClaimMessagesService, GetClaimMessagesService>();
+            services.AddTransient<IUpdateClaimMessagesService, UpdateClaimMessagesService>();
+            services.AddTransient<IUploadClaimMessagesService, UploadClaimMessagesService>();
+
+
             #endregion Services Settings
 
             #region Builder Settings
