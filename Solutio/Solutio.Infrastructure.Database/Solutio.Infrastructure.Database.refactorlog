@@ -42,4 +42,11 @@
     <Property Name="ParentElementType" Value="SqlTable" />
     <Property Name="NewName" Value="ClaimStateId" />
   </Operation>
+  <Operation Name="Rename Refactor" Key="819fc5ff-8a69-46f2-96f8-3a30f22ff9c4" ChangeDateTime="01/10/2020 19:10:03">
+    <Property Name="ElementName" Value="[dbo].[ClaimMessages].[UserId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ClaimMessages]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="UserName" />
+  </Operation>
 </Operations>

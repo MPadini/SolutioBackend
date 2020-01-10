@@ -56,7 +56,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                    x.Id,
                    x.ClaimId,
                    x.Message,
-                   x.UserId,
+                   x.UserName,
                    x.Viewed,
                    x.Created,
                    x.Modified
@@ -72,7 +72,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     x.Id,
                     x.ClaimId,
                     x.Message,
-                    x.UserId,
+                    x.UserName,
                     x.Viewed,
                     x.Created,
                     x.Modified

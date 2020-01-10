@@ -12,7 +12,7 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.FluentSetups
         {
             builder.HasKey(message => message.Id);
             builder.Property(message => message.ClaimId).IsRequired();
-            builder.Property(message => message.UserId).IsRequired();
+            builder.Property(message => message.UserName).IsRequired();
             builder.Property(message => message.Message).IsRequired();
             builder.Property(message => message.Viewed).IsRequired();
             builder.HasQueryFilter(message => message.Deleted == null);

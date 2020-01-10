@@ -9,7 +9,7 @@ namespace Solutio.Core.Entities
     {
         public long ClaimId { get; set; }
 
-        public int UserId { get; set; }
+        public string UserName{ get; set; }
 
         public string Message { get; set; }
 

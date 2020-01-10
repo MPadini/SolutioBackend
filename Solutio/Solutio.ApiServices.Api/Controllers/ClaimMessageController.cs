@@ -73,6 +73,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     return Ok();
                 }
                 var claimMessage = claimMessageDto.Adapt<ClaimMessage>();
+                claimMessage.UserName = User.Identity.Name;
 
                 var messageId = await uploadClaimMessagesService.Upload(claimMessage);
 
