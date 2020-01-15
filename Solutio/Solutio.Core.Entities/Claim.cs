@@ -20,6 +20,10 @@ namespace Solutio.Core.Entities
 
         public long StateId { get; set; }
 
+        public string SinisterNumber { get; set; }
+
+        public string Outro { get; set; }
+
         public ClaimState State { get; set; }
 
         public bool StateAlarmActive { get; set; }

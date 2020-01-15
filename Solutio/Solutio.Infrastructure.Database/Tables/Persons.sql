@@ -13,6 +13,8 @@
 	[Created] DATETIME NOT null DEFAULT GETDATE(),
 	[Modified] DATETIME,
 	[Deleted] DATETIME,
+    [WasInjured] BIT NULL DEFAULT 0, 
+    [IsCarHolder] BIT NULL DEFAULT 0, 
     CONSTRAINT [PK_Persons] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Persons_PersonTypes_PersonTypeId] FOREIGN KEY ([PersonTypeId]) REFERENCES [PersonTypes] ([Id])
 );

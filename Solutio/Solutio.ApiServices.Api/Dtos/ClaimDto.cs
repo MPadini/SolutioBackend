@@ -17,6 +17,10 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public bool StateAlarmActive { get; set; }
 
+        public string SinisterNumber { get; set; }
+
+        public string Outro { get; set; }
+
         public ClaimStateDto State { get; set; }
 
         public List<PersonDto> ClaimInsuredPersons { get; set; }

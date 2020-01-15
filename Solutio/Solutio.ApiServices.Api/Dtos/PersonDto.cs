@@ -23,7 +23,11 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public string Email { get; set; }
 
-       // public string Adress { get; set; }
+        // public string Adress { get; set; }
+
+        public bool WasInjured { get; set; }
+
+        public bool IsCarHolder { get; set; }
 
         public long PersonTypeId { get; set; }
 

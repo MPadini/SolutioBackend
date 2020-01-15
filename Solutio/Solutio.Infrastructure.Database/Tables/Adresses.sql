@@ -7,6 +7,7 @@
 	[Lng] nvarchar(100) NULL,
 	[Lat] nvarchar(100) NULL,
     [Intersection] nvarchar(max) NULL,
+	[BetweenStreets] NVARCHAR(MAX) NULL, 
 	[Created] datetime NOT NULL DEFAULT GetDate(),
     [Modified] datetime NULL,
     [Deleted] datetime NULL,

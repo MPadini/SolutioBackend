@@ -21,6 +21,10 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public long StateId { get; set; }
 
+        public string SinisterNumber { get; set; }
+
+        public string Outro { get; set; }
+
         public DateTime StateModifiedDate { get; set; }
 
         public ClaimStateDB State { get; set; }
