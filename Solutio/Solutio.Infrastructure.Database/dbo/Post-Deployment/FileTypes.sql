@@ -7,7 +7,8 @@ USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
 	(1, N'Archivo varios'),
 	(2, N'Dni'),
-	(3, N'Denuncia')
+	(3, N'Denuncia'),
+	(4, N'Reclamo')
 ) AS Source([FileTypesId], [Description]) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [FileTypesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 

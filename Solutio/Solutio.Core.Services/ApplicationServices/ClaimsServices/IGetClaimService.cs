@@ -13,5 +13,7 @@ namespace Solutio.Core.Services.ApplicationServices.ClaimsServices
         Task<List<Claim>> GetAll(string userName, long officeId);
 
         Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany);
+
+        Task<List<Claim>> GetClaimByState(long stateId);
     }
 }

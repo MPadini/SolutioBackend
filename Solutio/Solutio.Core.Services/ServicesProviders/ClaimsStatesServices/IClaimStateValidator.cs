@@ -10,7 +10,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices
     {
         protected string ErrorMessage => "No es posible cambiar el estado realizar el cambio de estado solicitado";
 
-        public abstract Task<bool> CanChangeState(ClaimState.eId claimState);
+        public abstract Task<long> ChangeNextState(Claim claim, long newStateSetedByuser);
     }
 }
  

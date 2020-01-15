@@ -9,5 +9,7 @@ namespace Solutio.Core.Services.ApplicationServices.ClaimsStatesServices
     public interface IChangeClaimStateService
     {
         Task<bool> ChangeState(Claim claim, long newStateId);
+
+        Task SendClaimsToAjuicio();
     }
 }

@@ -23,5 +23,7 @@ namespace Solutio.Core.Services.Repositories.ClaimsRepositories
         Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany);
 
         Task MarkAsPrinted(List<Claim> claims);
+
+        Task<List<Claim>> GetClaimByState(long stateId);
     }
 }

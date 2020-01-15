@@ -13,6 +13,7 @@ using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Microsoft.AspNetCore.Cors;
 using Solutio.ApiServices.Api.Mappers;
 using System.Security.Claims;
+using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 
 namespace Solutio.ApiServices.Api.Controllers
 {
@@ -27,19 +28,22 @@ namespace Solutio.ApiServices.Api.Controllers
         private readonly IUpdateClaimService updateClaimService;
         private readonly IDeleteClaimService deleteClaimService;
         private readonly IClaimDtoMapper claimDtoMapper;
+        private readonly IChangeClaimStateService changeClaimStateService;
 
         public ClaimController(
             INewClaimService newClaimService, 
             IGetClaimService getClaimService, 
             IUpdateClaimService updateClaimService, 
             IDeleteClaimService deleteClaimService, 
-            IClaimDtoMapper claimDtoMapper)
+            IClaimDtoMapper claimDtoMapper,
+            IChangeClaimStateService changeClaimStateService)
         {
             this.newClaimService = newClaimService;
             this.getClaimService = getClaimService;
             this.updateClaimService = updateClaimService;
             this.deleteClaimService = deleteClaimService;
             this.claimDtoMapper = claimDtoMapper;
+            this.changeClaimStateService = changeClaimStateService;
         }
 
         [HttpGet]
@@ -57,6 +61,9 @@ namespace Solutio.ApiServices.Api.Controllers
                 {
                     return Ok();
                 }
+
+                
+                 await changeClaimStateService.SendClaimsToAjuicio();
 
                 var claimsDto = claims.Adapt<List<ClaimDto>>();
 

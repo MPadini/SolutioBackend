@@ -17,6 +17,9 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.4.0" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.8" />
+    <PackageReference Include="HangFire.Core" Version="1.7.8" />
+    <PackageReference Include="HangFire.SqlServer" Version="1.7.8" />
     <PackageReference Include="iTextSharp-LGPL" Version="4.1.6" />
     <PackageReference Include="Mapster" Version="4.1.0" />
     <PackageReference Include="Select.HtmlToPdf.NetCore" Version="19.2.0" />

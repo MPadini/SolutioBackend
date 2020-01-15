@@ -114,6 +114,12 @@ namespace Solutio.Infrastructure.Repositories.Claims
             return claimMapper.Map(claims);
         }
 
+        public async Task<List<Claim>> GetClaimByState(long stateId) {
+            var claimsDB = applicationDbContext.Claims.AsNoTracking().Where(x => x.StateId == stateId).ToList();
+
+            return claimMapper.Map(claimsDB);
+        }
+
 
         private async Task<ClaimDB> Get(long id)
         {

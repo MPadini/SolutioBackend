@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using FluentValidation.AspNetCore;
+using Hangfire;
+using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -102,6 +104,23 @@ namespace Solutio.ApiServices.Api
             //    o.AssumeDefaultVersionWhenUnspecified = true;
             //    o.DefaultApiVersion = new ApiVersion(1, 0);
             //});
+
+            // Add Hangfire services.
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    UsePageLocksOnDequeue = true,
+                    DisableGlobalLocks = true
+                }));
+
+            // Add the processing server as IHostedService
+            services.AddHangfireServer();
 
             //db context
             services.AddDbContext<ApplicationDbContext>(options =>
@@ -239,7 +258,7 @@ namespace Solutio.ApiServices.Api
             #endregion Factories Settings
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider, IRecurringJobManager recurringJobManager)
         {
             if (env.IsDevelopment())
             {
@@ -252,6 +271,10 @@ namespace Solutio.ApiServices.Api
             {
                 c.SwaggerEndpoint(SwaggerConfiguration.EndpointUrl, SwaggerConfiguration.EndpointDescription);
             });
+
+            app.UseHangfireDashboard();
+
+            recurringJobManager.AddOrUpdate<IChangeClaimStateService>("some-id", x => x.SendClaimsToAjuicio(), Cron.Daily());
 
             app.UseCors("AllowOrigin");
 

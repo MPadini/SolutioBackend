@@ -1,6 +1,7 @@
 ﻿using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
+using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
 using Solutio.Core.Services.ApplicationServices.FileService;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private readonly IGetFileService getFileService;
         private readonly IUpdateFileService updateFileService;
         private readonly IUpdateClaimService updateClaimService;
+        private readonly IChangeClaimStateService changeClaimStateService;
 
         public GetClaimDocumentService(
             IPdfMerge pdfMerge,
@@ -25,7 +27,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             IGetClaimService getClaimService,
             IGetFileService getFileService,
             IUpdateFileService updateFileService,
-            IUpdateClaimService updateClaimService) {
+            IUpdateClaimService updateClaimService,
+            IChangeClaimStateService changeClaimStateService) {
             this.pdfMerge = pdfMerge;
             this.getHtmlTemplatesService = getHtmlTemplatesService;
             this.htmlToPdfHelperService = htmlToPdfHelperService;
@@ -33,6 +36,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             this.getFileService = getFileService;
             this.updateFileService = updateFileService;
             this.updateClaimService = updateClaimService;
+            this.changeClaimStateService = changeClaimStateService;
         }
 
         public async Task<byte[]> GetFile(List<long> claimIds, List<long> documentsIds, List<long> claimFileIds) {
@@ -287,6 +291,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private async Task<ClaimFilePage> GenerateClaimPage(Claim claim, string htmlTemplate) {
             if (claim.StateId != (long)ClaimState.eId.Pendiente_de_Presentación) return null;
             ClaimFilePage claimDocPage = new ClaimFilePage();
+
+            //Change state
+            await changeClaimStateService.ChangeState(claim, (long)ClaimState.eId.Presentado);
 
             var template = await ReemplaceTags(htmlTemplate, claim);
 
