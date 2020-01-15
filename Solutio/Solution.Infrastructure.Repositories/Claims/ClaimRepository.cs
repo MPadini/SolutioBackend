@@ -12,10 +12,8 @@ using System.Threading.Tasks;
 using System.Linq;
 using Solutio.Core.Services.Repositories;
 
-namespace Solutio.Infrastructure.Repositories.Claims
-{
-    public class ClaimRepository : IClaimRepository
-    {
+namespace Solutio.Infrastructure.Repositories.Claims {
+    public class ClaimRepository : IClaimRepository {
         private readonly ApplicationDbContext applicationDbContext;
         private readonly IClaimMapper claimMapper;
         private readonly IClaimThirdInsuredVehicleRepository claimThirdInsuredVehicleRepository;
@@ -33,8 +31,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             IClaimInsuredVehicleRepository claimInsuredVehicleRepository,
             IClaimInsuredPersonRepository claimInsuredPersonRepository,
             IClaimAdressRepository claimAdressRepository,
-            IClaimFileRepository claimFileRepository)
-        {
+            IClaimFileRepository claimFileRepository) {
             this.applicationDbContext = applicationDbContext;
             this.claimMapper = claimMapper;
             this.claimThirdInsuredVehicleRepository = claimThirdInsuredVehicleRepository;
@@ -45,13 +42,10 @@ namespace Solutio.Infrastructure.Repositories.Claims
             this.claimFileRepository = claimFileRepository;
         }
 
-        public async Task<long> Save(Claim claim, string userName)
-        {
+        public async Task<long> Save(Claim claim, string userName) {
             long result = 0;
-            using (var transaction = applicationDbContext.Database.BeginTransaction())
-            {
-                try
-                {
+            using (var transaction = applicationDbContext.Database.BeginTransaction()) {
+                try {
                     var claimDb = claimMapper.Map(claim);
 
                     claimDb.StateModifiedDate = DateTime.Now;
@@ -64,8 +58,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
                     result = claimDb.Id;
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     transaction.Rollback();
                     throw new ApplicationException(ex.Message);
                 }
@@ -74,14 +67,12 @@ namespace Solutio.Infrastructure.Repositories.Claims
             return result;
         }
 
-        public async Task<Claim> GetById(long id)
-        {
+        public async Task<Claim> GetById(long id) {
             var claimDb = await Get(id);
             return claimMapper.Map(claimDb);
         }
 
-        public async Task<List<Claim>> GetAll()
-        {
+        public async Task<List<Claim>> GetAll() {
             var claimsDb = await applicationDbContext.Claims.AsNoTracking()
                 .Include(x => x.State)
                 .ThenInclude(e => e.StateConfigurations)
@@ -95,10 +86,10 @@ namespace Solutio.Infrastructure.Repositories.Claims
         }
 
         public async Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany) {
-            var claimsDb = applicationDbContext.Claims.FromSql($"SELECT c.* FROM [dbo].[Vehicles] V  INNER JOIN [dbo].[ClaimThirdInsuredVehicles] "+ "" +
+            var claimsDb = applicationDbContext.Claims.AsNoTracking().FromSql($"SELECT c.* FROM [dbo].[Vehicles] V  INNER JOIN [dbo].[ClaimThirdInsuredVehicles] " + "" +
                 $"IV ON IV.VehicleId = V.Id INNER JOIN [dbo].[Claims] C ON C.Id = IV.ClaimId where V.InsuranceCompanyId = {insuranceCompany} " +
                 "and c.StateId in (21, 22, 23, 32, 33, 41, 43, 44) ").ToList();
-            if (claimsDb == null) return null;     
+            if (claimsDb == null) return null;
 
             List<long> claimsId = new List<long>();
             claimsId.AddRange(claimsDb.Select(x => x.Id));
@@ -121,10 +112,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
         }
 
 
-        private async Task<ClaimDB> Get(long id)
-        {
-            try
-            {
+        private async Task<ClaimDB> Get(long id) {
+            try {
                 return await applicationDbContext.Claims.AsNoTracking()
                .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
                .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle)
@@ -136,57 +125,49 @@ namespace Solutio.Infrastructure.Repositories.Claims
                .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)
                .FirstOrDefaultAsync(x => x.Id == id);
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
 
                 throw;
             }
 
         }
 
-        public async Task Update(Claim claim, long claimId)
-        {
-            try
-            {
+        public async Task Update(Claim claim, long claimId) {
+            try {
                 var claimDb = claimMapper.Map(claim);
 
                 applicationDbContext.Claims.Update(await SetClaimNull(claimDb));
                 applicationDbContext.SaveChanges();
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 throw new ApplicationException(ex.Message);
             }
         }
 
-        public async Task UpdateState(Claim claim, long claimId)
-        {
-            using (var transaction = applicationDbContext.Database.BeginTransaction())
-            {
-                try
-                {
-                    var claimDb = await Get(claimId);
-                    if (claimDb == null) return;
+        public async Task UpdateState(Claim claim, long claimId) {
+            //using (var transaction = applicationDbContext.Database.BeginTransaction())
+            //{
+            try {
+                var claimDb = await Get(claimId);
+                if (claimDb == null) return;
 
-                    claimDb.State = null;
-                    claimDb.StateId = claim.StateId;
-                    claimDb.StateModifiedDate = claim.StateModifiedDate;
+                claimDb.State = null;
+                claimDb.StateId = claim.StateId;
+                claimDb.StateModifiedDate = claim.StateModifiedDate;
 
-                    applicationDbContext.Claims.Update(claimDb);
-                    applicationDbContext.SaveChanges();
+                applicationDbContext.Claims.Update(claimDb);
+                applicationDbContext.SaveChanges();
 
-                    transaction.Commit();
-                }
-                catch (Exception ex)
-                {
-                    transaction.Rollback();
-                    throw new ApplicationException(ex.Message);
-                }
+                //  transaction.Commit();
             }
+            catch (Exception ex) {
+                //  transaction.Rollback();
+                throw new ApplicationException(ex.Message);
+            }
+            // }
         }
 
-        private async Task DeleteAssociatedEntities(Claim claim)
-        {
+        private async Task DeleteAssociatedEntities(Claim claim) {
             await claimInsuredPersonRepository.DeleteAll(claim);
             await claimThirdInsuredVehicleRepository.DeleteAll(claim);
             await claimInsuredVehicleRepository.DeleteAll(claim);
@@ -195,13 +176,10 @@ namespace Solutio.Infrastructure.Repositories.Claims
             await claimAdressRepository.Delete(claim);
         }
 
-        public async Task Delete(Claim claim)
-        {
+        public async Task Delete(Claim claim) {
             var claimDb = claimMapper.Map(claim);
-            using (var transaction = applicationDbContext.Database.BeginTransaction())
-            {
-                try
-                {
+            using (var transaction = applicationDbContext.Database.BeginTransaction()) {
+                try {
                     await DeleteAssociatedEntities(claim);
 
                     applicationDbContext.Claims.Remove(await SetClaimNull(claimDb));
@@ -209,16 +187,14 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
                     transaction.Commit();
                 }
-                catch (Exception ex)
-                {
+                catch (Exception ex) {
                     transaction.Rollback();
                     throw new ApplicationException(ex.Message);
                 }
             }
         }
 
-        private async Task<ClaimDB> SetClaimNull(ClaimDB claimDB)
-        {
+        private async Task<ClaimDB> SetClaimNull(ClaimDB claimDB) {
             claimDB.ClaimInsuredPersons = null;
             claimDB.ClaimInsuredVehicles = null;
             claimDB.ClaimThirdInsuredPersons = null;

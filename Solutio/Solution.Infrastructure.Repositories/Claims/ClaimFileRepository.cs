@@ -87,7 +87,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                   x.FileType,
                   x.FileTypeId,
                   x.Printed
-              });
+              }).ToList();
 
                 return filesWithBase64.Adapt<List<ClaimFile>>();
 
@@ -100,7 +100,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
                     x.FileType,
                     x.FileTypeId,
                     x.Printed
-                });
+                }).ToList();
 
             return files.Adapt<List<ClaimFile>>();
         }
