@@ -70,6 +70,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             claimDb.Hour = claimNewData.Hour;
             claimDb.TotalBudgetAmount = claimNewData.TotalBudgetAmount;
             claimDb.Date = claimNewData.Date;
+            claimDb.Outro = claimNewData.Outro;
+            claimDb.SinisterNumber = claimNewData.SinisterNumber;
 
             if (claimNewData.Adress != null)
             {

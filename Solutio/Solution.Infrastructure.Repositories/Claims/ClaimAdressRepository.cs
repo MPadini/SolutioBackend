@@ -72,6 +72,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
             claimDb.Adress.ProvinceId = adress.ProvinceId;
             claimDb.Adress.Lat = adress.Lat;
             claimDb.Adress.Lng = adress.Lng;
+            claimDb.Adress.BetweenStreets = adress.BetweenStreets;
 
             applicationDbContext.Adresses.Update(claimDb.Adress);
             applicationDbContext.SaveChanges();

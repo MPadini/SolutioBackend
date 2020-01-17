@@ -152,7 +152,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             htmlString = htmlString.Replace("[thirdCompany]", await GetCompanyName(claim));
             htmlString = htmlString.Replace("[sinisterDate]", DateTime.Now.ToString("dd/MM/yyyy"));
             htmlString = htmlString.Replace("[thirdVehicleDomain]", await GetThirdVehicleDomain(claim));
-            htmlString = htmlString.Replace("[sinisterNumber]", "1234567");
+            htmlString = htmlString.Replace("[sinisterNumber]", claim.SinisterNumber);
             htmlString = htmlString.Replace("[montoOfrecimiento]", "$500");
             htmlString = htmlString.Replace("[montoReclamado]", "$100000000");
 

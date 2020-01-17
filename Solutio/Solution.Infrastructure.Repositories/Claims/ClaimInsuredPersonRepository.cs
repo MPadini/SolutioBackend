@@ -86,6 +86,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
             personToUpdate.PersonTypeId = personNewData.PersonTypeId;
             personToUpdate.Surname = personNewData.Surname;
             personToUpdate.TelephoneNumber = personNewData.TelephoneNumber;
+            personToUpdate.IsCarHolder = personNewData.IsCarHolder;
+            personToUpdate.WasInjured = personNewData.WasInjured;
 
             applicationDbContext.Persons.Update(personToUpdate);
             applicationDbContext.SaveChanges();
