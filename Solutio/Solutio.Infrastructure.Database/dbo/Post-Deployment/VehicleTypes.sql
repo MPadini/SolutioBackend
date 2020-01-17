@@ -6,8 +6,12 @@ MERGE INTO [dbo].[VehicleTypes] AS Target
 
 USING (VALUES
 --¨CARGO DATOS PARA MERGE (ORIGEN)
-	(1, N'Automóvil'),
-	(2, N'Remolque')
+	(1, N'Auto/Camioneta'),
+	(2, N'Moto'),
+	(3, N'Bicicleta'),
+	(4, N'Remolque'),
+	(5, N'Taxi'),
+	(6, N'Remis')
 ) AS Source([VehicleTypesId], [Description]) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [VehicleTypesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 
