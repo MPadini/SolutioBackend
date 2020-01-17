@@ -19,3 +19,4 @@ Post-Deployment Script Template
 :r .\FileTypes.sql
 :r .\InsuranceCompanies.sql
 :r .\Offices.sql
+:r .\ClaimOfferStates.sql

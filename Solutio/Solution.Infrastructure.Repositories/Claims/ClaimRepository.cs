@@ -123,6 +123,7 @@ namespace Solutio.Infrastructure.Repositories.Claims {
                .Include(x => x.Adress).ThenInclude(e => e.City)
                .Include(x => x.Adress).ThenInclude(e => e.Province)
                .Include(x => x.State).ThenInclude(e => e.StateConfigurations).ThenInclude(d => d.AllowedState)
+               .Include(x => x.ClaimOffers).ThenInclude(e => e.ClaimOfferState)
                .FirstOrDefaultAsync(x => x.Id == id);
             }
             catch (Exception ex) {
@@ -201,6 +202,7 @@ namespace Solutio.Infrastructure.Repositories.Claims {
             claimDB.ClaimThirdInsuredVehicles = null;
             claimDB.Files = null;
             claimDB.Adress = null;
+            claimDB.ClaimOffers = null;
             return claimDB;
         }
 

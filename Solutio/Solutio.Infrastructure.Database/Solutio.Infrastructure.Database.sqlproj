@@ -95,6 +95,8 @@
     <Build Include="Tables\AspNetUserOffices.sql" />
     <Build Include="Tables\ClaimMessages.sql" />
     <Build Include="Tables\ClaimWorkflows.sql" />
+    <Build Include="Tables\ClaimOffers.sql" />
+    <Build Include="Tables\ClaimOfferStates.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="dbo\Post-Deployment\PostDeployment.sql" />
@@ -112,5 +114,6 @@
     <None Include="dbo\Post-Deployment\FileTypes.sql" />
     <None Include="dbo\Post-Deployment\InsuranceCompanies.sql" />
     <None Include="dbo\Post-Deployment\Offices.sql" />
+    <None Include="dbo\Post-Deployment\ClaimOfferStates.sql" />
   </ItemGroup>
 </Project>

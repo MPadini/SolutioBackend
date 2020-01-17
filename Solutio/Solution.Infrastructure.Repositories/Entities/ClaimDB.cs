@@ -43,6 +43,8 @@ namespace Solutio.Infrastructure.Repositories.Entities
 
         public List<ClaimFileDB> Files { get; set; }
 
+        public List<ClaimOfferDB> ClaimOffers { get; set; }
+
         public long? AdressId { get; set; }
 
         public AdressDB Adress { get; set; }

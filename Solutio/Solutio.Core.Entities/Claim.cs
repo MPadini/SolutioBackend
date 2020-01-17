@@ -40,6 +40,8 @@ namespace Solutio.Core.Entities
 
         public List<ClaimMessage> ClaimMessages { get; set; }
 
+        public List<ClaimOffer> ClaimOffers { get; set; }
+
         public decimal? TotalBudgetAmount { get; set; }
 
         public List<ClaimFile> Files { get; set; }
