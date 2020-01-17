@@ -98,9 +98,9 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimWorkflowDB> ClaimWorkflows { get; set; }
 
-        public DbSet<ClaimOfferDB> claimOffers { get; set; }
+        public DbSet<ClaimOfferDB> ClaimOffers { get; set; }
 
-        public DbSet<ClaimOfferStateDB> claimOfferStates { get; set; }
+        public DbSet<ClaimOfferStateDB> ClaimOfferStates { get; set; }
 
         #endregion DbSet Setups
 

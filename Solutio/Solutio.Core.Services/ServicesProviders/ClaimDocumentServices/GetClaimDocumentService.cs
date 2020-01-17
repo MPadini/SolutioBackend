@@ -215,7 +215,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                         claimFilePages.AddRange(allDoc);
                     }
 
-                    if(!claim.Printed) {
+                    if (!claim.Printed) {
                         var claimDoc = htmlTemplates.Where(x => x.Id == 2).FirstOrDefault();
                         var claimDocPage = await GenerateClaimPage(claim, claimDoc.HtmlTemplate);
                         if (claimDocPage != null) {
@@ -241,8 +241,13 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
         private async Task<string> AddOfferedAmount(Claim claim) {
             if (claim.StateId == (long)ClaimState.eId.Ofrecimiento_Rechazado ||
                 claim.StateId == (long)ClaimState.eId.Esperando_Ofrecimiento) {
-                //TODO: sacar hardcoded
-                return "$15000";
+
+                if (claim.ClaimOffers != null) {
+                    var claimOffer = claim.ClaimOffers.OrderByDescending(x => x.Created).FirstOrDefault();
+                    if (claimOffer != null) {
+                        return claimOffer.OfferedAmount.ToString();
+                    }
+                }
             }
 
             return string.Empty;

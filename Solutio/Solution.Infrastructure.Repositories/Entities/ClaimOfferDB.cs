@@ -5,8 +5,6 @@ using System.Text;
 namespace Solutio.Infrastructure.Repositories.Entities {
     public class ClaimOfferDB : BaseEntityDB {
 
-        public ClaimDB Claim { get; set; }
-
         public long ClaimId { get; set; }
 
         public decimal OfferedAmount { get; set; }

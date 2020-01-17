@@ -11,7 +11,9 @@ USING (VALUES
 	(2, N'Informado'),
 	(3, N'Ofrecimiento Aceptado'),
 	(4, N'Ofrecimiento Rechazado'),
-	(5, N'Pendiente de pago')
+	(5, N'Pendiente de pago'),
+	(6, N'Firmar Convenio'),
+	(7, N'Convenio Firmado')
 ) AS Source([ClaimOfferStateId], [Description]) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [ClaimOfferStateId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 
