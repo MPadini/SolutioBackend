@@ -115,7 +115,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 str.Append($"<tr>" +
                     $"<td>{claim.Id.ToString()}</td>" +
                     $"<td>{claim.ClaimInsuredVehicles.FirstOrDefault().Patent ?? string.Empty} </td>" +
-                    $"<td>{"123456"} </td>" +
+                    $"<td>{claim.SinisterNumber} </td>" +
                     $"<td>{claim.State.Description ?? string.Empty} </td>" +
                     $"<td>{daysDiff.ToString()}  </td>" +
                     $"<td> {await AddOfferedAmount(claim)} </td>" +
@@ -153,8 +153,11 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             htmlString = htmlString.Replace("[sinisterDate]", DateTime.Now.ToString("dd/MM/yyyy"));
             htmlString = htmlString.Replace("[thirdVehicleDomain]", await GetThirdVehicleDomain(claim));
             htmlString = htmlString.Replace("[sinisterNumber]", claim.SinisterNumber);
-            htmlString = htmlString.Replace("[montoOfrecimiento]", "$500");
-            htmlString = htmlString.Replace("[montoReclamado]", "$100000000");
+
+ 
+            htmlString = htmlString.Replace("[montoOfrecimiento]", await AddOfferedAmount(claim));
+            var value = claim.TotalBudgetAmount == null ? string.Empty : claim.TotalBudgetAmount.ToString();
+            htmlString = htmlString.Replace("[montoReclamado]", value);
 
             //Claim page
 

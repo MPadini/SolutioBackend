@@ -30,6 +30,7 @@ using Solutio.Core.Services.ApplicationServices.AlarmServices;
 using Solutio.Core.Services.ApplicationServices.AppUsers;
 using Solutio.Core.Services.ApplicationServices.ClaimDocumentServices;
 using Solutio.Core.Services.ApplicationServices.ClaimMessagesService;
+using Solutio.Core.Services.ApplicationServices.ClaimOfferServices;
 using Solutio.Core.Services.ApplicationServices.ClaimPersonServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsServices;
 using Solutio.Core.Services.ApplicationServices.ClaimsStatesServices;
@@ -53,6 +54,7 @@ using Solutio.Core.Services.ServicesProviders.AlarmServices;
 using Solutio.Core.Services.ServicesProviders.AppUsers;
 using Solutio.Core.Services.ServicesProviders.ClaimDocumentServices;
 using Solutio.Core.Services.ServicesProviders.ClaimMessagesService;
+using Solutio.Core.Services.ServicesProviders.ClaimOfferServices;
 using Solutio.Core.Services.ServicesProviders.ClaimPersonServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsServices;
 using Solutio.Core.Services.ServicesProviders.ClaimsStatesServices;
@@ -190,6 +192,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IOfficeRepository, OfficeRepository>();
             services.AddTransient<IClaimMessagesRepository, ClaimMessagesRepository>();
             services.AddTransient<IClaimWorkflowRepository, ClaimWorkflowRepository>();
+            services.AddTransient<IClaimOfferRepoitory, ClaimOfferRepoitory>();        
 
             #endregion Repositories Settings
 
@@ -242,7 +245,8 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IUpdateClaimMessagesService, UpdateClaimMessagesService>();
             services.AddTransient<IUploadClaimMessagesService, UploadClaimMessagesService>();
             services.AddTransient<IClaimWorkflowService, ClaimWorkflowService>();
-
+            services.AddTransient<IUpdateClaimOfferService, UpdateClaimOfferService>();
+            
             #endregion Services Settings
 
             #region Builder Settings
