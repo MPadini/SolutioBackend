@@ -154,12 +154,85 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
             htmlString = htmlString.Replace("[thirdVehicleDomain]", await GetThirdVehicleDomain(claim));
             htmlString = htmlString.Replace("[sinisterNumber]", claim.SinisterNumber);
 
- 
+
             htmlString = htmlString.Replace("[montoOfrecimiento]", await AddOfferedAmount(claim));
             var value = claim.TotalBudgetAmount == null ? string.Empty : claim.TotalBudgetAmount.ToString();
             htmlString = htmlString.Replace("[montoReclamado]", value);
 
             //Claim page
+            int index = 1;
+            if (claim.ClaimThirdInsuredPersons != null) {
+                foreach (var person in claim.ClaimThirdInsuredPersons) {
+                    htmlString = htmlString.Replace($"[nombrePersona{index}]", person.Name + " " + person.Surname);
+                    htmlString = htmlString.Replace($"[dniPersona{index}]", person.DocumentNumber.Equals("0") ? string.Empty : person.DocumentNumber);
+                    htmlString = htmlString.Replace($"[[enCaracterDePersona{index}]", person.PersonTypeId == 1 ? "Física" : "Jurídica");
+                    index++;
+                }
+            }
+
+            index = 1;
+            if (claim.ClaimThirdInsuredVehicles != null) {
+                foreach (var vehicle in claim.ClaimThirdInsuredVehicles) {
+                    htmlString = htmlString.Replace($"[dominioVehiculo{index}]", vehicle.Patent);
+                    if (vehicle.VehicleType != null) {
+                        htmlString = htmlString.Replace($"[tipoDeVehiculo{index}]", vehicle.VehicleType.Description);
+                    }
+                    index++;
+                }
+            }
+
+            if (claim.Adress != null) {
+                htmlString = htmlString.Replace("[DireccionDelSiniestro]", claim.Adress.Street + " " + claim.Adress.Number);
+                htmlString = htmlString.Replace("[entreCalles]", claim.Adress.BetweenStreets);
+                htmlString = htmlString.Replace("[Localidad]", claim.Adress.Province == null? string.Empty : claim.Adress.Province.Name);
+                htmlString = htmlString.Replace("[Provincia]", claim.Adress.Province == null ? string.Empty : claim.Adress.Province.Name);
+                htmlString = htmlString.Replace("[Pais]", "Argentina");
+
+                htmlString = htmlString.Replace("[FechaDeSiniestro]", claim.Date.ToString("dd/MM/yyyy"));
+                htmlString = htmlString.Replace("[HoraSiniestro]", claim.Hour);
+                htmlString = htmlString.Replace("[relato]", claim.Story);
+            }
+
+            htmlString = htmlString.Replace("[montoAReclamar]]", value);
+
+            return await cleanTemplate(htmlString);
+        }
+
+        private async Task<string> cleanTemplate(string htmlString) {
+            htmlString = htmlString.Replace($"[nombrePersona1]", string.Empty);
+            htmlString = htmlString.Replace($"[nombrePersona2]", string.Empty);
+            htmlString = htmlString.Replace($"[nombrePersona3]", string.Empty);
+            htmlString = htmlString.Replace($"[nombrePersona4]", string.Empty);
+            htmlString = htmlString.Replace($"[nombrePersona5]", string.Empty);
+            htmlString = htmlString.Replace($"[nombrePersona6]", string.Empty);
+
+            htmlString = htmlString.Replace($"[dniPersona1]", string.Empty);
+            htmlString = htmlString.Replace($"[dniPersona2]", string.Empty);
+            htmlString = htmlString.Replace($"[dniPersona3]", string.Empty);
+            htmlString = htmlString.Replace($"[dniPersona4]", string.Empty);
+            htmlString = htmlString.Replace($"[dniPersona5]", string.Empty);
+            htmlString = htmlString.Replace($"[dniPersona6]", string.Empty);
+
+            htmlString = htmlString.Replace($"[dominioVehiculo1]", string.Empty);
+            htmlString = htmlString.Replace($"[dominioVehiculo2]", string.Empty);
+            htmlString = htmlString.Replace($"[dominioVehiculo3]", string.Empty);
+            htmlString = htmlString.Replace($"[dominioVehiculo4]", string.Empty);
+            htmlString = htmlString.Replace($"[dominioVehiculo5]", string.Empty);
+            htmlString = htmlString.Replace($"[dominioVehiculo6]", string.Empty);
+
+            htmlString = htmlString.Replace($"[tipoDeVehiculo1]", string.Empty);
+            htmlString = htmlString.Replace($"[tipoDeVehiculo2]", string.Empty);
+            htmlString = htmlString.Replace($"[tipoDeVehiculo3]", string.Empty);
+            htmlString = htmlString.Replace($"[tipoDeVehiculo4]", string.Empty);
+            htmlString = htmlString.Replace($"[tipoDeVehiculo5]", string.Empty);
+            htmlString = htmlString.Replace($"[tipoDeVehiculo6]", string.Empty);
+
+            htmlString = htmlString.Replace($"[enCaracterDePersona1]", string.Empty);
+            htmlString = htmlString.Replace($"[enCaracterDePersona2]", string.Empty);
+            htmlString = htmlString.Replace($"[enCaracterDePersona3]", string.Empty);
+            htmlString = htmlString.Replace($"[enCaracterDePersona4]", string.Empty);
+            htmlString = htmlString.Replace($"[enCaracterDePersona5]", string.Empty);
+            htmlString = htmlString.Replace($"[enCaracterDePersona6]", string.Empty);
 
             return htmlString;
         }

@@ -54,7 +54,7 @@ USING (VALUES
 </head>
 <body>
 	<div class="barraSup">
-		SOLUTIO - Reconsideración
+		IUSTUM - Reconsideración
 	</div>
 	<div class="container">
 	  <p>
@@ -160,7 +160,7 @@ USING (VALUES
 </head>
 <body>
 	<div class="barraSup">
-		SOLUTIO - Reclamo
+		IUSTUM - Reclamo
 	</div>
 	<div class="container">
 	<p>
@@ -178,7 +178,7 @@ USING (VALUES
 			<li>El número de siniestro en tu compañía es: [sinisterNumber]</li>
 		</ul>
 	  <p>
-		Felicitaciones, recibiste un reclamo de SOLUTIO! Esperamos que juntos podamos trabajar para darle una respuesta eficiente y satisfactoria a quienes te detallamos a continuación:
+		Felicitaciones, recibiste un reclamo de IUSTUM Esperamos que juntos podamos trabajar para darle una respuesta eficiente y satisfactoria a quienes te detallamos a continuación:
 	  </p>
 	  <p>
 		<b>DAMNIFICADOS:</b><br>
@@ -268,10 +268,10 @@ USING (VALUES
 			<li>Entre Calles: [entreCalles]</li>
 			<li>Localidad: [Localidad]</li>
 			<li>Provincia: [Provincia]</li>
-			<li>País: [País]</li>
+			<li>País: [Pais]</li>
 			<li>Fecha de siniestro: [FechaDeSiniestro]</li>
 			<li>Hora: [HoraSiniestro]</li>
-			<li>Relato del hecho Relato del hecho: [relato]</li>
+			<li>Relato del hecho: [relato]</li>
 		</ul>
 	  </p>
 	</div>
@@ -331,7 +331,7 @@ USING (VALUES
 </head>
 <body>
 	<div class="barraSup">
-		SOLUTIO - Listado de reclamos
+		IUSTUM - Listado de reclamos
 	</div>
 	<div class="container">
 	  <h4>Compañía de seguros: [compania]</h4>
