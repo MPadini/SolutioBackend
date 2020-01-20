@@ -8,7 +8,9 @@ USING (VALUES
 	(1, N'Archivo varios'),
 	(2, N'Dni'),
 	(3, N'Denuncia'),
-	(4, N'Reclamo')
+	(4, N'Reclamo'),
+	(5, N'Convenio'),
+	(6, N'ConvenioFirmado')
 ) AS Source([FileTypesId], [Description]) -- > AGREGAR COLUMNAS 
 ON Target.[Id] = [FileTypesId] -- > CONDICIÓN PARA SABER SI HAY MATCH
 
