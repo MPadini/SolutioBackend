@@ -28,6 +28,8 @@ namespace Solutio.Core.Entities
 
         public bool StateAlarmActive { get; set; }
 
+        public bool HasNewMessages { get; set; }
+
         public DateTime StateModifiedDate { get; set; }
 
         public List<Person> ClaimInsuredPersons { get; set; }

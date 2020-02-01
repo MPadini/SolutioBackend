@@ -53,7 +53,8 @@ BEGIN
 	FROM #tempTable
 	PIVOT(Sum(Cantidad) for
 	stateId in (' + @Columns + '))
-	As TablaPivot'
+	As TablaPivot
+	WHERE (select SUM(Cantidad) from #tempTable B where B.Id = TablaPivot.Id) > 0'
 
 
 	EXEC(@SQL)

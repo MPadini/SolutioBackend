@@ -17,6 +17,8 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public bool StateAlarmActive { get; set; }
 
+        public bool HasNewMessages { get; set; }
+
         public string SinisterNumber { get; set; }
 
         public string Outro { get; set; }

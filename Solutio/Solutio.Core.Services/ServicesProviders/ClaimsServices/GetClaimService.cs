@@ -14,11 +14,13 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
     {
         private readonly IClaimRepository claimRepository;
         private readonly ISetAlarmActivationService setAlarmActivationService;
+        private readonly ISetAlertMessagesService setAlertMessagesService;
 
-        public GetClaimService(IClaimRepository claimRepository, ISetAlarmActivationService setAlarmActivationService)
+        public GetClaimService(IClaimRepository claimRepository, ISetAlarmActivationService setAlarmActivationService, ISetAlertMessagesService setAlertMessagesService)
         {
             this.claimRepository = claimRepository;
             this.setAlarmActivationService = setAlarmActivationService;
+            this.setAlertMessagesService = setAlertMessagesService;
         }
 
         public async Task<Claim> GetById(long id)
@@ -33,6 +35,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             if (claims == null || !claims.Any()) return default;
 
             var userToSearch = string.IsNullOrWhiteSpace(userName) ? "" : userName;
+            var userRolId = string.IsNullOrWhiteSpace(userName) ? 1 : 2;
 
             claims = claims.Where(x => userToSearch == "" || x.UserName.ToLower().Equals(userToSearch.ToLower())).ToList();
             if (claims == null || !claims.Any()) return default;
@@ -46,6 +49,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             claims.ForEach(async claim =>
             {
                 await setAlarmActivationService.Set(claim);
+                await setAlertMessagesService.Set(claim, userRolId);
             });
 
             return claims;

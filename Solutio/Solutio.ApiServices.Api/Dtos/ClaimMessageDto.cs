@@ -9,6 +9,8 @@ namespace Solutio.ApiServices.Api.Dtos
     {
         public long ClaimId { get; set; }
 
+        public int UserRoleId { get; set; }
+
         public string UserName { get; set; }
 
         public string Message { get; set; }

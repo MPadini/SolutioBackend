@@ -226,6 +226,7 @@ namespace Solutio.ApiServices.Api
             services.AddTransient<IDeleteClaimThirdPersonService, DeleteClaimThirdPersonService>();
             services.AddTransient<IDeleteClaimPersonService, DeleteClaimPersonService>();
             services.AddTransient<ISetAlarmActivationService, SetAlarmActivationService>();
+            services.AddTransient<ISetAlertMessagesService, SetAlertMessagesService>();
             services.AddTransient<IUpdateAdressService, UpdateAdressService>();
             services.AddTransient<IUpdateClaimInsuredPersonService, UpdateClaimInsuredPersonService>();
             services.AddTransient<IUpdateClaimThirdInsuredPersonService, UpdateClaimThirdInsuredPersonService>();
