@@ -75,7 +75,7 @@ USING (VALUES
 	  <br>
 	  <br>
 	  <p>
-		Hemos recibido como oferta por el siniestro de referencia la suma de: $[montoOfrecimiento]
+		Hemos recibido como oferta por el siniestro de referencia la suma de: [montoOfrecimiento]
 	  </p>
 	  <p>
 		Consideramos insuficiente la oferta realizada por vuestra aseguradora y solicitamos se reconsidere el monto ofrecido

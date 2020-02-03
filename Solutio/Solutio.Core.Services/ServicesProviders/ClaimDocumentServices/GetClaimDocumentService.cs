@@ -118,7 +118,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                     $"<td>{claim.SinisterNumber} </td>" +
                     $"<td>{claim.State.Description ?? string.Empty} </td>" +
                     $"<td>{daysDiff.ToString()}  </td>" +
-                    $"<td> ${await AddOfferedAmount(claim)} </td>" +
+                    $"<td> {await AddOfferedAmount(claim)} </td>" +
                     $"</tr>" +
                     $"<tr><td colspan='6'> Notas: </td></tr>");
             }
@@ -161,11 +161,11 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
 
             //Claim page
             int index = 1;
-            if (claim.ClaimThirdInsuredPersons != null) {
-                foreach (var person in claim.ClaimThirdInsuredPersons) {
+            if (claim.ClaimInsuredPersons != null) {
+                foreach (var person in claim.ClaimInsuredPersons) {
                     htmlString = htmlString.Replace($"[nombrePersona{index}]", person.Name + " " + person.Surname);
                     htmlString = htmlString.Replace($"[dniPersona{index}]", person.DocumentNumber.Equals("0") ? string.Empty : person.DocumentNumber);
-                    htmlString = htmlString.Replace($"[[enCaracterDePersona{index}]", person.PersonTypeId == 1 ? "Física" : "Jurídica");
+                    htmlString = htmlString.Replace($"[[enCaracterDePersona{index}]", person.WasInjured ? "Lesionado" : "Titular");
                     index++;
                 }
             }
@@ -297,12 +297,12 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                         if (claimDocPage != null) {
                             claimFilePages.Add(claimDocPage);
                         }
+                    }
 
-                        var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
-                        var reconsiderationPage = await GenerateReconsideration(claim, reconsideration.HtmlTemplate);
-                        if (reconsiderationPage != null) {
-                            claimFilePages.Add(reconsiderationPage);
-                        }
+                    var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
+                    var reconsiderationPage = await GenerateReconsideration(claim, reconsideration.HtmlTemplate);
+                    if (reconsiderationPage != null) {
+                        claimFilePages.Add(reconsiderationPage);
                     }
                 }
 
@@ -321,7 +321,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 if (claim.ClaimOffers != null) {
                     var claimOffer = claim.ClaimOffers.OrderByDescending(x => x.Created).FirstOrDefault();
                     if (claimOffer != null) {
-                        return claimOffer.OfferedAmount.ToString();
+                        return "$" + claimOffer.OfferedAmount.ToString();
                     }
                 }
             }
