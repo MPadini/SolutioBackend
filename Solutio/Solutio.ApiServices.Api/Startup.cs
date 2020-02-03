@@ -158,6 +158,18 @@ namespace Solutio.ApiServices.Api
                      ClockSkew = TimeSpan.Zero
                  });
 
+            // Configure Identity
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+            });
+
+
             //Filter for validation
             services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
             services.AddMvc(opt => opt.Filters.Add(typeof(ModelStateFilter)))

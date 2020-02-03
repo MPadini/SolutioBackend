@@ -1,6 +1,6 @@
 ﻿SET IDENTITY_INSERT [dbo].[ClaimDocuments] ON
 GO
---DEFINO LA TABLA DESTINO (TARGET)
+--DEFINO LA TABLA DESTINO 
 MERGE INTO [dbo].[ClaimDocuments] AS Target
 
 USING (VALUES
@@ -75,11 +75,11 @@ USING (VALUES
 	  <br>
 	  <br>
 	  <p>
-		Hemos recibido como oferta por el siniestro de referencia la suma de: [montoOfrecimiento]
+		Hemos recibido como oferta por el siniestro de referencia la suma de: $[montoOfrecimiento]
 	  </p>
 	  <p>
 		Consideramos insuficiente la oferta realizada por vuestra aseguradora y solicitamos se reconsidere el monto ofrecido
-		y proceda a abonar la suma de: [montoReclamado].
+		y proceda a abonar la suma de: $[montoReclamado].
 	  </p>
 	  <p>
 		A este monto se le suma lo que determinen los estudios médicos correspondiente a las lesiones (si hay lesiones).
@@ -256,7 +256,7 @@ USING (VALUES
 	  <p>
 		<b>¿CUÁL ES LA JUSTA INDEMNIZACION?</b><br>
 		<ul>
-			<li>Daño emergente: [montoAReclamar]]</li>
+			<li>Daño emergente: $[montoAReclamar]]</li>
 			<li>Lesiones: (si hay lesiones) Monto justo que determinen los estudios médicos realizados 
 		Todo lo arriba mencionado con más los intereses legales desde la fecha de producción del siniestro hasta su real y efectivo pago, gastos y honorarios profesionales seria lo justo.</li>
 		</ul>

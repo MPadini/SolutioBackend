@@ -118,7 +118,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                     $"<td>{claim.SinisterNumber} </td>" +
                     $"<td>{claim.State.Description ?? string.Empty} </td>" +
                     $"<td>{daysDiff.ToString()}  </td>" +
-                    $"<td> {await AddOfferedAmount(claim)} </td>" +
+                    $"<td> ${await AddOfferedAmount(claim)} </td>" +
                     $"</tr>" +
                     $"<tr><td colspan='6'> Notas: </td></tr>");
             }
