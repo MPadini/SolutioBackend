@@ -165,7 +165,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                 foreach (var person in claim.ClaimInsuredPersons) {
                     htmlString = htmlString.Replace($"[nombrePersona{index}]", person.Name + " " + person.Surname);
                     htmlString = htmlString.Replace($"[dniPersona{index}]", person.DocumentNumber.Equals("0") ? string.Empty : person.DocumentNumber);
-                    htmlString = htmlString.Replace($"[[enCaracterDePersona{index}]", person.WasInjured ? "Lesionado" : "Titular");
+                    htmlString = htmlString.Replace($"[enCaracterDePersona{index}]", person.WasInjured ? "Lesionado" : "Titular");
                     index++;
                 }
             }
