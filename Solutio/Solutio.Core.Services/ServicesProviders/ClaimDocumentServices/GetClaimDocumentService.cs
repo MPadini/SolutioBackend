@@ -299,6 +299,11 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                         }
                     }
 
+                    var convenio = await GenerateConvenioFirmado(claim);
+                    if (convenio != null && convenio.Any()) {
+                        claimFilePages.AddRange(convenio);
+                    }
+
                     var reconsideration = htmlTemplates.Where(x => x.Id == 3).FirstOrDefault();
                     var reconsiderationPage = await GenerateReconsideration(claim, reconsideration.HtmlTemplate);
                     if (reconsiderationPage != null) {
@@ -348,6 +353,33 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices {
                     claimFilePages.Add(claimDocPage);
                 }
             }
+
+            await updateFileService.MarkAsPrinted(filesToPrint);
+
+            return claimFilePages;
+        }
+
+        private async Task<List<ClaimFilePage>> GenerateConvenioFirmado(Claim claim) {
+            List<ClaimFilePage> claimFilePages = new List<ClaimFilePage>();
+
+            if (claim.StateId != (long)ClaimState.eId.Convenio_Firmado) return null;
+
+            var claimFiles = await getFileService.GetByClaimId(claim.Id, true);
+            if (claimFiles == null) return null;
+
+            var filesToPrint = claimFiles.Where(file => file.FileTypeId == (long) FileType.eId.ConvenioFirmado).ToList();
+            if (filesToPrint == null) return null;
+
+            foreach (var file in filesToPrint) {
+                ClaimFilePage claimDocPage = new ClaimFilePage();
+                byte[] bFile = Convert.FromBase64String(file.Base64);
+                if (await CanAdd(bFile)) {
+                    claimDocPage.Page = bFile;
+                    claimDocPage.ClaimId = claim.Id;
+                    claimFilePages.Add(claimDocPage);
+                }
+            }
+            await changeClaimStateService.ChangeState(claim, (long)ClaimState.eId.Pendiente_de_Pago);
 
             await updateFileService.MarkAsPrinted(filesToPrint);
 

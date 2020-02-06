@@ -12,7 +12,8 @@ namespace Solutio.Core.Entities {
             Archivo_varios = 1,
             Dni = 2,
             Denuncia = 3,
-            reclamo = 4
+            reclamo = 4,
+            ConvenioFirmado = 6
         }
     }
 }
