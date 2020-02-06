@@ -19,6 +19,8 @@ namespace Solutio.ApiServices.Api.Dtos
 
         public bool HasNewMessages { get; set; }
 
+        public bool HasMessages { get; set; }
+
         public string SinisterNumber { get; set; }
 
         public string Outro { get; set; }

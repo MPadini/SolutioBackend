@@ -22,10 +22,15 @@ namespace Solutio.Core.Services.ServicesProviders.AlarmServices
         public async Task<Claim> Set(Claim claim, int userRole)
         {
             claim.HasNewMessages = false;
+            claim.HasMessages = false;
             var messages = await getClaimMessagesService.GetByClaimId(claim.Id);
             //set not new messages
             if (messages != null)
             {
+                if (messages.Count > 0)
+                {
+                    claim.HasMessages = true;
+                }
                 var thisOne = messages.Find(message => message.Viewed == false && message.UserRoleId != userRole);
                 if (thisOne != null)
                 {
