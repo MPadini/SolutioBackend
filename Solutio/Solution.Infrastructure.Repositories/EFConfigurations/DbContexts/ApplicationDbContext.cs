@@ -96,6 +96,8 @@ namespace Solutio.Infrastructure.Repositories.EFConfigurations.DbContexts
 
         public DbSet<ClaimMessageDB> ClaimMessages { get; set; }
 
+        public DbSet<ClaimMessageViewDB> ClaimMessagesView { get; set; }
+
         public DbSet<ClaimWorkflowDB> ClaimWorkflows { get; set; }
 
         public DbSet<ClaimOfferDB> ClaimOffers { get; set; }

@@ -67,7 +67,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<List<ClaimMessage>> GetByClaimId(long claimId)
         {
-            var messages = applicationDbContext.ClaimMessages.AsNoTracking().FromSql($"SELECT M.*, ISNULL(UR.RoleId, 1) 'UserRoleId' FROM [dbo].[ClaimMessages] M  LEFT JOIN [dbo].[AspNetUsers] U ON U.EMAIL = M.USERNAME LEFT JOIN [dbo].[AspNetUserRoles] UR ON UR.UserId = U.Id WHERE M.ClaimId = {claimId} ").ToList();
+            var messages = applicationDbContext.ClaimMessagesView.AsNoTracking().FromSql($"SELECT M.*, ISNULL(UR.RoleId, 1) 'UserRoleId' FROM [dbo].[ClaimMessages] M  LEFT JOIN [dbo].[AspNetUsers] U ON U.EMAIL = M.USERNAME LEFT JOIN [dbo].[AspNetUserRoles] UR ON UR.UserId = U.Id WHERE M.ClaimId = {claimId} ").ToList();
             //var messages = applicationDbContext.ClaimMessages.AsNoTracking()
             //    .Where(x => x.ClaimId == claimId).Select(x => new {
             //        x.Id,

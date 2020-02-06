@@ -30,6 +30,8 @@ namespace Solutio.Core.Entities
 
         public bool HasNewMessages { get; set; }
 
+        public bool HasMessages { get; set; }
+
         public DateTime StateModifiedDate { get; set; }
 
         public List<Person> ClaimInsuredPersons { get; set; }
