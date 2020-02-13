@@ -392,6 +392,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
 
             foreach (var file in filesToPrint)
             {
+                if (file.FileTypeId == (long)FileType.eId.reclamo) continue;
+
                 ClaimFilePage claimDocPage = new ClaimFilePage();
                 byte[] bFile = Convert.FromBase64String(file.Base64);
                 if (await CanAdd(bFile))
