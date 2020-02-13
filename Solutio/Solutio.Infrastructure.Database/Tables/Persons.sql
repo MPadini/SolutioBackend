@@ -4,7 +4,7 @@
     [Surname] nvarchar(max) NULL,
 	[LegalEntityName] nvarchar(200) NULL,
 	[Cuit] nvarchar(100) NULL,
-    [DocumentNumber] VARCHAR(50) NULL,
+    [DocumentNumber] VARCHAR(50) NOT NULL DEFAULT '',
     [TelephoneNumber] VARCHAR(50) NULL,
     [MobileNumber] VARCHAR(50) NULL,
     [Email] nvarchar(max) NULL,

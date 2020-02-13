@@ -82,20 +82,27 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<List<Claim>> GetAll()
         {
-            var claimsDb = await applicationDbContext.Claims.AsNoTracking()
-                .Include(x => x.State)
-                .ThenInclude(e => e.StateConfigurations)
-                .ThenInclude(d => d.AllowedState)
-                .Include(x => x.ClaimInsuredPersons)
-                .ThenInclude(x => x.Person)
-                .Include(x => x.ClaimInsuredVehicles)
-                .ThenInclude(x => x.Vehicle)
-                .Include(x => x.ClaimThirdInsuredVehicles)
-                .ThenInclude(x => x.Vehicle)
-                .ThenInclude(x => x.InsuranceCompany)
-                .ToListAsync();
+            try {
+                var claimsDb = await applicationDbContext.Claims.AsNoTracking()
+             .Include(x => x.State)
+             .ThenInclude(e => e.StateConfigurations)
+             .ThenInclude(d => d.AllowedState)
+             .Include(x => x.ClaimInsuredPersons)
+             .ThenInclude(x => x.Person)
+             .Include(x => x.ClaimInsuredVehicles)
+             .ThenInclude(x => x.Vehicle)
+             .Include(x => x.ClaimThirdInsuredVehicles)
+             .ThenInclude(x => x.Vehicle)
+             .ThenInclude(x => x.InsuranceCompany)
+             .ToListAsync();
 
-            return claimMapper.Map(claimsDb);
+                return claimMapper.Map(claimsDb);
+            }
+            catch (Exception ex) {
+
+                throw;
+            }
+         
         }
 
         public async Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany)
