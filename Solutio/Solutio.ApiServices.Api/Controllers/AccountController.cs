@@ -97,7 +97,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 }
 
                 await AddRole(user, userInfo.RoleName);
-                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));           
+                await sendConfirmationEmailService.Send(user.Id, user.Email, userInfo.Password, await userManager.GenerateEmailConfirmationTokenAsync(user));           
 
                 return Ok();
             }
@@ -278,7 +278,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     throw new ApplicationException("El correo ingresado ya fue confirmado");
                 }
 
-                await sendConfirmationEmailService.Send(user.Id, user.Email, await userManager.GenerateEmailConfirmationTokenAsync(user));
+                await sendConfirmationEmailService.Send(user.Id, user.Email, "", await userManager.GenerateEmailConfirmationTokenAsync(user));
 
                 return Ok();
             }

@@ -7,6 +7,6 @@ namespace Solutio.Core.Services.ApplicationServices.LoginServices
 {
     public interface ISendConfirmationEmailService
     {
-        Task Send(int userId, string email, string ConfirmationToken);
+        Task Send(int userId, string email, string password, string ConfirmationToken);
     }
 }

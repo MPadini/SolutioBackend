@@ -82,7 +82,8 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
         public async Task<List<Claim>> GetAll()
         {
-            try {
+            try
+            {
                 var claimsDb = await applicationDbContext.Claims.AsNoTracking()
              .Include(x => x.State)
              .ThenInclude(e => e.StateConfigurations)
@@ -98,11 +99,12 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
                 return claimMapper.Map(claimsDb);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
 
                 throw;
             }
-         
+
         }
 
         public async Task<List<Claim>> GetClaimByInsuranceCompany(long insuranceCompany)
@@ -117,6 +119,7 @@ namespace Solutio.Infrastructure.Repositories.Claims
 
             var claims = applicationDbContext.Claims.AsNoTracking()
                 .Include(x => x.Adress)
+                .Include(x => x.ClaimOffers)
               .Include(x => x.ClaimInsuredPersons).ThenInclude(x => x.Person)
               .Include(x => x.ClaimInsuredVehicles).ThenInclude(x => x.Vehicle).ThenInclude(x => x.VehicleType)
               .Include(x => x.ClaimThirdInsuredPersons).ThenInclude(x => x.Person)

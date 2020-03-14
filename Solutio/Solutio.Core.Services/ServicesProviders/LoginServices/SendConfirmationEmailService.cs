@@ -19,20 +19,22 @@ namespace Solutio.Core.Services.ServicesProviders.LoginServices
             this.urlLogin = urlLogin.Value;
         }
 
-        public async Task Send(int userId, string email, string ConfirmationToken)
+        public async Task Send(int userId, string email, string password, string ConfirmationToken)
         {
             try {
-                await emailSender.SendEmailAsync(email, "Solutio - Por favor confirme su correo electronico", GenerateMessage(email, ConfirmationToken));
+                await emailSender.SendEmailAsync(email, "IUSTUM - Activación de su cuenta", GenerateMessage(email, password, ConfirmationToken));
             }
             catch (System.Exception) {
                 //log
             }
         }
 
-        private string GenerateMessage(string email, string ConfirmationToken)
+        private string GenerateMessage(string email, string password, string ConfirmationToken)
         {
             var callbackUrl = GetLink(email, ConfirmationToken);
-            var message = $"Por favor confirme su cuenta haciendo click <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' >aquí</a>.";
+            var message = $"Por favor confirme su cuenta haciendo click <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' >aquí</a>. <br><br>" +
+                "Luego de confirmar podra accededer a su cuenta ingresando su correo y la contraseña que hemos generado para usted: <b>" + password + "</b><br><br>" +
+                "Gracias por confiar en IUSTUM y sea bienvenido";
 
             return message;
         }

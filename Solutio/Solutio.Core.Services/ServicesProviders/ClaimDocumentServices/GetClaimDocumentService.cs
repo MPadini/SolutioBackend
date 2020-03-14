@@ -186,7 +186,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
                 {
                     htmlString = htmlString.Replace($"[nombrePersona{index}]", person.Name + " " + person.Surname);
                     htmlString = htmlString.Replace($"[dniPersona{index}]", person.DocumentNumber.Equals("0") ? string.Empty : person.DocumentNumber);
-                    htmlString = htmlString.Replace($"[enCaracterDePersona{index}]", person.WasInjured ? "Lesionado" : "Titular");
+                    htmlString = htmlString.Replace($"[enCaracterDePersona{index}]", (person.WasInjured && person.IsCarHolder) ? "Titular y Lesionado" : (person.WasInjured ? "Lesionado" : "Titular"));
                     index++;
                 }
             }
@@ -363,6 +363,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
         {
             if (claim.StateId == (long)ClaimState.eId.Ofrecimiento_Rechazado ||
                 claim.StateId == (long)ClaimState.eId.Esperando_Ofrecimiento ||
+                claim.StateId == (long)ClaimState.eId.Firmar_Convenio ||
+                claim.StateId == (long)ClaimState.eId.Pendiente_de_Pago ||
                 claim.StateId == (long)ClaimState.eId.Ofrecimiento_Aceptado)
             {
 
