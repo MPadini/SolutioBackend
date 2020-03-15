@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Solutio.ApiServices.Api.Dtos;
+using Solutio.Core.Entities;
 using Solutio.Core.Services.ApplicationServices.OfficeServices;
 using Solutio.Infrastructure.Repositories.Entities;
 
@@ -52,6 +53,39 @@ namespace Solutio.ApiServices.Api.Controllers
                 var offices = await officeService.GetOfficesByUser(user.Id);
 
                 return Ok(offices.Adapt<List<OfficeDto>>());
+            }
+            catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete()]
+        public async Task<IActionResult> Delete(long officeId) {
+            try {
+                var offices = await officeService.GetAll();
+                if (offices == null) return Ok();
+
+                var office = offices.FirstOrDefault(x => x.Id == officeId);
+                if (office == null) throw new ApplicationException("La oficina que intenta eliminar no existe.");
+
+                await officeService.Delete(office);
+
+                return Ok();
+            }
+            catch (Exception ex) {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
+
+        [HttpPost()]
+        public async Task<IActionResult> Post(OfficeDto officeDto) {
+            try {
+                if (officeDto == null) return BadRequest();
+                var office = officeDto.Adapt<Office>();
+
+                await officeService.Save(office);
+
+                return Ok();
             }
             catch (Exception ex) {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });

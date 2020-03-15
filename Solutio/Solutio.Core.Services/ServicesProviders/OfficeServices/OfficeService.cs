@@ -15,12 +15,20 @@ namespace Solutio.Core.Services.ServicesProviders.OfficeServices {
             this.officeRepository = officeRepository;
         }
 
+        public async Task Delete(Office office) {
+            await officeRepository.Delete(office);
+        }
+
         public async Task<List<Office>> GetAll() {
             return await officeRepository.GetAll();
         }
 
         public async Task<List<Office>> GetOfficesByUser(int userId) {
             return await officeRepository.GetOfficesByUser(userId);
+        }
+
+        public async Task Save(Office office) {
+            await officeRepository.Save(office);
         }
 
         public async Task SaveUserOffices(int userId, List<long> officesId) {
