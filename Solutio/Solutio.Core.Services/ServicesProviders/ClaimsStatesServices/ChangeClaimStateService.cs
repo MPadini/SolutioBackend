@@ -112,7 +112,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices {
 
 
                 if (!string.IsNullOrEmpty(message)) {
-                    await emailSender.SendEmailAsync(claim.UserName, $"Sr. productor el trámite { claim.Id } requiere de su atención", message);
+                    await emailSender.SendEmailAsync(claim.UserName, $"Sr. productor, el trámite { claim.Id } requiere de su atención", message);
                 }
             }
             catch (Exception) {
