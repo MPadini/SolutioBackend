@@ -76,6 +76,8 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices {
             claim.StateModifiedDate = DateTime.Now;
 
             await claimRepository.UpdateState(claim, claim.Id);
+
+            await SendEmail(claim, state);
         }
 
         private async Task<bool> ValidateAllowedState(Claim claim, long newStateId) {
@@ -83,6 +85,39 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices {
             if (allowedState == null || !allowedState.Any()) throw new ApplicationException("Invalid status change.");
 
             return true;
+        }
+
+
+        private async Task SendEmail(Claim claim, ClaimState claimState) {
+            try {
+                if (claim == null) return;
+                if (claimState == null) return;
+
+                string message = string.Empty;
+                if (claimState.Id == (long)ClaimState.eId.Rechazado_Mejores_Datos_com) {
+                    message = $"El trámite { claim.Id } ha sido rechazado para mejores datos. Verfique por favor";
+                }
+
+                if (claimState.Id == (long)ClaimState.eId.Rechazado_Mejores_Datos_ui) {
+                    message = $"El trámite { claim.Id } ha sido rechazado para mejores datos. Verfique por favor";
+                }
+
+                if (claimState.Id == (long)ClaimState.eId.Nuevo_Ofrecimiento) {
+                    message = $"El trámite { claim.Id } ha recibido un nuevo ofrecimiento.";
+                }
+
+                if (claimState.Id == (long)ClaimState.eId.Firmar_Convenio) {
+                    message = $"El trámite { claim.Id } posee un convenio para firmar.";
+                }
+
+
+                if (!string.IsNullOrEmpty(message)) {
+                    await emailSender.SendEmailAsync(claim.UserName, $"Sr. productor el trámite { claim.Id } requiere de su atención", message);
+                }
+            }
+            catch (Exception) {
+                //Log
+            }
         }
     }
 }
