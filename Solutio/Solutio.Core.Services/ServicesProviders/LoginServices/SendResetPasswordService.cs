@@ -21,13 +21,13 @@ namespace Solutio.Core.Services.ServicesProviders.LoginServices
 
         public async Task Send(int userId, string email, string ConfirmationToken)
         {
-            await emailSender.SendEmailAsync(email, "Solutio - Modificación de contraseña", GenerateMessage(email, ConfirmationToken));
+            await emailSender.SendEmailAsync(email, "Iustum - Modificación de contraseña", GenerateMessage(email, ConfirmationToken));
         }
 
         private string GenerateMessage(string email, string ConfirmationToken)
         {
             var callbackUrl = GetLink(email, ConfirmationToken);
-            var message = $"Para modificar su contraseña haga click <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' >aquí</a>.";
+            var message = $"Hola " + email + "! <br><br>Para modificar su contraseña haga click en el siguiente enlace: <a href = '"+ HtmlEncoder.Default.Encode(callbackUrl) + "' > CAMBIAR CONTRASEÑA </a>. <br><br>Le recomendamos incluir alguna mayuscula y algun caracter númerico para mayor seguridad. <br><br> Saludos";
 
             return message;
         }
