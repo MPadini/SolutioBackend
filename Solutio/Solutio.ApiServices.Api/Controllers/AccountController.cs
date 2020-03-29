@@ -221,17 +221,17 @@ namespace Solutio.ApiServices.Api.Controllers
                 {
                     return BadRequest(new { message = GetErrorMessage(result) });
                 }
-
-               
+                               
                 var role = await userManager.GetRolesAsync(user);
 
-                return await BuildToken(user.Id, userInfo.Email, role.ToList(), userInfo.OfficeId);
+                return await BuildToken(user.Id, userInfo.Email, role.ToList(), 0);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
             }
         }
+
 
         [HttpPost]
         [Route("RefreshToken")]
@@ -381,6 +381,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 expiresIn = expirationTimeInSeconds,
                 rol = rolesName.FirstOrDefault(),
                 user = userName,
+                office = officeId,
                 refreshToken = refreshToken.Refreshtoken
             });
         }
