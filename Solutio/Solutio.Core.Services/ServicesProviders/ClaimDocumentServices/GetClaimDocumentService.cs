@@ -327,7 +327,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
                         claimFilePages.AddRange(allDoc);
                     }
 
-                    if (!claim.Printed)
+                    if (claim.StateId == (long)ClaimState.eId.Pendiente_de_Presentación || !claim.Printed)
                     {
                         var claimDoc = htmlTemplates.Where(x => x.Id == 2).FirstOrDefault();
                         var claimDocPage = await GenerateClaimPage(claim, claimDoc.HtmlTemplate);
@@ -349,6 +349,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
                     {
                         claimFilePages.Add(reconsiderationPage);
                     }
+
+                    //no estoy tan seguro de esto.. pero el cambio de estado estaba cuando se generaba el documento reclamo por primera vez y eso estaba incorrecto
+                    //await changeClaimStateService.ChangeState(claim, (long)ClaimState.eId.Presentado);
                 }
 
                 await updateClaimService.MarkAsPrinted(claims);

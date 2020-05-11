@@ -34,6 +34,7 @@ namespace Solutio.Core.Services.ServicesProviders.LoginServices
             var callbackUrl = GetLink(email, ConfirmationToken);
             var message = $"Por favor confirme su cuenta haciendo click <a href = '{HtmlEncoder.Default.Encode(callbackUrl)}' >aquí</a>. <br><br>" +
                 "Luego de confirmar podra accededer a su cuenta ingresando su correo y la contraseña que hemos generado para usted: <b>" + password + "</b><br><br>" +
+                "Podrá cambiar su contraseña ingresando a la opción <b> Recuperar / Cambiar contraseña <br> disponible en login de la aplicación. </b><br><br>" +
                 "Gracias por confiar en IUSTUM y sea bienvenido";
 
             return message;
