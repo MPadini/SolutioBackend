@@ -36,7 +36,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices {
             this.emailSender = emailSender;
         }
 
-        public async Task<bool> ChangeState(Claim claim, long newStateId) {
+        public async Task<bool> ChangeState(Claim claim, long newStateId, string userName) {
             if (claim == null) throw new ArgumentException(nameof(Claim), "null");
 
             //var actualState = await claimStateFactory.GetStateValidator(claim.StateId);
@@ -45,7 +45,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices {
             // if (claim.StateId != newStateId) {
             if (newStateId > 0) {
                 await Change(claim, newStateId);
-                await claimWorkflowService.RegisterWorkflow(newStateId, claim.Id);
+                await claimWorkflowService.RegisterWorkflow(newStateId, claim.Id, userName);
             }
            
             // }
@@ -53,14 +53,14 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsStatesServices {
             return true;
         }
 
-        public async Task SendClaimsToAjuicio() {
+        public async Task SendClaimsToAjuicio(string userName) {
             var claims = await getClaimService.GetClaimByState((long)ClaimState.eId.Esperando_Denuncia);
             foreach (var claim in claims) {
                 var datediff = (DateTime.Now - claim.StateModifiedDate).TotalDays;
                 if (datediff > 20) {
 
                     await Change(claim, (long)ClaimState.eId.A_Juicio);
-                    await claimWorkflowService.RegisterWorkflow((long)ClaimState.eId.A_Juicio, claim.Id);
+                    await claimWorkflowService.RegisterWorkflow((long)ClaimState.eId.A_Juicio, claim.Id, userName);
 
                     var message = $"El reclamo {claim.Id} fue enviado a juicio porque superó el tiempo especificado";
                     await emailSender.SendEmailAsync(claim.UserName, message, message);

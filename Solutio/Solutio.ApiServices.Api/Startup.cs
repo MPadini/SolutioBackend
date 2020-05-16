@@ -291,7 +291,7 @@ namespace Solutio.ApiServices.Api
 
             app.UseHangfireDashboard();
 
-            recurringJobManager.AddOrUpdate<IChangeClaimStateService>("some-id", x => x.SendClaimsToAjuicio(), Cron.Daily());
+            recurringJobManager.AddOrUpdate<IChangeClaimStateService>("some-id", x => x.SendClaimsToAjuicio("Sistema"), Cron.Daily());
 
             app.UseCors("AllowOrigin");
 

@@ -5,5 +5,6 @@
 	[ClaimId] BIGINT NOT NULL,
     [Created] DATETIME NOT NULL DEFAULT GetDate(), 
     [Modified] DATETIME NULL, 
-    [Deleted] DATETIME NULL
+    [Deleted] DATETIME NULL, 
+    [UserName] VARCHAR(150) NULL
 )

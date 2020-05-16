@@ -8,7 +8,7 @@ namespace Solutio.Core.Services.ApplicationServices.ClaimsServices
 {
     public interface IUpdateClaimService
     {
-        Task Update(Claim claim, long claimId);
+        Task Update(Claim claim, long claimId, string userName);
 
         Task MarkAsPrinted(List<Claim> claims);
     }

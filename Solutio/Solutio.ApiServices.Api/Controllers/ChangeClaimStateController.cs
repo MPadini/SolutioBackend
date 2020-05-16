@@ -36,7 +36,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     return NotFound();
                 }
 
-                await changeClaimStateService.ChangeState(claim, newStateId);
+                await changeClaimStateService.ChangeState(claim, newStateId, User.Identity.Name);
                 return Ok();
             }
             catch (Exception ex)

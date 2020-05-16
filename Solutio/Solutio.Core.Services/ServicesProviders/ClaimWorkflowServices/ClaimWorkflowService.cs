@@ -18,10 +18,11 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimWorkflowServices {
             return await claimWorkflowRepository.Get(claimId);
         }
 
-        public async Task RegisterWorkflow(long stateId, long claimId) {
+        public async Task RegisterWorkflow(long stateId, long claimId, string userName) {
             var workflow = ClaimWorkflow.NewInstance();
             workflow.ClaimStateId = stateId;
             workflow.ClaimId = claimId;
+            workflow.UserName = userName;
 
             await claimWorkflowRepository.Save(workflow);
         }

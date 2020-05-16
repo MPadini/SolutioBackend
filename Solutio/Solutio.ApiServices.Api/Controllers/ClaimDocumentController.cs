@@ -57,7 +57,7 @@ namespace Solutio.ApiServices.Api.Controllers
                     insuranceCompanies.Add(insuranceCompany);
                 }
 
-                var file = await getClaimDocumentService.GetFileByInsuranceCompany(insuranceCompanies);
+                var file = await getClaimDocumentService.GetFileByInsuranceCompany(insuranceCompanies, User.Identity.Name);
 
                 return await DownloadFile(file);
             }

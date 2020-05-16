@@ -13,5 +13,7 @@ namespace Solutio.ApiServices.Api.Dtos {
         public long ClaimId { get; set; }
 
         public ClaimStateDto ClaimState { get; set; }
+
+        public string UserName { get; set; }
     }
 }

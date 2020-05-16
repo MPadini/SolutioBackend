@@ -25,7 +25,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             var result = await claimRepository.Save(claim, userName);
 
             if (claim.State != null) {
-                await claimWorkflowService.RegisterWorkflow(claim.StateId, result);
+                await claimWorkflowService.RegisterWorkflow(claim.StateId, result, userName);
             }
            
 

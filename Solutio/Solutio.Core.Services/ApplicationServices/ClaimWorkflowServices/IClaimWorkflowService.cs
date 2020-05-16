@@ -9,6 +9,6 @@ namespace Solutio.Core.Services.ApplicationServices.ClaimWorkflowServices {
 
         Task<List<ClaimWorkflow>> Get(long claimId);
 
-        Task RegisterWorkflow(long stateId, long claimId);
+        Task RegisterWorkflow(long stateId, long claimId, string userName);
     }
 }

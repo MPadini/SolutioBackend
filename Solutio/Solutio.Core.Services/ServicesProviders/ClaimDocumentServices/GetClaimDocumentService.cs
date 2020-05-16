@@ -298,7 +298,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
             return true;
         }
 
-        public async Task<byte[]> GetFileByInsuranceCompany(List<InsuranceCompany> insuranceCompanies)
+        public async Task<byte[]> GetFileByInsuranceCompany(List<InsuranceCompany> insuranceCompanies, string userName)
         {
             var htmlTemplates = await getHtmlTemplatesService.GetHtmlTemplates();
             if (htmlTemplates == null || !htmlTemplates.Any()) throw new ArgumentException("No hay templates configurados.");
@@ -330,14 +330,14 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
                     if (claim.StateId == (long)ClaimState.eId.Pendiente_de_Presentación || !claim.Printed)
                     {
                         var claimDoc = htmlTemplates.Where(x => x.Id == 2).FirstOrDefault();
-                        var claimDocPage = await GenerateClaimPage(claim, claimDoc.HtmlTemplate);
+                        var claimDocPage = await GenerateClaimPage(claim, claimDoc.HtmlTemplate, userName);
                         if (claimDocPage != null)
                         {
                             claimFilePages.Add(claimDocPage);
                         }
                     }
 
-                    var convenio = await GenerateConvenioFirmado(claim);
+                    var convenio = await GenerateConvenioFirmado(claim, userName);
                     if (convenio != null && convenio.Any())
                     {
                         claimFilePages.AddRange(convenio);
@@ -414,7 +414,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
             return claimFilePages;
         }
 
-        private async Task<List<ClaimFilePage>> GenerateConvenioFirmado(Claim claim)
+        private async Task<List<ClaimFilePage>> GenerateConvenioFirmado(Claim claim, string userName)
         {
             List<ClaimFilePage> claimFilePages = new List<ClaimFilePage>();
 
@@ -437,7 +437,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
                     claimFilePages.Add(claimDocPage);
                 }
             }
-            await changeClaimStateService.ChangeState(claim, (long)ClaimState.eId.Pendiente_de_Pago);
+            await changeClaimStateService.ChangeState(claim, (long)ClaimState.eId.Pendiente_de_Pago, userName);
 
             await updateFileService.MarkAsPrinted(filesToPrint);
 
@@ -461,14 +461,14 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
             return claimDocPage;
         }
 
-        private async Task<ClaimFilePage> GenerateClaimPage(Claim claim, string htmlTemplate)
+        private async Task<ClaimFilePage> GenerateClaimPage(Claim claim, string htmlTemplate, string userName)
         {
             if (claim.StateId != (long)ClaimState.eId.Pendiente_de_Presentación)
                 return null;
             ClaimFilePage claimDocPage = new ClaimFilePage();
 
             //Change state
-            await changeClaimStateService.ChangeState(claim, (long)ClaimState.eId.Presentado);
+            await changeClaimStateService.ChangeState(claim, (long)ClaimState.eId.Presentado, userName);
 
             var template = await ReemplaceTags(htmlTemplate, claim);
 

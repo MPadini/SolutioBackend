@@ -15,5 +15,7 @@ namespace Solutio.Core.Entities {
         public long ClaimStateId { get; set; }
 
         public ClaimState ClaimState { get; set; }
+
+        public string UserName { get; set; }
     }
 }

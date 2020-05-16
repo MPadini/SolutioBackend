@@ -63,7 +63,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 }
 
                 
-                 await changeClaimStateService.SendClaimsToAjuicio();
+                 await changeClaimStateService.SendClaimsToAjuicio(User.Identity.Name);
 
                 var claimsDto = claims.Adapt<List<ClaimDto>>();
 
@@ -153,7 +153,7 @@ namespace Solutio.ApiServices.Api.Controllers
                 }
 
                 var updatedClaim = claimDtoMapper.Map(claimDto, 0);
-                await updateClaimService.Update(updatedClaim, id);
+                await updateClaimService.Update(updatedClaim, id, User.Identity.Name);
 
                 return Created("claim", new { claim.Id });
             }

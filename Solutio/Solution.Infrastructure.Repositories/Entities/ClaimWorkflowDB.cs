@@ -10,5 +10,7 @@ namespace Solutio.Infrastructure.Repositories.Entities {
         public long ClaimStateId { get; set; }
 
         public ClaimStateDB ClaimState { get; set; }
+
+        public string UserName { get; set; }
     }
 }

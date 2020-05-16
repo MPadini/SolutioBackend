@@ -50,7 +50,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
             this.updateClaimOfferService = updateClaimOfferService;
         }
 
-        public async Task Update(Claim claim, long claimId)
+        public async Task Update(Claim claim, long claimId, string userName)
         {
             var claimDb = await claimRepository.GetById(claimId);
             if (claimDb == null) return;
@@ -62,7 +62,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimsServices
                 await claimRepository.Update(updatedClaim, claimId);
                 await UpdateAssociatedEntities(claimDb, claim);
 
-                await changeClaimStateService.ChangeState(claim, 0);
+                await changeClaimStateService.ChangeState(claim, 0, userName);
 
                 scope.Complete();
             }  
