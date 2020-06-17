@@ -84,11 +84,27 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
                 var file = await getFileService.GetById(claimfileId);
                 if (file != null)
                 {
-                    byte[] bFile = Convert.FromBase64String(file.Base64);
-                    if (await CanAdd(bFile))
+                    if (file.FileName.ToLower().Contains(".pdf"))
                     {
-                        files.Add(bFile);
+                        //Si es pdf lo agrego directamente
+                        byte[] bFile = Convert.FromBase64String(file.Base64);
+                        if (await CanAdd(bFile))
+                        {
+                            files.Add(bFile);
+                        }
                     }
+                    else
+                    {
+                        //sino debe crear una nueva pagina de pdf a partir del archivo imagen, y luego la agrego
+                        byte[] bFile = Convert.FromBase64String(file.Base64);
+                        byte[] bFileFromImage = pdfMerge.CreatePdfFromFile(bFile);
+                        if (await CanAdd(bFileFromImage))
+                        {
+                            files.Add(bFileFromImage);
+                        }
+                    }
+
+
                 }
             }
 
@@ -103,6 +119,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
 
             if (!files.Any()) throw new ApplicationException("No se han podido generar los documentos solicitados");
 
+            //aqui deberian llegar solo archivos pdf
             var result = await pdfMerge.MergeFiles(files);
             return result;
         }
@@ -169,7 +186,7 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
 
             htmlString = htmlString.Replace("[claimId]", claim.Id.ToString());
             htmlString = htmlString.Replace("[thirdCompany]", await GetCompanyName(claim));
-            htmlString = htmlString.Replace("[sinisterDate]", DateTime.Now.ToString("dd/MM/yyyy"));
+            htmlString = htmlString.Replace("[sinisterDate]", claim.Date.ToString("dd/MM/yyyy"));
             htmlString = htmlString.Replace("[thirdVehicleDomain]", await GetThirdVehicleDomain(claim));
             htmlString = htmlString.Replace("[sinisterNumber]", claim.SinisterNumber);
 
@@ -192,9 +209,9 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
             }
 
             index = 1;
-            if (claim.ClaimThirdInsuredVehicles != null)
+            if (claim.ClaimInsuredVehicles != null)
             {
-                foreach (var vehicle in claim.ClaimThirdInsuredVehicles)
+                foreach (var vehicle in claim.ClaimInsuredVehicles)
                 {
                     htmlString = htmlString.Replace($"[dominioVehiculo{index}]", vehicle.Patent);
                     if (vehicle.VehicleType != null)
@@ -399,13 +416,33 @@ namespace Solutio.Core.Services.ServicesProviders.ClaimDocumentServices
             {
                 if (file.FileTypeId == (long)FileType.eId.reclamo) continue;
 
-                ClaimFilePage claimDocPage = new ClaimFilePage();
-                byte[] bFile = Convert.FromBase64String(file.Base64);
-                if (await CanAdd(bFile))
+                if (file != null)
                 {
-                    claimDocPage.Page = bFile;
-                    claimDocPage.ClaimId = claim.Id;
-                    claimFilePages.Add(claimDocPage);
+                    if (file.FileName.ToLower().Contains(".pdf"))
+                    {
+                        //Si es pdf lo agrego directamente
+                        byte[] bFile = Convert.FromBase64String(file.Base64);
+                        if (await CanAdd(bFile))
+                        {
+                            ClaimFilePage claimDocPage = new ClaimFilePage();
+                            claimDocPage.Page = bFile;
+                            claimDocPage.ClaimId = claim.Id;
+                            claimFilePages.Add(claimDocPage);
+                        }
+                    }
+                    else
+                    {
+                        //sino debe crear una nueva pagina de pdf a partir del archivo imagen, y luego la agrego
+                        byte[] bFile = Convert.FromBase64String(file.Base64);
+                        byte[] bFileFromImage = pdfMerge.CreatePdfFromFile(bFile);
+                        if (await CanAdd(bFileFromImage))
+                        {
+                            ClaimFilePage claimDocPage = new ClaimFilePage();
+                            claimDocPage.Page = bFileFromImage;
+                            claimDocPage.ClaimId = claim.Id;
+                            claimFilePages.Add(claimDocPage);
+                        }
+                    }
                 }
             }
 

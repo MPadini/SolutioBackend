@@ -10,5 +10,6 @@ namespace Solutio.Core.Services.ApplicationServices.ClaimDocumentServices {
 
         Task<byte[]> MergeFiles(List<ClaimFilePage> ClaimFilePages);
 
+        byte[] CreatePdfFromFile(byte[] sourceFile);
     }
 }
