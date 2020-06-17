@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -178,6 +180,12 @@ namespace Solutio.ApiServices.Api
 
             SetupDependenciesInjection(services);
             SetupSwagger(services);
+
+            services.Configure<GzipCompressionProviderOptions>(options => options.Level = CompressionLevel.Optimal);
+            services.AddResponseCompression(options => {
+                options.EnableForHttps = true;
+                options.Providers.Add<GzipCompressionProvider>();
+            });
         }
 
         private void SetupDependenciesInjection(IServiceCollection services)
@@ -294,7 +302,7 @@ namespace Solutio.ApiServices.Api
             recurringJobManager.AddOrUpdate<IChangeClaimStateService>("some-id", x => x.SendClaimsToAjuicio("Sistema"), Cron.Daily());
 
             app.UseCors("AllowOrigin");
-
+            app.UseResponseCompression();
             app.UseMvc();
         }
 
